@@ -11,6 +11,10 @@ fi
 
 . .env/bin/activate
 export ENV=development
-export FLASK_SECRET_KEY=value #Set value to random string.
+
+#Set value to random string.
+export FLASK_SECRET_KEY=value
+export FLASK_SECRET_SALT=value 
+
 python3 run.py
 deactivate

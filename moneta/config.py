@@ -12,3 +12,8 @@ class LocalConfig(Config):
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(SQLITE_DB_DIR,"test.db")
     DEBUG = True
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
+    SECURITY_PASSWORD_HASH = "bcrypt"
+    SECURITY_PASSWORD_SALT = os.getenv("FLASK_SECRET_SALT")
+    SECURITY_REGISTERABLE = True
+    SECURITY_SEND_REGISTER_EMAIL = False
+    SECURITY_UNAUTHORISED_VIEW = None
