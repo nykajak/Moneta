@@ -3,4 +3,4 @@ from moneta import app,db
 
 @app.route("/test")
 def test():
-    return "Hello",200
+    return render_template("test.html")

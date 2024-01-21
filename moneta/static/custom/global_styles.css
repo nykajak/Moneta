@@ -1,0 +1,7 @@
+:root {
+    --custom_primary: rgb(57,147,221);
+    --custom_secondary: rgb(84,122,65);
+    --custom_tertiary: rgb(170,99,115);
+    --custom_accent_light: rgb(227,227,227);
+    --custom_accent_dark: rgb(54,33,62);
+}
