@@ -11,5 +11,6 @@ fi
 
 . .env/bin/activate
 export ENV=development
+export FLASK_SECRET_KEY=value #Set value to random string.
 python3 run.py
 deactivate
