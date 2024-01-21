@@ -5,3 +5,7 @@
     --custom_accent_light: rgb(227,227,227);
     --custom_accent_dark: rgb(54,33,62);
 }
+
+body{ 
+    overflow-x: hidden; /* To prevent horizontal scroller from appearing*/
+}

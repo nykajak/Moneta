@@ -12,12 +12,37 @@
 
     <body>
         {% block header_element %}
+            <div class="container-flexible">
+                <div class="row text-center">
+                    <div class="col"><h1>Moneta: Remembering Words</h1></div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col"><a href="">For Users</a></div>
+                    <div class="col"><a href="">For Librarians</a></div>
+                    <div class="col"><a href="">About</a></div>
+                </div>
+            </div>
+            <hr>
         {% endblock %}
 
         {% block main_body %}
         {% endblock %}
 
         {% block footer_element %}
+        <hr>
+        <div class="container-flexible mx-auto text-center">
+            <section>
+                <p>Welcome! Hope you enjoy!<br>Built with Flask</p> 
+            </section>
+
+            <section>
+                <address>
+                    Made by: <strong>Nykaj A K</strong><br>
+                    Contact: 22f3003212@ds.study.iitm.ac.in 
+                </address>
+            </section>
+        </div>
         {% endblock %}
     </body>
 </html>
