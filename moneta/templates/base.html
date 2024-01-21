@@ -1,0 +1,20 @@
+<html>
+    <head>
+        {% if actual_title %}
+        <title>actual_title</title>
+        {% else %}
+            <title>Moneta</title>
+        {% endif %}
+    </head>
+
+    <body>
+        {{ block header_element}}
+        {{ endblock }}
+
+        {{ block main_body}}
+        {{ endblock }}
+
+        {{ block footer_element}}
+        {{ endblock }}
+    </body>
+</html>
