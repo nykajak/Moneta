@@ -16,8 +16,8 @@ class User(db.Model):
     def __repr__(self):
         return f"User({self.username},{self.email})"
 
-class Role(db.Model):
-    __tablename__ = "role"
+# class Role(db.Model):
+#     __tablename__ = "role"
 
 class Book(db.Model):
     __tablename__ = "book"
