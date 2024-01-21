@@ -23,7 +23,7 @@ def create_app():
     
 
     db.init_app(app)
-    app.app_context.push()
+    app.app_context().push()
 
     return app
 
