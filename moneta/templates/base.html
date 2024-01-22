@@ -6,12 +6,12 @@
             <title>Moneta</title>
         {% endif %}
 
-        <link href="./static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/static/custom/global_styles.css">
+        <link href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static',filename='custom/global_styles.css') }}">
     </head>
 
     <body>
-        {% block header_element %}
+        <!-- {% block header_element %} -->
             <div class="container-flexible">
                 <div class="row text-center">
                     <div class="col"><h1>Moneta: Remembering Words</h1></div>
@@ -24,12 +24,12 @@
                 </div>
             </div>
             <hr>
-        {% endblock %}
+        <!-- {% endblock %} -->
 
         {% block main_body %}
         {% endblock %}
 
-        {% block footer_element %}
+        <!-- {% block footer_element %} -->
         <hr>
         <div class="container-flexible mx-auto text-center">
             <section>
@@ -43,6 +43,6 @@
                 </address>
             </section>
         </div>
-        {% endblock %}
+        <!-- {% endblock %} -->
     </body>
 </html>

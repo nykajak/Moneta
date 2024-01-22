@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from moneta.config import LocalConfig
 from moneta.database import db
+from moneta.forms import MyLoginForm,MyRegistrationForm
 from flask_security import Security, SQLAlchemySessionUserDatastore, SQLAlchemyUserDatastore
 from moneta.models import User,Role
 from flask_security.models import fsqla_v3 as fsqla
@@ -29,7 +30,7 @@ def create_app():
     app.app_context().push()
 
     user_datastore = SQLAlchemyUserDatastore(db,User,Role)
-    app.security = Security(app,user_datastore) 
+    app.security = Security(app,user_datastore, login_form=MyLoginForm,register_form=MyRegistrationForm) 
     fsqla.FsModels.set_db_info(db)
 
     return app
