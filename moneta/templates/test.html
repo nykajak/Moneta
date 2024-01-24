@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
 {% block main_body %}
+    {% if user %}
     <h1>{{ user.username }}</h1>
+    {% endif %}
 {% endblock %}
