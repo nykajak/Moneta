@@ -1,11 +1,21 @@
-from flask import request,render_template,flash,render_template_string,redirect
-from moneta import app,db,bcrypt
+from flask import request,render_template,flash,redirect,url_for,session
+from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm
 from moneta.models import User
+from flask_login import login_user,logout_user,login_required
+
+@login_manager.user_loader
+def load_user(user_id):
+    pass
 
 @app.route("/")
-def test():
+def main():
     return render_template("test.html")
+
+@app.route("/test")
+def test():
+    u = User.query.filter_by(id=session.get('_user_id')).first()
+    return render_template("test.html",user = u)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -15,8 +25,10 @@ def login():
         u = User.query.filter_by(email=form.email.data).first()
         if u and bcrypt.check_password_hash(u.password,form.password.data):
             print('Successful login!')
-            # Login user code here!
-            redirect('/',200)
+            print(login_user(u))
+
+            next = request.args.get('next')
+            return redirect(next or url_for('test'))
 
         else:
             if not u:
@@ -33,7 +45,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        u = User(username=form.username.data,email=form.email.data,password=hashed_password,active=1)
+        u = User(username=form.username.data,email=form.email.data,password=hashed_password)
         flag = 0
         try:
             db.session.add(u)
@@ -44,8 +56,10 @@ def register():
 
         if flag:
             print("User created!")
-            # Login code here!
-            redirect('/',200)
+            print(login_user(u))
+
+            next = request.args.get('next')
+            return redirect(next or url_for('test'))
         else:
             print("User not created!")
         
@@ -54,7 +68,8 @@ def register():
 
 @app.route("/logout")
 def logout():
-    pass
+    logout_user()
+    return redirect('test')
     
 
 @app.errorhandler(404)

@@ -3,9 +3,11 @@ from flask import Flask
 from moneta.config import LocalConfig
 from moneta.database import db
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 # from flask_security.models import fsqla_v3 as fsqla
 
 app = None
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__,template_folder="templates")
@@ -30,4 +32,6 @@ def create_app():
     return app,bcrypt
 
 app,bcrypt = create_app()
+login_manager.init_app(app)
+
 from moneta import routes

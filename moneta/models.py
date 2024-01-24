@@ -1,5 +1,6 @@
 from moneta.database import db 
 from datetime import date
+from flask_login import UserMixin
 # from flask_security import UserMixin,RoleMixin
 # from flask_security.models import fsqla_v3 as fsqla
 
@@ -29,7 +30,7 @@ permission = db.Table('permission',
     db.Column('role_id',db.Integer,db.ForeignKey("role.id"),primary_key=True)
 )
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     __tablename__ = "user"
 
     # Fields
@@ -37,7 +38,9 @@ class User(db.Model):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(60),nullable=True)
     email = db.Column(db.String(60),nullable=False,unique=True)
-    active = db.Column(db.Boolean(),nullable=False)
+    # is_active = db.Column(db.Boolean(),nullable=False,default=1)
+    # is_authenticated = db.Column(db.Boolean(),nullable=False)
+    # is_anonymous = db.Column(db.Boolean(),nullable=False,default=0)
 
     # Reference to all the books currently borrowed
     books = db.relationship('Book',secondary=borrow,lazy=True)
@@ -47,6 +50,9 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User({self.username},{self.email})"
+    
+    # def get_id(self):
+    #     return str(self.id)
 
 class Role(db.Model):
     __tablename__ = "role"
