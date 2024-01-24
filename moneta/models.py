@@ -1,6 +1,6 @@
 from moneta.database import db 
 from datetime import date
-from flask_security import UserMixin,RoleMixin
+# from flask_security import UserMixin,RoleMixin
 # from flask_security.models import fsqla_v3 as fsqla
 
 # Table to store category relation between Book and Section
@@ -29,7 +29,7 @@ permission = db.Table('permission',
     db.Column('role_id',db.Integer,db.ForeignKey("role.id"),primary_key=True)
 )
 
-class User(db.Model,UserMixin):
+class User(db.Model):
     __tablename__ = "user"
 
     # Fields
@@ -38,7 +38,6 @@ class User(db.Model,UserMixin):
     password = db.Column(db.String(60),nullable=True)
     email = db.Column(db.String(60),nullable=False,unique=True)
     active = db.Column(db.Boolean(),nullable=False)
-    fs_uniquifier = db.Column(db.String(64),unique = True, nullable = False)
 
     # Reference to all the books currently borrowed
     books = db.relationship('Book',secondary=borrow,lazy=True)
@@ -49,7 +48,7 @@ class User(db.Model,UserMixin):
     def __repr__(self):
         return f"User({self.username},{self.email})"
 
-class Role(db.Model,RoleMixin):
+class Role(db.Model):
     __tablename__ = "role"
 
     # Fields
