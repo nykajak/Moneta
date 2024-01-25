@@ -22,19 +22,24 @@ def login():
     form = MyLoginForm()
 
     if form.validate_on_submit():
+        app.logger.info("Login form validated!")
+
         u = User.query.filter_by(email=form.email.data).first()
+        app.logger.debug("User query processed!")
+
         if u and bcrypt.check_password_hash(u.password,form.password.data):
-            print('Successful login!')
-            print(login_user(u))
+            app.logger.debug("Successful login!")
+            res = login_user(u)
+            app.logger.debug(f"Result of logging in is: {res}")
 
             next = request.args.get('next')
             return redirect(next or url_for('test'))
 
         else:
             if not u:
-                print("No such user!")
+                app.logger.debug("No such user!")
             else:
-                print("Incorrect password!")
+                app.logger.debug("User provided incorrect password!")
 
     return render_template("login.html",login_user_form = form)
 
@@ -44,24 +49,31 @@ def register():
     form = MyRegistrationForm()
 
     if form.validate_on_submit():
+        app.logger.info("Register form validated!")
+
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         u = User(username=form.username.data,email=form.email.data,password=hashed_password)
+        app.logger.debug("User query processed!")
+
         flag = 0
         try:
             db.session.add(u)
             db.session.commit()
             flag = 1
+
         except Exception as E:
-            print(E)
+            pass
 
         if flag:
-            print("User created!")
-            print(login_user(u))
+            app.logger.debug("User created!")
+            res = login_user(u)
+            app.logger.debug(f"Result of logging in is: {res}")
+            app.logger.debug("User logged in!")
 
             next = request.args.get('next')
             return redirect(next or url_for('test'))
         else:
-            print("User not created!")
+            app.logger.debug("User not created as already exists!")
         
 
     return render_template("register.html",register_user_form = form)
@@ -69,9 +81,11 @@ def register():
 @app.route("/logout")
 def logout():
     logout_user()
+    app.logger.debug("User logged out!")
     return redirect('test')
     
 
 @app.errorhandler(404)
 def page_not_found(e):
+    app.logger.critical("Expected page does not exist!")
     return "Page not found",404

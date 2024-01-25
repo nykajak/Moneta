@@ -6,8 +6,8 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import logging 
 
-# logger_format = f"%(asctime)s %(filename)s %(funcname)s :: %(levelname)s - %(message)s"
-# logging.basicConfig(filename='debug.log', level=logging.DEBUG, format = logger_format)
+logger_format = f"%(asctime)s \n %(filename)s %(funcName)s \n %(levelname)s - %(message)s \n"
+logging.basicConfig(filename='debug.log', level=logging.DEBUG, format = logger_format)
 
 app = None
 login_manager = LoginManager()
@@ -35,6 +35,8 @@ def create_app():
     return app,bcrypt
 
 app,bcrypt = create_app()
+app.logger.info("App and bcrypt created!")
 login_manager.init_app(app)
+app.logger.info("Login manager initialised!")
 
 from moneta import routes
