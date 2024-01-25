@@ -2,20 +2,20 @@ from flask import request,render_template,flash,redirect,url_for,session
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm
 from moneta.models import User
-from flask_login import login_user,logout_user,login_required
+from flask_login import login_user,logout_user,login_required,current_user
 
 @login_manager.user_loader
 def load_user(user_id):
-    pass
+    return User.query.filter_by(id=user_id).first()
 
 @app.route("/")
 def main():
     return render_template("test.html")
 
 @app.route("/test")
+@login_required
 def test():
-    u = User.query.filter_by(id=session.get('_user_id')).first()
-    return render_template("test.html",user = u)
+    return render_template("test.html",user = current_user)
 
 @app.route("/login",methods=['GET','POST'])
 def login():

@@ -4,7 +4,10 @@ from moneta.config import LocalConfig
 from moneta.database import db
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-# from flask_security.models import fsqla_v3 as fsqla
+import logging 
+
+# logger_format = f"%(asctime)s %(filename)s %(funcname)s :: %(levelname)s - %(message)s"
+# logging.basicConfig(filename='debug.log', level=logging.DEBUG, format = logger_format)
 
 app = None
 login_manager = LoginManager()
