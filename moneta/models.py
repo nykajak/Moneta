@@ -67,6 +67,7 @@ class Book(db.Model):
 
     # Fields
     id = db.Column(db.Integer,primary_key = True)
+    author_id = db.Column(db.Integer,db.ForeignKey("author.id"),nullable = False)
     name = db.Column(db.String(80), unique = True, nullable = False)
     content = db.Column(db.Text,nullable = False)
 
@@ -74,6 +75,16 @@ class Book(db.Model):
 
     def __repr__(self):
         return f'Book({self.name})'
+    
+class Author(db.Model):
+    __tablename__ = 'author'
+
+    #Fields
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(80), unique = True, nullable = False)
+
+    def __repr__(self):
+        return f'Author({self.name})'
 
 class Section(db.Model):
     __tablename__ = "section"
