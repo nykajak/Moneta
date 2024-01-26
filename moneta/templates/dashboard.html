@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block header_element %}
+    <div class="container-flexible">
+        <div class="row text-center">
+            <div class="col">
+                <h2>Moneta: Remembering Words</h2>
+                <h4>Welcome {{ user.username }} </h4>
+            </div>
+        </div>
+        <hr>
+        <div class="row text-center">
+            <div class="col"><a href="">Explore</a></div>
+            <div class="col"><a href="">Random</a></div>
+            <div class="col"><a href="">Your Shelf</a></div>
+            <div class="col"><a href="">Profile</a></div>
+        </div>
+    </div>
+    <hr>
+{% endblock %}

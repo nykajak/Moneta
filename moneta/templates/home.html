@@ -1,0 +1,5 @@
+{% if user.is_anonymous %}
+    {% extends "base.html" %}
+{% else %}
+    {% extends "dashboard.html" %}
+{% endif %}

@@ -9,8 +9,8 @@ def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
 
 @app.route("/")
-def main():
-    return render_template("test.html")
+def home():
+    return render_template("home.html",user=current_user)
 
 @app.route("/test")
 @login_required
