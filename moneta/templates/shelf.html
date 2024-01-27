@@ -1,27 +1,11 @@
-{% extends "base.html" %}
+{% extends "dashboard.html" %}
 
 {% block main_body %}
     <div class="container">
-        <div class="row">
-
-            {% for i in range(10) %}
-                {{ books.length }}
-                {% if i < books|length %}
-                    <div class="card col-2 text-center p-5 m-4">
-                        <img src="static/assets/{{ books[i].title }}.jpg" alt="broken" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ books[i].title }}</h5>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="card col-2 text-center p-5 m-2">
-                        <img src=" {{ url_for('static', filename='assets/default_book.png') }} " alt="" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">None</h5>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+        {% for book in books %}
+            <div class="">
+                <h4>{{ book.name }}</h4>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

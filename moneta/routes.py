@@ -1,7 +1,7 @@
 from flask import request,render_template,flash,redirect,url_for,session
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm
-from moneta.models import User
+from moneta.models import User,Section,Book,category
 from flask_login import login_user,logout_user,login_required,current_user
 
 @login_manager.user_loader
@@ -90,6 +90,22 @@ def logout():
     logout_user()
     app.logger.debug("User logged out!")
     return redirect(url_for('home'))
+
+@app.route("/sections")
+@login_required
+def genre():
+    sections = Section.query.all()
+    return render_template('sections.html',sections=sections, user=current_user)
+
+@app.route("/sections/<name>")
+@login_required
+def selected_genre(name):
+    return "404. Not implemented."
+
+@app.route("/shelf")
+@login_required
+def shelf():
+    return render_template('shelf.html',books=current_user.books, user=current_user)
     
 
 @app.errorhandler(404)
