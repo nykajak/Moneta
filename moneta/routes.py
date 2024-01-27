@@ -22,7 +22,7 @@ def login():
 
     if form.validate_on_submit():
         app.logger.info("Login form validated!")
-
+        
         u = User.query.filter_by(email=form.email.data).first()
         app.logger.debug("User query processed!")
 
@@ -81,7 +81,7 @@ def register():
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         else:
-            pass    
+            pass   
 
     return render_template("register.html",register_user_form = form)
 

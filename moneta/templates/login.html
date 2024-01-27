@@ -8,12 +8,30 @@
 
                 <div class="form-group">
                     {{ login_user_form.email.label(class='form-control-label') }}
-                    {{ login_user_form.email(class='form-control form-control-md') }}
+                    {% if login_user_form.email.errors %}
+                        {{ login_user_form.email(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in login_user_form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ login_user_form.email(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
 
                 <div class="form-group">
                     {{ login_user_form.password.label(class='form-control-label') }}
-                    {{ login_user_form.password(class='form-control form-control-md') }}
+                    {% if login_user_form.password.errors %}
+                        {{ login_user_form.password(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in login_user_form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ login_user_form.password(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
             </fieldset>
             

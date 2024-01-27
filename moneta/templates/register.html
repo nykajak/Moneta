@@ -8,22 +8,58 @@
 
                 <div class="form-group">
                     {{ register_user_form.username.label(class='form-control-label') }}
-                    {{ register_user_form.username(class='form-control form-control-md') }}
+                    {% if register_user_form.username.errors %}
+                        {{ register_user_form.username(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in register_user_form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ register_user_form.username(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
 
                 <div class="form-group">
                     {{ register_user_form.email.label(class='form-control-label') }}
-                    {{ register_user_form.email(class='form-control form-control-md') }}
+                    {% if register_user_form.email.errors %}
+                        {{ register_user_form.email(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in register_user_form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ register_user_form.email(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
 
                 <div class="form-group">
                     {{ register_user_form.password.label(class='form-control-label') }}
-                    {{ register_user_form.password(class='form-control form-control-md') }}
+                    {% if register_user_form.password.errors %}
+                        {{ register_user_form.password(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in register_user_form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ register_user_form.password(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
 
                 <div class="form-group">
                     {{ register_user_form.confirm_password.label(class='form-control-label') }}
-                    {{ register_user_form.confirm_password(class='form-control form-control-md') }}
+                    {% if register_user_form.confirm_password.errors %}
+                        {{ register_user_form.confirm_password(class='form-control form-control-md is-invalid') }}
+                        <div class="invalid-feedback">
+                            {% for error in register_user_form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ register_user_form.confirm_password(class='form-control form-control-md') }}
+                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">
