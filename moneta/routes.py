@@ -37,8 +37,10 @@ def login():
         else:
             if not u:
                 app.logger.debug("No such user!")
+                flash("No such user found!",category="danger")
             else:
                 app.logger.debug("User provided incorrect password!")
+                flash("Incorrect password!",category="danger")
 
     return render_template("login.html",login_user_form = form)
 
@@ -61,7 +63,14 @@ def register():
             flag = 1
 
         except Exception as E:
-            pass
+            failed = E.args[0][56:]
+            if failed == 'email':
+                app.logger.debug("User not created as email already exists!")
+                flash("Email already in use",category='danger')
+            elif failed == 'username':
+                app.logger.debug("User not created as username already exists!")
+                flash("Username already in use",category='danger')
+                
 
         if flag:
             app.logger.debug("User created!")
@@ -72,8 +81,7 @@ def register():
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         else:
-            app.logger.debug("User not created as already exists!")
-        
+            pass    
 
     return render_template("register.html",register_user_form = form)
 
