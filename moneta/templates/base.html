@@ -18,9 +18,9 @@
                 </div>
                 <hr>
                 <div class="row text-center">
-                    <div class="col"><a href="">For Users</a></div>
-                    <div class="col"><a href="">For Librarians</a></div>
-                    <div class="col"><a href="">About</a></div>
+                    <div class="col"><a href="{{ url_for('register') }}">Register</a></div>
+                    <div class="col"><a href="{{ url_for('login') }}">Login</a></div>
+                    <div class="col"><a href="{{ url_for('home') }}">About</a></div>
                 </div>
             </div>
             <hr>
@@ -30,8 +30,8 @@
         {% endblock %}
 
         {% block footer_element %}
-        <hr>
-        <div class="container-flexible mx-auto text-center">
+        <div class="text-center mx-auto" style="position: absolute; bottom: 10px; width: 100%;">
+            <hr>
             <section>
                 <p>Welcome! Hope you enjoy!<br>Built with Flask</p> 
             </section>

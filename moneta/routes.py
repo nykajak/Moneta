@@ -13,7 +13,6 @@ def home():
     return render_template("home.html",user=current_user)
 
 @app.route("/test")
-@login_required
 def test():
     return render_template("test.html",user = current_user)
 
@@ -33,7 +32,7 @@ def login():
             app.logger.debug(f"Result of logging in is: {res}")
 
             next = request.args.get('next')
-            return redirect(next or url_for('test'))
+            return redirect(next or url_for('home'))
 
         else:
             if not u:
@@ -71,7 +70,7 @@ def register():
             app.logger.debug("User logged in!")
 
             next = request.args.get('next')
-            return redirect(next or url_for('test'))
+            return redirect(next or url_for('home'))
         else:
             app.logger.debug("User not created as already exists!")
         
@@ -82,7 +81,7 @@ def register():
 def logout():
     logout_user()
     app.logger.debug("User logged out!")
-    return redirect('test')
+    return redirect(url_for('home'))
     
 
 @app.errorhandler(404)
