@@ -87,6 +87,7 @@ class Author(db.Model):
     #Fields
     id = db.Column(db.Integer,primary_key = True)
     name = db.Column(db.String(80), unique = True, nullable = False)
+    bio = db.Column(db.String(255))
 
     # Reference to all ratings written by author and vice versa.
     books = db.relationship('Book',secondary=written,backref = db.backref('authors',lazy='dynamic') )
