@@ -100,7 +100,8 @@ def genre():
 @app.route("/sections/<name>")
 @login_required
 def selected_genre(name):
-    return "404. Not implemented."
+    section = Section.query.filter(Section.name == name.title()).one()
+    return render_template('genre_list.html',genre = name.title(), books=section.books, user=current_user)
 
 @app.route("/shelf")
 @login_required

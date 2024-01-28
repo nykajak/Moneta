@@ -71,7 +71,7 @@ class Book(db.Model):
     name = db.Column(db.String(80), unique = True, nullable = False)
     content = db.Column(db.Text,nullable = False)
 
-    # Mass loading of all ratings for particular book avoided due to bulk.
+    ratings = db.relationship('User',secondary=rating)
 
     def __repr__(self):
         return f'Book({self.name})'
@@ -95,7 +95,7 @@ class Section(db.Model):
     doc = db.Column(db.DateTime, default = date.today())
     description = db.Column(db.String(256))
 
-    # Mass loading of all books of particular section avoided due to bulk.
+    books = db.relationship('Book',secondary=category,backref = db.backref('sections',lazy='dynamic') )
 
     def __repr__(self):
         return f"Section({self.name}, {self.description})"
