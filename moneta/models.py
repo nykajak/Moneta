@@ -36,6 +36,13 @@ permission = db.Table('permission',
     db.Column('role_id',db.Integer,db.ForeignKey("role.id"),primary_key=True)
 )
 
+# Table to keep track of comments between User and Book
+comment = db.Table('comment',
+    db.Column('user_id',db.Integer,db.ForeignKey("user.id"),primary_key=True),
+    db.Column('book_id',db.Integer,db.ForeignKey("book.id"),primary_key=True),
+    db.Column('content',db.Text,nullable=False)
+)
+
 class User(db.Model,UserMixin):
     __tablename__ = "user"
 
@@ -75,9 +82,13 @@ class Book(db.Model):
     # Fields
     id = db.Column(db.Integer,primary_key = True)
     name = db.Column(db.String(80), unique = True, nullable = False)
+    description = db.Column(db.Text)
 
     # Reference to all ratings assigned to the book
     ratings = db.relationship('User',secondary=rating)
+
+    # Reference to all comments associated with the book
+    comments = db.relationship('User',secondary=comment, backref = db.backref('comments',lazy='dynamic'))
 
     def __repr__(self):
         return f'Book({self.name})'
