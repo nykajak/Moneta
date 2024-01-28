@@ -1,11 +1,9 @@
 {% extends "dashboard.html" %}
 
 {% block main_body %}
-    <div class="container">
+    <div class="container text-center">
         {% for book in books %}
-            <div class="">
-                <h4>{{ book.name }}</h4>
-            </div>
+            <h4><a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a></h4>
         {% endfor %}
     </div>
 {% endblock %}
