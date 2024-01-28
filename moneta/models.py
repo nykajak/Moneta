@@ -16,31 +16,10 @@ category = db.Table('category',
     db.Column('section_id', db.Integer, db.ForeignKey('section.id'), primary_key=True)
 )
 
-# Table to keep track of borrow relation between User and Book
-borrow = db.Table('borrow',
-    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('b_date', db.DateTime, nullable = False, default = date.today())
-)
-
-# Table to keep track of rating relation between User and Book
-rating = db.Table('rating',
-    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('score', db.Integer, nullable = False)
-)
-
 # Table to keep track of roles between User and Role
 permission = db.Table('permission',
     db.Column('user_id',db.Integer,db.ForeignKey("user.id"),primary_key=True),
     db.Column('role_id',db.Integer,db.ForeignKey("role.id"),primary_key=True)
-)
-
-# Table to keep track of comments between User and Book
-comment = db.Table('comment',
-    db.Column('user_id',db.Integer,db.ForeignKey("user.id"),primary_key=True),
-    db.Column('book_id',db.Integer,db.ForeignKey("book.id"),primary_key=True),
-    db.Column('content',db.Text,nullable=False)
 )
 
 class User(db.Model,UserMixin):
@@ -56,8 +35,8 @@ class User(db.Model,UserMixin):
     # is_authenticated = db.Column(db.Boolean(),nullable=False)
     # is_anonymous = db.Column(db.Boolean(),nullable=False,default=0)
 
-    # Reference to all the books currently borrowed
-    books = db.relationship('Book',secondary=borrow,lazy=True)
+    # Reference to all the borrow objects corresponding to books currently borrowed
+    borrowed = db.relationship('Borrow',backref='user',lazy=True)
 
     # Reference to all roles assigned to the user
     roles = db.relationship('Role',secondary=permission,backref = db.backref('users',lazy='dynamic'))
@@ -85,10 +64,10 @@ class Book(db.Model):
     description = db.Column(db.Text)
 
     # Reference to all ratings assigned to the book
-    ratings = db.relationship('User',secondary=rating)
+    ratings = db.relationship('Rating',backref='book',lazy=True)
 
     # Reference to all comments associated with the book
-    comments = db.relationship('User',secondary=comment, backref = db.backref('comments',lazy='dynamic'))
+    comments = db.relationship('Comment',backref = 'book', lazy=True)
 
     def __repr__(self):
         return f'Book({self.name})'
@@ -121,3 +100,36 @@ class Section(db.Model):
 
     def __repr__(self):
         return f"Section({self.name}, {self.description})"
+    
+
+class Comment(db.Model):
+    __tablename__ = "comment"
+
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"),primary_key=True)
+    book_id = db.Column(db.Integer,db.ForeignKey("book.id"),primary_key=True)
+    content = db.Column(db.Text,nullable=False)
+
+    def __repr__(self):
+        return f"Comment({self.user_id},{self.book_id})"
+    
+class Rating(db.Model):
+    __tablename__ = "rating"
+
+    book_id = db.Column(db.Integer,db.ForeignKey("book.id"),primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"),primary_key=True)
+    score = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self):
+        return f"Rating({self.user_id},{self.book_id})"
+
+class Borrow(db.Model):
+    __tablename__ = "borrow"
+
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    b_date = db.Column(db.DateTime, nullable = False, default = date.today())
+
+    book = db.relationship('Book',lazy= True)
+
+    def __repr__(self):
+        return f"Borrow({self.user_id},{self.book_id},{self.b_date})"

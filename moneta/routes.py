@@ -1,7 +1,7 @@
 from flask import request,render_template,flash,redirect,url_for,session
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm
-from moneta.models import User,Section,Book,category
+from moneta.models import User,Section,Book
 from flask_login import login_user,logout_user,login_required,current_user
 
 @login_manager.user_loader
@@ -106,7 +106,33 @@ def selected_genre(name):
 @app.route("/shelf")
 @login_required
 def shelf():
-    return render_template('shelf.html',books=current_user.books, user=current_user)
+    books = [borrow_obj.book for borrow_obj in current_user.borrowed]
+    return render_template('shelf.html',books=books, user=current_user)
+
+@app.route("/book/<id>")
+@login_required
+def selected_book(id):
+    curr_book = Book.query.filter(Book.id == id).one()
+    
+    your_score = None
+    avg_score = None
+    sum_score = 0
+
+    all_ratings = curr_book.ratings
+    all_authors = curr_book.authors
+
+    for user_rating in all_ratings:
+        if user_rating.user_id == current_user.id:
+            your_score = user_rating.score
+
+        sum_score += user_rating.score
+
+    if (sum_score != 0):
+        avg_score = sum_score / len(all_ratings)
+
+    return render_template('book.html',book=curr_book, user=current_user,
+                            avg_score = avg_score, your_score = your_score,
+                            num_scores = len(all_ratings), all_authors = all_authors)
     
 
 @app.errorhandler(404)
