@@ -1,0 +1,23 @@
+{% extends "dashboard.html" %}
+
+{% block main_body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">{{ author.name }}</div>
+            {% if author.description %}
+                <div class="col">{{ author.description }}</div> 
+            {% else %}
+                <div class="col">No description yet!</div> 
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {% for book in books %}
+                        <a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a>
+                        <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

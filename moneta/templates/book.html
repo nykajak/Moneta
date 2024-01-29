@@ -22,10 +22,16 @@
                     <p> No description provided! </p>
                 {% endif %}
 
+                {% for section in all_sections %}
+                    <a href="{{ url_for('selected_genre',name=section.name) }}">{{ section.name }} </a>
+                    <br>
+                {% endfor %}
+
                 <div>
                     <h4>Authors: </h4>
                     {% for author in all_authors %}
-                        {{ author.name }} <br>
+                        <a href="{{ url_for('selected_author',id = author.id) }}">{{ author.name }}</a>
+                        <br>
                     {% endfor %}
                 </div>
             </div>

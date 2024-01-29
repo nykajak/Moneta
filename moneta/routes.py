@@ -1,7 +1,7 @@
 from flask import request,render_template,flash,redirect,url_for,session
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm
-from moneta.models import User,Section,Book
+from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
 
 @login_manager.user_loader
@@ -120,6 +120,7 @@ def selected_book(id):
 
     all_ratings = curr_book.ratings
     all_authors = curr_book.authors
+    all_sections = curr_book.sections
 
     for user_rating in all_ratings:
         if user_rating.user_id == current_user.id:
@@ -132,8 +133,16 @@ def selected_book(id):
 
     return render_template('book.html',book=curr_book, user=current_user,
                             avg_score = avg_score, your_score = your_score,
-                            num_scores = len(all_ratings), all_authors = all_authors)
+                            num_scores = len(all_ratings), all_authors = all_authors,
+                            all_sections = all_sections)
     
+
+@app.route("/author/<id>")
+@login_required
+def selected_author(id):
+    author = Author.query.filter(id == Author.id).one()
+    books = author.books
+    return render_template('author.html',author=author,books=books,user=current_user)
 
 @app.errorhandler(404)
 def page_not_found(e):
