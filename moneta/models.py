@@ -72,6 +72,10 @@ class Book(db.Model):
     def __repr__(self):
         return f'Book({self.name})'
     
+
+    def __lt__(self,other):
+        return self.name < other.name
+    
 class Author(db.Model):
     __tablename__ = 'author'
 

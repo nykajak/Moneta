@@ -1,6 +1,6 @@
 from flask import request,render_template,flash,redirect,url_for,session
 from moneta import app,db,bcrypt,login_manager
-from moneta.forms import MyLoginForm,MyRegistrationForm
+from moneta.forms import MyLoginForm,MyRegistrationForm,SearchForm
 from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
 
@@ -148,6 +148,28 @@ def selected_author(id):
 @login_required
 def read(id):
     return render_template("read.html",user=current_user)
+
+@app.route("/explore", methods=['GET','POST'])
+@login_required
+def search():
+    form = SearchForm()
+
+    if form.validate_on_submit():
+        book,author = form.book_name.data,form.author_name.data
+        book_results = set(b for b in Book.query.filter(Book.name.like(f"%{book}%")))
+        author_results = set(a for a in Author.query.filter(Author.name.like(f"%{author}%")))
+
+        result = set()
+        for a in author_results:
+            for b in a.books:
+                if b in book_results:
+                    result.add(b)
+
+        result = list(result)
+        result.sort()
+        return render_template("results.html",user=current_user, results = result)
+
+    return render_template("explore.html",user=current_user,form = form)
 
 @app.errorhandler(404)
 def page_not_found(e):

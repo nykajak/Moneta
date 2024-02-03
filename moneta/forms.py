@@ -14,3 +14,8 @@ class MyLoginForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired(),Length(min = 6,max=60)])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Log In')
+
+class SearchForm(FlaskForm):
+    book_name = StringField('Book Name')
+    author_name = StringField('Author Name')
+    submit = SubmitField('Search')
