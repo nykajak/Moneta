@@ -3,7 +3,10 @@
 {% block main_body %}
     <div class="container text-center">
         {% for book in books %}
-            <h4><a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a></h4>
+            <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                <br>
+                <h5><a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a></h5>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

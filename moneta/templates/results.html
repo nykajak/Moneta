@@ -6,8 +6,9 @@
             <h2>No results found!</h2>
         {% else %}
             {% for result in results %}
-                <div class="row">
-                    <a href="{{ url_for('selected_book',id = result.id) }}">{{ result.name }}</a>
+                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                    <br>
+                    <h5><a href="{{ url_for('selected_book',id = result.id) }}">{{ result.name }}</a></h5>
                 </div>
             {% endfor %}
         {% endif %}
