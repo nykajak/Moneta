@@ -144,6 +144,11 @@ def selected_author(id):
     books = author.books
     return render_template('author.html',author=author,books=books,user=current_user)
 
+@app.route("/read/<id>")
+@login_required
+def read(id):
+    return render_template("read.html",user=current_user)
+
 @app.errorhandler(404)
 def page_not_found(e):
     app.logger.critical("Expected page does not exist!")

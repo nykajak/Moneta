@@ -1,0 +1,7 @@
+{% extends "dashboard.html" %}
+
+{% block main_body %}
+    <div class="container">
+        <iframe src="{{ url_for('static',filename='assets/default.pdf')}}#toolbar=0" frameborder="2" width="900px" height="900px"></iframe>
+    </div>
+{% endblock %}
