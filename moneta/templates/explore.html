@@ -33,6 +33,20 @@
                     {{ form.author_name(class='form-control form-control-md') }}
                 {% endif %}
             </div>
+
+            <div class="form-group">
+                {{ form.section_name.label(class='form-control-label') }}
+                {% if form.section_name.errors %}
+                    {{ form.section_name(class='form-control form-control-md is-invalid') }}
+                    <div class="invalid-feedback">
+                        {% for error in form.section_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.section_name(class='form-control form-control-md') }}
+                {% endif %}
+            </div>
         </fieldset>
         <div class="form-group">
             {{ form.submit(class='btn btn-info') }}

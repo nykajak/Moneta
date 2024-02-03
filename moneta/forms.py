@@ -18,4 +18,5 @@ class MyLoginForm(FlaskForm):
 class SearchForm(FlaskForm):
     book_name = StringField('Book Name')
     author_name = StringField('Author Name')
+    section_name = StringField('Genre')
     submit = SubmitField('Search')

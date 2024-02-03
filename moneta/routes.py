@@ -155,15 +155,10 @@ def search():
     form = SearchForm()
 
     if form.validate_on_submit():
-        book,author = form.book_name.data,form.author_name.data
-        book_results = set(b for b in Book.query.filter(Book.name.like(f"%{book}%")))
-        author_results = set(a for a in Author.query.filter(Author.name.like(f"%{author}%")))
-
-        result = set()
-        for a in author_results:
-            for b in a.books:
-                if b in book_results:
-                    result.add(b)
+        book_name,author_name,section_name = form.book_name.data,form.author_name.data,form.section_name.data
+        result = Book.query.filter(Book.name.like(f"%{book_name}%"))
+        result = result.filter(Book.authors.any(Author.name.like(f"%{author_name}%")))
+        result = result.filter(Book.sections.any(Section.name.like(f"%{section_name}%")))
 
         result = list(result)
         result.sort()
