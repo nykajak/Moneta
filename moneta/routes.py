@@ -200,3 +200,21 @@ def search():
 def see_users():
     users = User.query.all()
     return render_template("librarian_specific/all_users.html",users = users)
+
+@app.route("/librarian/sections")
+@librarian_required
+def see_sections():
+    sections = Section.query.all()
+    return render_template("librarian_specific/all_sections.html",sections = sections)
+
+@app.route("/librarian/books")
+@librarian_required
+def see_books():
+    books = Book.query.all()
+    return render_template("librarian_specific/all_books.html",books = books)
+
+@app.route("/librarian/authors")
+@librarian_required
+def see_authors():
+    authors = Author.query.all()
+    return render_template("librarian_specific/all_authors.html",authors = authors)

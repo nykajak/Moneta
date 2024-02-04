@@ -12,9 +12,10 @@
         <div class="row text-center">
             <div class="col"><a href="">Find</a></div>
             <div class="col"><a href="{{ url_for('see_users') }}">Users</a></div>
-            <div class="col"><a href="">Genres</a></div>
-            <div class="col"><a href="">Books</a></div>
-            <div class="col"><a href="">Profile</a></div>
+            <div class="col"><a href="{{ url_for('see_sections') }}">Genres</a></div>
+            <div class="col"><a href="{{ url_for('see_books') }}">Books</a></div>
+            <div class="col"><a href="{{ url_for('see_authors') }}">Authors</a></div>
+            <div class="col"><a href="{{ url_for('home')}}">Profile</a></div>
         </div>
     </div>
     <hr>

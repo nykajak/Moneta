@@ -1,0 +1,13 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto">
+        {% for section in sections %}
+            <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                <br>
+                <h5><a href="">{{ section.name }}</a></h5>
+                <p>{{ section.description }}</p>
+            </div>
+        {% endfor %}      
+    </div>
+{% endblock %}
