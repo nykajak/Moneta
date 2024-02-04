@@ -156,9 +156,10 @@ def search():
 
     if form.validate_on_submit():
         book_name,author_name,section_name = form.book_name.data,form.author_name.data,form.section_name.data
-        result = Book.query.filter(Book.name.like(f"%{book_name}%"))
-        result = result.filter(Book.authors.any(Author.name.like(f"%{author_name}%")))
-        result = result.filter(Book.sections.any(Section.name.like(f"%{section_name}%")))
+        result = Book.query.filter(Book.name.ilike(f"%{book_name}%"))
+        result = result.filter(Book.authors.any(Author.name.ilike(f"%{author_name}%")))
+        result = result.filter(Book.sections.any(Section.name.ilike(f"%{section_name}%")))
+        print(result)
 
         result = list(result)
         result.sort()
