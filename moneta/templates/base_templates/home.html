@@ -1,5 +1,7 @@
 {% if current_user.is_anonymous %}
     {% extends "anon_specific/about.html" %}
-{% else %}
+{% elif not current_user.is_librarian %}
     {% extends "user_specific/profile.html" %}
+{% else %}
+    {% extends "librarian_specific/profile.html" %}
 {% endif %}

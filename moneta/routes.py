@@ -3,6 +3,7 @@ from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm,SearchForm
 from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
+from functools import wraps
 
 ## Utility functions!
 
@@ -19,6 +20,14 @@ def page_not_found(e):
 def test():
     return render_template("base_templates/test.html")
 
+def librarian_required(fun):
+    @wraps(fun)
+    def inner(*args,**kwargs):
+        if not current_user.is_anonymous and current_user.is_librarian:
+            return fun(*args,**kwargs)
+        else:
+            return app.login_manager.unauthorized()
+    return inner
 
 ## Decision routes
 @app.route("/")
@@ -183,3 +192,11 @@ def search():
         return render_template("user_specific/results.html",results = result)
 
     return render_template("user_specific/explore.html",form = form)
+
+## Librarian routes
+
+@app.route("/librarian/users")
+@librarian_required
+def see_users():
+    users = User.query.all()
+    return render_template("librarian_specific/all_users.html",users = users)

@@ -1,0 +1,14 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto">
+        {% for user in users %}
+            {% if not user.is_librarian %}
+                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                    <br>
+                    <h5><a href="">{{ user.username }}</a></h5>
+                </div>
+            {% endif %}
+        {% endfor %}      
+    </div>
+{% endblock %}

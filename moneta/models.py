@@ -31,6 +31,7 @@ class User(db.Model,UserMixin):
     password = db.Column(db.String(60),nullable=True)
     email = db.Column(db.String(60),nullable=False,unique=True)
     doj = db.Column(db.DateTime, nullable=False, default = date.today())
+    is_librarian = db.Column(db.Integer,nullable = False, default = 0)
     # is_active = db.Column(db.Boolean(),nullable=False,default=1)
     # is_authenticated = db.Column(db.Boolean(),nullable=False)
     # is_anonymous = db.Column(db.Boolean(),nullable=False,default=0)
