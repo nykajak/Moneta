@@ -1,0 +1,15 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto">
+        {% for result in results %}
+            <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                {% if result.name %}
+                    <h5><a href="">{{ result.name }}</a></h5>
+                {% else %}
+                    <h5><a href="">{{ result.username }}</a></h5>
+                {% endif %}
+            </div>
+        {% endfor %}      
+    </div>
+{% endblock %}

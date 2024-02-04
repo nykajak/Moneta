@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,RadioField
 from wtforms.validators import DataRequired,Length,Email,EqualTo
 
 class MyRegistrationForm(FlaskForm):
@@ -15,8 +15,13 @@ class MyLoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Log In')
 
-class SearchForm(FlaskForm):
+class UserSearchForm(FlaskForm):
     book_name = StringField('Book Name')
     author_name = StringField('Author Name')
     section_name = StringField('Genre')
+    submit = SubmitField('Search')
+
+class LibrarianSearchForm(FlaskForm):
+    obj_name = StringField("Search term",validators=[DataRequired()])
+    obj_type = RadioField('Search for',choices=[(x,x) for x in ['Book','Author','Section','User']],default='Book')
     submit = SubmitField('Search')

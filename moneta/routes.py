@@ -1,6 +1,6 @@
 from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
-from moneta.forms import MyLoginForm,MyRegistrationForm,SearchForm
+from moneta.forms import MyLoginForm,MyRegistrationForm,UserSearchForm,LibrarianSearchForm
 from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
 from functools import wraps
@@ -179,7 +179,7 @@ def selected_author(id):
 @app.route("/explore", methods=['GET','POST'])
 @login_required
 def search():
-    form = SearchForm()
+    form = UserSearchForm()
 
     if form.validate_on_submit():
         book_name,author_name,section_name = form.book_name.data,form.author_name.data,form.section_name.data
@@ -218,3 +218,27 @@ def see_books():
 def see_authors():
     authors = Author.query.all()
     return render_template("librarian_specific/all_authors.html",authors = authors)
+
+@app.route("/find",methods=['GET','POST'])
+@librarian_required
+def find_something():
+    form = LibrarianSearchForm()
+
+    if form.validate_on_submit():
+        if form.obj_type.data == "Book":
+            results = Book.query.filter(Book.name.ilike(f"%{form.obj_name.data}%"))
+
+        elif form.obj_type.data == "User":
+            results = User.query.filter(User.username.ilike(f"%{form.obj_name.data}%"))
+        
+        elif form.obj_type.data == "Section":
+            results = Section.query.filter(Section.name.ilike(f"%{form.obj_name.data}%"))
+        
+        elif form.obj_type.data == "Author":
+            results = Author.query.filter(Author.name.ilike(f"%{form.obj_name.data}%"))
+        else:
+            results = None
+
+        return render_template("librarian_specific/results.html",results = results)
+
+    return render_template("librarian_specific/search.html",form = form)
