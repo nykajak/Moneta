@@ -1,20 +1,31 @@
-from flask import request,render_template,flash,redirect,url_for,session
+from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import MyLoginForm,MyRegistrationForm,SearchForm
 from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
 
+## Utility functions!
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
 
-@app.route("/")
-def home():
-    return render_template("base_templates/home.html",user=current_user)
+@app.errorhandler(404)
+def page_not_found(e):
+    app.logger.critical("Expected page does not exist!")
+    return "Page not found",404
 
 @app.route("/test")
 def test():
     return render_template("base_templates/test.html",user = current_user)
+
+
+## Decision routes
+@app.route("/")
+def home():
+    return render_template("base_templates/home.html",user=current_user)
+
+## Anon user routes
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -85,12 +96,16 @@ def register():
 
     return render_template("anon_specific/register.html",register_user_form = form)
 
+## Normal user routes.
+
+# Logout
 @app.route("/logout")
 def logout():
     logout_user()
     app.logger.debug("User logged out!")
     return redirect(url_for('home'))
 
+# Genre
 @app.route("/sections")
 @login_required
 def genre():
@@ -103,12 +118,14 @@ def selected_genre(name):
     section = Section.query.filter(Section.name == name.title()).one()
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books, user=current_user)
 
+# Shelf
 @app.route("/shelf")
 @login_required
 def shelf():
     books = [borrow_obj.book for borrow_obj in current_user.borrowed]
     return render_template('user_specific/shelf.html',books=books, user=current_user)
 
+# Book
 @app.route("/book/<id>")
 @login_required
 def selected_book(id):
@@ -135,8 +152,13 @@ def selected_book(id):
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
                             all_sections = all_sections)
-    
 
+@app.route("/read/<id>")
+@login_required
+def read(id):
+    return render_template("user_specific/read.html",user=current_user)
+    
+# Author
 @app.route("/author/<id>")
 @login_required
 def selected_author(id):
@@ -144,11 +166,7 @@ def selected_author(id):
     books = author.books
     return render_template('user_specific/author.html',author=author,books=books,user=current_user)
 
-@app.route("/read/<id>")
-@login_required
-def read(id):
-    return render_template("user_specific/read.html",user=current_user)
-
+# Search
 @app.route("/explore", methods=['GET','POST'])
 @login_required
 def search():
@@ -165,8 +183,3 @@ def search():
         return render_template("user_specific/results.html",user=current_user, results = result)
 
     return render_template("user_specific/explore.html",user=current_user,form = form)
-
-@app.errorhandler(404)
-def page_not_found(e):
-    app.logger.critical("Expected page does not exist!")
-    return "Page not found",404
