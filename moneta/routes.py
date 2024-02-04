@@ -159,7 +159,6 @@ def search():
         result = Book.query.filter(Book.name.ilike(f"%{book_name}%"))
         result = result.filter(Book.authors.any(Author.name.ilike(f"%{author_name}%")))
         result = result.filter(Book.sections.any(Section.name.ilike(f"%{section_name}%")))
-        print(result)
 
         result = list(result)
         result.sort()
