@@ -10,11 +10,11 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-    return render_template("home.html",user=current_user)
+    return render_template("base_templates/home.html",user=current_user)
 
 @app.route("/test")
 def test():
-    return render_template("test.html",user = current_user)
+    return render_template("base_templates/test.html",user = current_user)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -42,7 +42,7 @@ def login():
                 app.logger.debug("User provided incorrect password!")
                 flash("Incorrect password!",category="danger")
 
-    return render_template("login.html",login_user_form = form)
+    return render_template("anon_specific/login.html",login_user_form = form)
 
 
 @app.route("/register",methods=['GET','POST'])
@@ -83,7 +83,7 @@ def register():
         else:
             pass   
 
-    return render_template("register.html",register_user_form = form)
+    return render_template("anon_specific/register.html",register_user_form = form)
 
 @app.route("/logout")
 def logout():
@@ -95,19 +95,19 @@ def logout():
 @login_required
 def genre():
     sections = Section.query.all()
-    return render_template('sections.html',sections=sections, user=current_user)
+    return render_template('user_specific/sections.html',sections=sections, user=current_user)
 
 @app.route("/sections/<name>")
 @login_required
 def selected_genre(name):
     section = Section.query.filter(Section.name == name.title()).one()
-    return render_template('genre_list.html',genre = name.title(), books=section.books, user=current_user)
+    return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books, user=current_user)
 
 @app.route("/shelf")
 @login_required
 def shelf():
     books = [borrow_obj.book for borrow_obj in current_user.borrowed]
-    return render_template('shelf.html',books=books, user=current_user)
+    return render_template('user_specific/shelf.html',books=books, user=current_user)
 
 @app.route("/book/<id>")
 @login_required
@@ -131,7 +131,7 @@ def selected_book(id):
     if (sum_score != 0):
         avg_score = sum_score / len(all_ratings)
 
-    return render_template('book.html',book=curr_book, user=current_user,
+    return render_template('user_specific/book.html',book=curr_book, user=current_user,
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
                             all_sections = all_sections)
@@ -142,12 +142,12 @@ def selected_book(id):
 def selected_author(id):
     author = Author.query.filter(id == Author.id).one()
     books = author.books
-    return render_template('author.html',author=author,books=books,user=current_user)
+    return render_template('user_specific/author.html',author=author,books=books,user=current_user)
 
 @app.route("/read/<id>")
 @login_required
 def read(id):
-    return render_template("read.html",user=current_user)
+    return render_template("user_specific/read.html",user=current_user)
 
 @app.route("/explore", methods=['GET','POST'])
 @login_required
@@ -162,9 +162,9 @@ def search():
 
         result = list(result)
         result.sort()
-        return render_template("results.html",user=current_user, results = result)
+        return render_template("user_specific/results.html",user=current_user, results = result)
 
-    return render_template("explore.html",user=current_user,form = form)
+    return render_template("user_specific/explore.html",user=current_user,form = form)
 
 @app.errorhandler(404)
 def page_not_found(e):

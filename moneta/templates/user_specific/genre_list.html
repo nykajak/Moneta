@@ -1,11 +1,12 @@
-{% extends "dashboard.html" %}
+{% extends "base_templates/dashboard.html" %}
 
 {% block main_body %}
     <div class="container text-center">
+        <h3>Genre: {{ genre }}</h3>
         {% for book in books %}
             <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                 <br>
-                <h5><a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a></h5>
+                <h5><a href="{{ url_for('selected_book',id = book.id) }}">{{book.name}}</a></h5>
             </div>
         {% endfor %}
     </div>
