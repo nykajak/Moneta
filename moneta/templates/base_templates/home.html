@@ -1,4 +1,4 @@
-{% if user.is_anonymous %}
+{% if current_user.is_anonymous %}
     {% extends "anon_specific/about.html" %}
 {% else %}
     {% extends "user_specific/profile.html" %}

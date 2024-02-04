@@ -17,13 +17,13 @@ def page_not_found(e):
 
 @app.route("/test")
 def test():
-    return render_template("base_templates/test.html",user = current_user)
+    return render_template("base_templates/test.html")
 
 
 ## Decision routes
 @app.route("/")
 def home():
-    return render_template("base_templates/home.html",user=current_user)
+    return render_template("base_templates/home.html")
 
 ## Anon user routes
 
@@ -110,20 +110,20 @@ def logout():
 @login_required
 def genre():
     sections = Section.query.all()
-    return render_template('user_specific/sections.html',sections=sections, user=current_user)
+    return render_template('user_specific/sections.html',sections=sections)
 
 @app.route("/sections/<name>")
 @login_required
 def selected_genre(name):
     section = Section.query.filter(Section.name == name.title()).one()
-    return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books, user=current_user)
+    return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
 
 # Shelf
 @app.route("/shelf")
 @login_required
 def shelf():
     books = [borrow_obj.book for borrow_obj in current_user.borrowed]
-    return render_template('user_specific/shelf.html',books=books, user=current_user)
+    return render_template('user_specific/shelf.html',books=books)
 
 # Book
 @app.route("/book/<id>")
@@ -148,7 +148,7 @@ def selected_book(id):
     if (sum_score != 0):
         avg_score = sum_score / len(all_ratings)
 
-    return render_template('user_specific/book.html',book=curr_book, user=current_user,
+    return render_template('user_specific/book.html',book=curr_book,
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
                             all_sections = all_sections)
@@ -156,7 +156,7 @@ def selected_book(id):
 @app.route("/read/<id>")
 @login_required
 def read(id):
-    return render_template("user_specific/read.html",user=current_user)
+    return render_template("user_specific/read.html")
     
 # Author
 @app.route("/author/<id>")
@@ -164,7 +164,7 @@ def read(id):
 def selected_author(id):
     author = Author.query.filter(id == Author.id).one()
     books = author.books
-    return render_template('user_specific/author.html',author=author,books=books,user=current_user)
+    return render_template('user_specific/author.html',author=author,books=books)
 
 # Search
 @app.route("/explore", methods=['GET','POST'])
@@ -180,6 +180,6 @@ def search():
 
         result = list(result)
         result.sort()
-        return render_template("user_specific/results.html",user=current_user, results = result)
+        return render_template("user_specific/results.html",results = result)
 
-    return render_template("user_specific/explore.html",user=current_user,form = form)
+    return render_template("user_specific/explore.html",form = form)
