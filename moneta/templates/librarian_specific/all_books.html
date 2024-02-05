@@ -3,9 +3,11 @@
 {% block main_body %}
     <div class="container text-center mx-auto">
         {% for book in books %}
-            <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                <br>
-                <h5><a href="">{{ book.name }}</a></h5>
+            <div class="row mx-auto border border-dark p-1" style="width:75%">
+                <div class="col text-center">
+                    <h5><a href="{{url_for('see_specific_book',id=book.id)}}">{{ book.name }}</a></h5>
+                </div>
+                <button class="btn btn-danger">Delete</button>   
             </div>
         {% endfor %}      
     </div>

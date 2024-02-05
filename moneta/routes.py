@@ -236,19 +236,23 @@ def find_something():
     if form.validate_on_submit():
         if form.obj_type.data == "Book":
             results = Book.query.filter(Book.name.ilike(f"%{form.obj_name.data}%"))
+            return render_template("librarian_specific/all_books.html",books = results)
 
         elif form.obj_type.data == "User":
             results = User.query.filter(User.username.ilike(f"%{form.obj_name.data}%"))
+            return render_template("librarian_specific/all_users.html", users = results)
         
         elif form.obj_type.data == "Section":
             results = Section.query.filter(Section.name.ilike(f"%{form.obj_name.data}%"))
+            return render_template("librarian_specific/all_sections.html", sections = results)
         
         elif form.obj_type.data == "Author":
             results = Author.query.filter(Author.name.ilike(f"%{form.obj_name.data}%"))
+            return render_template("librarian_specific/all_authors.html",authors = results)
         else:
             results = None
 
-        return render_template("librarian_specific/results.html",results = results, kind = form.obj_type.data)
+        return "Something went wrong",404
 
     return render_template("librarian_specific/search.html",form = form)
 

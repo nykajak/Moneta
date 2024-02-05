@@ -4,9 +4,11 @@
     <div class="container text-center mx-auto">
         {% for user in users %}
             {% if not user.is_librarian %}
-                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                    <br>
-                    <h5><a href="">{{ user.username }}</a></h5>
+                <div class="row mx-auto border border-dark p-1" style="width:75%">
+                    <div class="col text-center">
+                        <h5 class=""><a href="{{url_for('see_specific_user',id=user.id)}}">{{ user.username }}</a></h5>
+                    </div>
+                    <button class="btn btn-danger">Delete</button>   
                 </div>
             {% endif %}
         {% endfor %}      
