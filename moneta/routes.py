@@ -29,6 +29,15 @@ def librarian_required(fun):
             return app.login_manager.unauthorized()
     return inner
 
+def normal_user_required(fun):
+    @wraps(fun)
+    def inner(*args,**kwargs):
+        if not current_user.is_anonymous and not current_user.is_librarian:
+            return fun(*args,**kwargs)
+        else:
+            return app.login_manager.unauthorized()
+    return inner    
+
 ## Decision routes
 @app.route("/")
 def home():
@@ -116,27 +125,27 @@ def logout():
 
 # Genre
 @app.route("/sections")
-@login_required
+@normal_user_required
 def genre():
     sections = Section.query.all()
     return render_template('user_specific/sections.html',sections=sections)
 
 @app.route("/sections/<name>")
-@login_required
+@normal_user_required
 def selected_genre(name):
     section = Section.query.filter(Section.name == name.title()).one()
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
 
 # Shelf
 @app.route("/shelf")
-@login_required
+@normal_user_required
 def shelf():
     books = [borrow_obj.book for borrow_obj in current_user.borrowed]
     return render_template('user_specific/shelf.html',books=books)
 
 # Book
 @app.route("/book/<id>")
-@login_required
+@normal_user_required
 def selected_book(id):
     curr_book = Book.query.filter(Book.id == id).one()
     
@@ -163,13 +172,13 @@ def selected_book(id):
                             all_sections = all_sections)
 
 @app.route("/read/<id>")
-@login_required
+@normal_user_required
 def read(id):
     return render_template("user_specific/read.html")
     
 # Author
 @app.route("/author/<id>")
-@login_required
+@normal_user_required
 def selected_author(id):
     author = Author.query.filter(id == Author.id).one()
     books = author.books
@@ -177,7 +186,7 @@ def selected_author(id):
 
 # Search
 @app.route("/explore", methods=['GET','POST'])
-@login_required
+@normal_user_required
 def search():
     form = UserSearchForm()
 
