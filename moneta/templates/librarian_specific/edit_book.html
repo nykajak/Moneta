@@ -12,14 +12,14 @@
             <div class="col">
                 <h4>Authors: </h4>
                 {% for author in book.authors %}
-                    <h5><a href="">{{author.name}}</a></h5>
+                    <h5><a href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a></h5>
                 {% endfor %}
             </div>
 
             <div class="col">
                 <h4>Genres: </h4>
                 {% for section in book.sections %}
-                    <h5><a href="">{{section.name}}</a></h5>
+                    <h5><a href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a></h5>
                 {% endfor %}
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <h4>Comments: </h4>
                 {% for comment in book.comments %}
                     <div>
-                        <h5><a href="">{{comment.user.username}}</a></h5>
+                        <h5><a href="{{url_for('see_specific_user',id = comment.user.id)}}">{{comment.user.username}}</a></h5>
                         <h5>{{comment.content}}</h5>
                     </div>
                     

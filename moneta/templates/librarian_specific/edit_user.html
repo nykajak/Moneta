@@ -1,0 +1,21 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto border border-dark p-1">
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h5>{{ user.username }}</h5>
+            </div>
+        </div>    
+
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h4>Books: </h4>
+                {% for borrowed in user.borrowed %}
+                    <h5><a href="{{url_for('see_specific_book',id = borrowed.book.id)}}">{{ borrowed.book.name }}</a></h5>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}
