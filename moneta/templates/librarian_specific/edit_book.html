@@ -1,0 +1,41 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto border border-dark p-1">
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h5>{{ book.name }}</h5>
+            </div>
+        </div>    
+
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h4>Authors: </h4>
+                {% for author in book.authors %}
+                    <h5><a href="">{{author.name}}</a></h5>
+                {% endfor %}
+            </div>
+
+            <div class="col">
+                <h4>Genres: </h4>
+                {% for section in book.sections %}
+                    <h5><a href="">{{section.name}}</a></h5>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h4>Comments: </h4>
+                {% for comment in book.comments %}
+                    <div>
+                        <h5><a href="">{{comment.user.username}}</a></h5>
+                        <h5>{{comment.content}}</h5>
+                    </div>
+                    
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

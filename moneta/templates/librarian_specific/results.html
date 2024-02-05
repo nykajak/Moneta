@@ -4,9 +4,13 @@
     <div class="container text-center mx-auto">
         {% for result in results %}
             <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                {% if result.name %}
+                {% if kind == "Author" %}
                     <h5><a href="">{{ result.name }}</a></h5>
-                {% else %}
+                {% elif kind == "Book" %}
+                    <h5><a href="{{url_for('see_specific_book',id=result.id)}}">{{ result.name }}</a></h5>
+                {% elif kind == "Section" %}
+                    <h5><a href="">{{ result.name }}</a></h5>
+                {% elif kind == "User" %}
                     <h5><a href="">{{ result.username }}</a></h5>
                 {% endif %}
             </div>

@@ -42,6 +42,8 @@ class User(db.Model,UserMixin):
     # Reference to all roles assigned to the user
     roles = db.relationship('Role',secondary=permission,backref = db.backref('users',lazy='dynamic'))
 
+    comments = db.relationship('Comment',backref = 'user', lazy=True)
+
     def __repr__(self):
         return f"User({self.username},{self.email})"
     

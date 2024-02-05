@@ -239,6 +239,12 @@ def find_something():
         else:
             results = None
 
-        return render_template("librarian_specific/results.html",results = results)
+        return render_template("librarian_specific/results.html",results = results, kind = form.obj_type.data)
 
     return render_template("librarian_specific/search.html",form = form)
+
+@app.route("/librarian/book/<id>")
+@librarian_required
+def see_specific_book(id):
+    book = Book.query.filter(Book.id == id).one()
+    return render_template("librarian_specific/edit_book.html",book = book)
