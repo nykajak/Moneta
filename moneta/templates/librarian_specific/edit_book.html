@@ -5,21 +5,24 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <h5>{{ book.name }}</h5>
+                <p>{{ book.description }}</p>
+                <button class="btn btn-primary">Edit</button>
+                <button class="btn btn-danger">Delete</button>
             </div>
         </div>    
-
+        <br>
         <div class="row text-center mx-auto">
             <div class="col">
-                <h4>Authors: </h4>
+                <h4>Authors: <button class="btn btn-default">+</button></h4>
                 {% for author in book.authors %}
-                    <h5><a href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a></h5>
+                    <h5><a href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a><button class="btn btn-default">x</button></h5>
                 {% endfor %}
             </div>
 
             <div class="col">
-                <h4>Genres: </h4>
+                <h4>Genres: <button class="btn btn-default">+</button></h4>
                 {% for section in book.sections %}
-                    <h5><a href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a></h5>
+                    <h5><a href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a><button class="btn btn-default">x</button></h5>
                 {% endfor %}
             </div>
         </div>
