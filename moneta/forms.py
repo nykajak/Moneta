@@ -27,17 +27,17 @@ class LibrarianSearchForm(FlaskForm):
     submit = SubmitField('Search')
 
 class EditBookForm(FlaskForm):
-    name = StringField('Book Name')
-    description = StringField('Description')
+    name = StringField('Book Name',validators=[DataRequired()])
+    description = StringField('Description',validators=[DataRequired()])
     # file_name = FileField('Content')
-    submit = SubmitField('Search')
+    submit = SubmitField('Edit')
     
 class EditAuthorForm(FlaskForm):
     name = StringField('Author Name')
     description = StringField('Description')
-    submit = SubmitField('Search')
+    submit = SubmitField('Edit')
 
 class EditSectionForm(FlaskForm):
     name = StringField('Section Name')
     description = StringField('Description')
-    submit = SubmitField('Search')
+    submit = SubmitField('Edit')

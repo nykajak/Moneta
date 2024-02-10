@@ -1,0 +1,51 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+<div class="container">
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ form.name.label(class='form-control-label') }}
+                {% if form.name.errors %}
+                    {{ form.name(class='form-control form-control-md is-invalid',value = default.name) }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class='form-control form-control-md',value = default.name) }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label(class='form-control-label') }}
+                {% if form.description.errors %}
+                    {{ form.description(class='form-control form-control-md is-invalid',value = default.description) }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.description(class='form-control form-control-md',value = default.description) }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class='btn btn-info') }}
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            {% for category,message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

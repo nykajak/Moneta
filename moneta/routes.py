@@ -1,6 +1,6 @@
 from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
-from moneta.forms import MyLoginForm,MyRegistrationForm,UserSearchForm,LibrarianSearchForm
+from moneta.forms import *
 from moneta.models import User,Section,Book,Author
 from flask_login import login_user,logout_user,login_required,current_user
 from functools import wraps
@@ -279,3 +279,42 @@ def see_specific_user(id):
 def see_specific_author(id):
     author = Author.query.filter(Author.id == id).one()
     return render_template("librarian_specific/object_author.html",author = author)
+
+@app.route("/librarian/book/edit/<id>",methods = ['GET','POST'])
+@librarian_required
+def edit_specific_book(id):
+    book = Book.query.filter(Book.id == id).one()
+    form = EditBookForm()
+
+    if form.validate_on_submit():
+        # Logic goes here!
+        next = request.args.get('next')
+        return redirect(next or url_for('home'))
+
+    return render_template("librarian_specific/edit_book.html",form = form, default = book)
+
+@app.route("/librarian/section/edit/<id>",methods = ['GET','POST'])
+@librarian_required
+def edit_specific_section(id):
+    section = Section.query.filter(Section.id == id).one()
+    form = EditSectionForm()
+
+    if form.validate_on_submit():
+        # Logic goes here!
+        next = request.args.get('next')
+        return redirect(next or url_for('home'))
+
+    return render_template("librarian_specific/edit_section.html",form = form, default = section)
+
+@app.route("/librarian/author/edit/<id>",methods = ['GET','POST'])
+@librarian_required
+def edit_specific_author(id):
+    author = Author.query.filter(Author.id == id).one()
+    form = EditAuthorForm()
+
+    if form.validate_on_submit():
+        # Logic goes here!
+        next = request.args.get('next')
+        return redirect(next or url_for('home'))
+
+    return render_template("librarian_specific/edit_book.html",form = form, default = author)
