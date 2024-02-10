@@ -1,7 +1,7 @@
 from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import *
-from moneta.models import User,Section,Book,Author
+from moneta.models import *
 from flask_login import login_user,logout_user,current_user
 from functools import wraps
 
@@ -155,7 +155,7 @@ def genre():
 @app.route("/sections/<name>")
 @normal_user_required
 def selected_genre(name):
-    section = Section.query.filter(Section.name == name.title()).one()
+    section = Section.query.filter(Section.name == name.title()).scalar()
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
 
 # Route to see user shelf containing all borrowed books.
@@ -169,7 +169,7 @@ def shelf():
 @app.route("/book/<id>")
 @normal_user_required
 def selected_book(id):
-    curr_book = Book.query.filter(Book.id == id).one()
+    curr_book = Book.query.filter(Book.id == id).scalar()
     
     your_score = None
     avg_score = None
@@ -203,7 +203,7 @@ def read(id):
 @app.route("/author/<id>")
 @normal_user_required
 def selected_author(id):
-    author = Author.query.filter(id == Author.id).one()
+    author = Author.query.filter(id == Author.id).scalar()
     books = author.books
     return render_template('user_specific/author.html',author=author,books=books)
 
@@ -288,35 +288,35 @@ def find_something():
 @app.route("/librarian/book/<id>")
 @librarian_required
 def see_specific_book(id):
-    book = Book.query.filter(Book.id == id).one()
+    book = Book.query.filter(Book.id == id).scalar()
     return render_template("librarian_specific/object_book.html",book = book)
 
 # Route to view a particular section.
 @app.route("/librarian/section/<id>")
 @librarian_required
 def see_specific_section(id):
-    section = Section.query.filter(Section.id == id).one()
+    section = Section.query.filter(Section.id == id).scalar()
     return render_template("librarian_specific/object_section.html",section = section)
 
 # Route to view a particular user.
 @app.route("/librarian/user/<id>")
 @librarian_required
 def see_specific_user(id):
-    user = User.query.filter(User.id == id).one()
+    user = User.query.filter(User.id == id).scalar()
     return render_template("librarian_specific/object_user.html",user = user)
 
 # Route to view a particular author.
 @app.route("/librarian/author/<id>")
 @librarian_required
 def see_specific_author(id):
-    author = Author.query.filter(Author.id == id).one()
+    author = Author.query.filter(Author.id == id).scalar()
     return render_template("librarian_specific/object_author.html",author = author)
 
 # Stub route to edit the details of some book.
 @app.route("/librarian/book/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_book(id):
-    book = Book.query.filter(Book.id == id).one()
+    book = Book.query.filter(Book.id == id).scalar()
     form = EditBookForm()
 
     if form.validate_on_submit():
@@ -332,7 +332,7 @@ def edit_specific_book(id):
 @app.route("/librarian/section/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_section(id):
-    section = Section.query.filter(Section.id == id).one()
+    section = Section.query.filter(Section.id == id).scalar()
     form = EditSectionForm()
 
     if form.validate_on_submit():
@@ -348,7 +348,7 @@ def edit_specific_section(id):
 @app.route("/librarian/author/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_author(id):
-    author = Author.query.filter(Author.id == id).one()
+    author = Author.query.filter(Author.id == id).scalar()
     form = EditAuthorForm()
 
     if form.validate_on_submit():
@@ -360,34 +360,43 @@ def edit_specific_author(id):
 
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
 
-@app.route("/librarian/user/delete/<id>")
-@librarian_required
-def delete_specific_user(id):    
-    obj = User.query.filter(User.id == id).one()
-    db.session.delete(obj)
-    db.session.commit()
-    return redirect(url_for('see_users'))
+# Route to delete specific user.
+# @app.route("/librarian/user/delete/<id>")
+# @librarian_required
+# def delete_specific_user(id):    
+#     obj = User.query.filter(User.id == id).scalar()
+#     db.session.delete(obj)
+#     db.session.commit()
+#     return redirect(url_for('see_users'))
 
+# Route to delete specific book.
 @app.route("/librarian/book/delete/<id>")
 @librarian_required
 def delete_specific_book(id):  
-    obj = Book.query.filter(Book.id == id).one()
+    obj = Book.query.filter(Book.id == id).scalar()
+
+    db.session.query(written).filter(written.c.book_id == id).delete()
+    db.session.query(category).filter(category.c.book_id == id).delete()
+    db.session.query(Borrow).filter(Borrow.book_id == id).delete()
+    db.session.query(Comment).filter(Comment.book_id == id).delete()
+    db.session.query(Rating).filter(Rating.book_id == id).delete()
+
     db.session.delete(obj)
     db.session.commit()  
     return redirect(url_for('see_books'))
 
-@app.route("/librarian/section/delete/<id>")
-@librarian_required
-def delete_specific_section(id): 
-    obj = Section.query.filter(Section.id == id).one()
-    db.session.delete(obj)
-    db.session.commit()   
-    return redirect(url_for('see_sections'))
+# @app.route("/librarian/section/delete/<id>")
+# @librarian_required
+# def delete_specific_section(id): 
+#     obj = Section.query.filter(Section.id == id).scalar()
+#     db.session.delete(obj)
+#     db.session.commit()   
+#     return redirect(url_for('see_sections'))
 
-@app.route("/librarian/author/delete/<id>")
-@librarian_required
-def delete_specific_author(id):   
-    obj = Author.query.filter(Author.id == id).one()
-    db.session.delete(obj)
-    db.session.commit() 
-    return redirect(url_for('see_authors'))
+# @app.route("/librarian/author/delete/<id>")
+# @librarian_required
+# def delete_specific_author(id):   
+#     obj = Author.query.filter(Author.id == id).scalar()
+#     db.session.delete(obj)
+#     db.session.commit() 
+#     return redirect(url_for('see_authors'))
