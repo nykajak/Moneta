@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,RadioField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,RadioField,FileField
 from wtforms.validators import DataRequired,Length,Email,EqualTo
 
 class MyRegistrationForm(FlaskForm):
@@ -24,4 +24,20 @@ class UserSearchForm(FlaskForm):
 class LibrarianSearchForm(FlaskForm):
     obj_name = StringField("Search term",validators=[DataRequired()])
     obj_type = RadioField('Search for',choices=[(x,x) for x in ['Book','Author','Section','User']],default='Book')
+    submit = SubmitField('Search')
+
+class EditBookForm(FlaskForm):
+    name = StringField('Book Name')
+    description = StringField('Description')
+    # file_name = FileField('Content')
+    submit = SubmitField('Search')
+    
+class EditAuthorForm(FlaskForm):
+    name = StringField('Author Name')
+    description = StringField('Description')
+    submit = SubmitField('Search')
+
+class EditSectionForm(FlaskForm):
+    name = StringField('Section Name')
+    description = StringField('Description')
     submit = SubmitField('Search')
