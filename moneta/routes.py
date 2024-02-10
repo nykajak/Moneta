@@ -10,12 +10,14 @@ from functools import wraps
 # Helper function called internally to login correct user.
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.filter_by(id=user_id).first()
+    user = User.query.filter_by(id=user_id).first()
+    app.logger.info(f"User {user.username} was loaded!")
+    return user
 
 # Helper function called internally to display content for pages that do not exist.
 @app.errorhandler(404)
 def page_not_found(e):
-    app.logger.critical("Expected page does not exist!")
+    app.logger.warning(f"The page with url: {request.url} was requested")
     return "Page not found",404
 
 # Helper wrapper to ensure that only librarians can access certain pages.
@@ -25,6 +27,10 @@ def librarian_required(fun):
         if not current_user.is_anonymous and current_user.is_librarian:
             return fun(*args,**kwargs)
         else:
+            if current_user.is_anonymous:
+                app.logger.warning(f"Unauthorised anonymous user tried to access librarian endpoint: {fun.__name__}, {args=}, {kwargs=}")
+            else:
+                app.logger.warning(f"Unauthorised user ({current_user.username}) tried to access librarian endpoint: {fun.__name__}, {args=}, {kwargs=}")
             return app.login_manager.unauthorized()
     return inner
 
@@ -35,6 +41,10 @@ def normal_user_required(fun):
         if not current_user.is_anonymous and not current_user.is_librarian:
             return fun(*args,**kwargs)
         else:
+            if current_user.is_anonymous:
+                app.logger.warning(f"Unauthorised anonymous user tried to access user endpoint: {fun.__name__}, {args=}, {kwargs=}")
+            else:
+                app.logger.warning(f"Unauthorised librarian ({current_user.username}) tried to access user endpoint: {fun.__name__}, {args=}, {kwargs=}")
             return app.login_manager.unauthorized()
     return inner    
 
