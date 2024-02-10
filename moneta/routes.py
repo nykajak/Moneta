@@ -156,6 +156,8 @@ def genre():
 @normal_user_required
 def selected_genre(name):
     section = Section.query.filter(Section.name == name.title()).scalar()
+    if not section:
+        return render_template('user_specific/non_existant.html')
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
 
 # Route to see user shelf containing all borrowed books.
@@ -170,6 +172,9 @@ def shelf():
 @normal_user_required
 def selected_book(id):
     curr_book = Book.query.filter(Book.id == id).scalar()
+
+    if not curr_book:
+        return render_template('user_specific/non_existant.html')
     
     your_score = None
     avg_score = None
@@ -204,6 +209,8 @@ def read(id):
 @normal_user_required
 def selected_author(id):
     author = Author.query.filter(id == Author.id).scalar()
+    if not author:
+        return render_template('user_specific/non_existant.html')
     books = author.books
     return render_template('user_specific/author.html',author=author,books=books)
 
@@ -289,6 +296,8 @@ def find_something():
 @librarian_required
 def see_specific_book(id):
     book = Book.query.filter(Book.id == id).scalar()
+    if not book:
+        return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_book.html",book = book)
 
 # Route to view a particular section.
@@ -296,6 +305,8 @@ def see_specific_book(id):
 @librarian_required
 def see_specific_section(id):
     section = Section.query.filter(Section.id == id).scalar()
+    if not section:
+        return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_section.html",section = section)
 
 # Route to view a particular user.
@@ -303,6 +314,8 @@ def see_specific_section(id):
 @librarian_required
 def see_specific_user(id):
     user = User.query.filter(User.id == id).scalar()
+    if not user:
+        return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_user.html",user = user)
 
 # Route to view a particular author.
@@ -310,6 +323,8 @@ def see_specific_user(id):
 @librarian_required
 def see_specific_author(id):
     author = Author.query.filter(Author.id == id).scalar()
+    if not author:
+        return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_author.html",author = author)
 
 # Stub route to edit the details of some book.
@@ -317,6 +332,8 @@ def see_specific_author(id):
 @librarian_required
 def edit_specific_book(id):
     book = Book.query.filter(Book.id == id).scalar()
+    if not book:
+        return render_template('librarian_specific/non_existant.html')
     form = EditBookForm()
 
     if form.validate_on_submit():
@@ -333,6 +350,8 @@ def edit_specific_book(id):
 @librarian_required
 def edit_specific_section(id):
     section = Section.query.filter(Section.id == id).scalar()
+    if not section:
+        return render_template('librarian_specific/non_existant.html')
     form = EditSectionForm()
 
     if form.validate_on_submit():
@@ -349,6 +368,8 @@ def edit_specific_section(id):
 @librarian_required
 def edit_specific_author(id):
     author = Author.query.filter(Author.id == id).scalar()
+    if not author:
+        return render_template('librarian_specific/non_existant.html')
     form = EditAuthorForm()
 
     if form.validate_on_submit():
@@ -365,6 +386,8 @@ def edit_specific_author(id):
 # @librarian_required
 # def delete_specific_user(id):    
 #     obj = User.query.filter(User.id == id).scalar()
+#     if not obj:
+#         return render_template('librarian_specific/non_existant.html')
 #     db.session.delete(obj)
 #     db.session.commit()
 #     return redirect(url_for('see_users'))
@@ -374,6 +397,8 @@ def edit_specific_author(id):
 @librarian_required
 def delete_specific_book(id):  
     obj = Book.query.filter(Book.id == id).scalar()
+    if not obj:
+        return render_template('librarian_specific/non_existant.html')
 
     db.session.query(written).filter(written.c.book_id == id).delete()
     db.session.query(category).filter(category.c.book_id == id).delete()
@@ -389,6 +414,8 @@ def delete_specific_book(id):
 # @librarian_required
 # def delete_specific_section(id): 
 #     obj = Section.query.filter(Section.id == id).scalar()
+#     if not obj:
+#         return render_template('librarian_specific/non_existant.html')
 #     db.session.delete(obj)
 #     db.session.commit()   
 #     return redirect(url_for('see_sections'))
@@ -397,6 +424,8 @@ def delete_specific_book(id):
 # @librarian_required
 # def delete_specific_author(id):   
 #     obj = Author.query.filter(Author.id == id).scalar()
+#     if not obj:
+#         return render_template('librarian_specific/non_existant.html')
 #     db.session.delete(obj)
 #     db.session.commit() 
 #     return redirect(url_for('see_authors'))
