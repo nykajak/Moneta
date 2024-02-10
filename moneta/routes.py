@@ -2,7 +2,7 @@ from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import *
 from moneta.models import User,Section,Book,Author
-from flask_login import login_user,logout_user,login_required,current_user
+from flask_login import login_user,logout_user,current_user
 from functools import wraps
 
 ## Utility functions!
