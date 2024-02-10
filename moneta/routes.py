@@ -324,8 +324,7 @@ def edit_specific_book(id):
         book.description = form.description.data
         db.session.commit()
 
-        next = request.args.get('next')
-        return redirect(next or url_for('home'))
+        return redirect(url_for('see_specific_book',id=id))
 
     return render_template("librarian_specific/edit_book.html",form = form, default = book)
 
@@ -341,8 +340,7 @@ def edit_specific_section(id):
         section.description = form.description.data
         db.session.commit()
 
-        next = request.args.get('next')
-        return redirect(next or url_for('home'))
+        return redirect(url_for('see_specific_section',id=id))
 
     return render_template("librarian_specific/edit_section.html",form = form, default = section)
 
@@ -358,7 +356,6 @@ def edit_specific_author(id):
         author.bio = form.description.data
         db.session.commit()
 
-        next = request.args.get('next')
-        return redirect(next or url_for('home'))
+        return redirect(url_for('see_specific_author',id=id))
 
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
