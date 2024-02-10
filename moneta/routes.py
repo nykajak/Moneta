@@ -320,7 +320,10 @@ def edit_specific_book(id):
     form = EditBookForm()
 
     if form.validate_on_submit():
-        # Logic goes here!
+        book.name = form.name.data
+        book.description = form.description.data
+        db.session.commit()
+
         next = request.args.get('next')
         return redirect(next or url_for('home'))
 
@@ -334,7 +337,10 @@ def edit_specific_section(id):
     form = EditSectionForm()
 
     if form.validate_on_submit():
-        # Logic goes here!
+        section.name = form.name.data
+        section.description = form.description.data
+        db.session.commit()
+
         next = request.args.get('next')
         return redirect(next or url_for('home'))
 
@@ -348,8 +354,11 @@ def edit_specific_author(id):
     form = EditAuthorForm()
 
     if form.validate_on_submit():
-        # Logic goes here!
+        author.name = form.name.data
+        author.bio = form.description.data
+        db.session.commit()
+
         next = request.args.get('next')
         return redirect(next or url_for('home'))
 
-    return render_template("librarian_specific/edit_book.html",form = form, default = author)
+    return render_template("librarian_specific/edit_author.html",form = form, default = author)
