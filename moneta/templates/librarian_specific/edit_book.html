@@ -32,7 +32,7 @@
                 <h4>Comments: </h4>
                 {% for comment in book.comments %}
                     <div>
-                        <h5><a href="{{url_for('see_specific_user',id = comment.user.id)}}">{{comment.user.username}}</a></h5>
+                        <h5><a href="{{url_for('see_specific_user',id = comment.user.id)}}">{{comment.user.username}}</a><button class="btn btn-default">x</button></h5>
                         <h5>{{comment.content}}</h5>
                     </div>
                     
