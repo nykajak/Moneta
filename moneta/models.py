@@ -16,12 +16,6 @@ category = db.Table('category',
     db.Column('section_id', db.Integer, db.ForeignKey('section.id'), primary_key=True)
 )
 
-# Table to keep track of roles between User and Role
-permission = db.Table('permission',
-    db.Column('user_id',db.Integer,db.ForeignKey("user.id"),primary_key=True),
-    db.Column('role_id',db.Integer,db.ForeignKey("role.id"),primary_key=True)
-)
-
 class User(db.Model,UserMixin):
     __tablename__ = "user"
 
@@ -39,9 +33,10 @@ class User(db.Model,UserMixin):
     # Reference to all the borrow objects corresponding to books currently borrowed
     borrowed = db.relationship('Borrow',backref='user',lazy=True)
 
-    # Reference to all roles assigned to the user
-    roles = db.relationship('Role',secondary=permission,backref = db.backref('users',lazy='dynamic'))
+    # Reference to all the return objects corresponding to books already returned
+    returned = db.relationship('Return',backref='user',lazy=True)
 
+    # Reference to all the comments made by user
     comments = db.relationship('Comment',backref = 'user', lazy=True)
 
     def __repr__(self):
@@ -49,14 +44,6 @@ class User(db.Model,UserMixin):
     
     # def get_id(self):
     #     return str(self.id)
-
-class Role(db.Model):
-    __tablename__ = "role"
-
-    # Fields
-    id = db.Column(db.Integer,primary_key = True)
-    name = db.Column(db.String(20),nullable = False)
-    description = db.Column(db.String(256))
 
 class Book(db.Model):
     __tablename__ = "book"
@@ -140,3 +127,16 @@ class Borrow(db.Model):
 
     def __repr__(self):
         return f"Borrow({self.user_id},{self.book_id},{self.b_date})"
+    
+class Return(db.Model):
+    __tablename__ = "return"
+
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    b_date = db.Column(db.DateTime, nullable = False)
+    r_date = db.Column(db.DateTime, nullable = False, default = date.today())
+
+    book = db.relationship('Book',lazy= True)
+
+    def __repr__(self):
+        return f"Return({self.user_id},{self.book_id},{self.r_date})"
