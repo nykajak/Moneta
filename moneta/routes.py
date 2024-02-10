@@ -312,7 +312,7 @@ def see_specific_author(id):
     author = Author.query.filter(Author.id == id).one()
     return render_template("librarian_specific/object_author.html",author = author)
 
-# Stub route to edit the details of some user.
+# Stub route to edit the details of some book.
 @app.route("/librarian/book/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_book(id):
@@ -359,3 +359,35 @@ def edit_specific_author(id):
         return redirect(url_for('see_specific_author',id=id))
 
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
+
+@app.route("/librarian/user/delete/<id>")
+@librarian_required
+def delete_specific_user(id):    
+    obj = User.query.filter(User.id == id).one()
+    db.session.delete(obj)
+    db.session.commit()
+    return redirect(url_for('see_users'))
+
+@app.route("/librarian/book/delete/<id>")
+@librarian_required
+def delete_specific_book(id):  
+    obj = Book.query.filter(Book.id == id).one()
+    db.session.delete(obj)
+    db.session.commit()  
+    return redirect(url_for('see_books'))
+
+@app.route("/librarian/section/delete/<id>")
+@librarian_required
+def delete_specific_section(id): 
+    obj = Section.query.filter(Section.id == id).one()
+    db.session.delete(obj)
+    db.session.commit()   
+    return redirect(url_for('see_sections'))
+
+@app.route("/librarian/author/delete/<id>")
+@librarian_required
+def delete_specific_author(id):   
+    obj = Author.query.filter(Author.id == id).one()
+    db.session.delete(obj)
+    db.session.commit() 
+    return redirect(url_for('see_authors'))
