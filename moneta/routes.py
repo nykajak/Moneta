@@ -260,22 +260,22 @@ def find_something():
 @librarian_required
 def see_specific_book(id):
     book = Book.query.filter(Book.id == id).one()
-    return render_template("librarian_specific/edit_book.html",book = book)
+    return render_template("librarian_specific/object_book.html",book = book)
 
 @app.route("/librarian/section/<id>")
 @librarian_required
 def see_specific_section(id):
     section = Section.query.filter(Section.id == id).one()
-    return render_template("librarian_specific/edit_section.html",section = section)
+    return render_template("librarian_specific/object_section.html",section = section)
 
 @app.route("/librarian/user/<id>")
 @librarian_required
 def see_specific_user(id):
     user = User.query.filter(User.id == id).one()
-    return render_template("librarian_specific/edit_user.html",user = user)
+    return render_template("librarian_specific/object_user.html",user = user)
 
 @app.route("/librarian/author/<id>")
 @librarian_required
 def see_specific_author(id):
     author = Author.query.filter(Author.id == id).one()
-    return render_template("librarian_specific/edit_author.html",author = author)
+    return render_template("librarian_specific/object_author.html",author = author)
