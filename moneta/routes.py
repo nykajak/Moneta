@@ -17,7 +17,10 @@ def load_user(user_id):
 # Helper function called internally to display content for pages that do not exist.
 @app.errorhandler(404)
 def page_not_found(e):
-    app.logger.warning(f"The page with url: {request.url} was requested")
+    if not current_user.is_anonymous:
+        app.logger.warning(f"The page with url: {request.url} was requested by user: {current_user.username}")
+    else:
+        app.logger.warning(f"The page with url: {request.url} was requested by an anonymous user")
     return "Page not found",404
 
 # Helper wrapper to ensure that only librarians can access certain pages.
@@ -67,16 +70,18 @@ def login():
         app.logger.debug("User query processed!")
 
         if u and bcrypt.check_password_hash(u.password,form.password.data):
-            app.logger.debug("Successful login!")
             res = login_user(u)
-            app.logger.debug(f"Result of logging in is: {res}")
+            if res:
+                app.logger.info("Successful login!")
+            else:
+                app.logger.critical("Login failed.")
 
             next = request.args.get('next')
             return redirect(next or url_for('home'))
 
         else:
             if not u:
-                app.logger.debug("No such user!")
+                app.logger.debug(f"No user with email: {form.email.data}!")
                 flash("No such user found!",category="danger")
             else:
                 app.logger.debug("User provided incorrect password!")
@@ -113,10 +118,12 @@ def register():
                 
 
         if flag:
-            app.logger.debug("User created!")
+            app.logger.debug(f"User created with username:{form.username.data}!")
             res = login_user(u)
-            app.logger.debug(f"Result of logging in is: {res}")
-            app.logger.debug("User logged in!")
+            if res:
+                app.logger.info("User logged in!")
+            else:
+                app.logger.critical("Login failed.")
 
             next = request.args.get('next')
             return redirect(next or url_for('home'))
@@ -130,8 +137,11 @@ def register():
 # Logout route.
 @app.route("/logout")
 def logout():
-    logout_user()
-    app.logger.debug("User logged out!")
+    res = logout_user()
+    if res:
+        app.logger.debug("User logged out!")
+    else:
+        app.logger.critical("Logout failed.")
     return redirect(url_for('home'))
 
 # Route to browse through all sections
