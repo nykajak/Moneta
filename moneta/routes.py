@@ -460,3 +460,27 @@ def confirm_action(message,id):
     else:
         action["route"] = url_for('see_sections')
     return render_template("librarian_specific/confirm.html",action=action)
+
+@app.route("/librarian/author/remove/book",methods=['POST'])
+@librarian_required
+def remove_book_from_author():
+    author_id,book_id = request.author_id.data,request.book_id.data
+    print(db.session.query(written).filter(written.c.book_id == book_id and written.c.author_id == author_id).delete())
+    # db.commit()
+    return redirect(url_for("see_specific_author",id = author_id))
+
+@app.route("/librarian/section/remove/book",methods=['POST'])
+@librarian_required
+def remove_book_from_section():
+    section_id,book_id = request.section_id.data,request.book_id.data
+    print(db.session.query(category).filter(category.c.book_id == book_id and category.c.section_id == section_id).delete())
+    # db.commit()
+    return redirect(url_for("see_specific_section",id = section_id))
+
+@app.route("/librarian/user/remove/book",methods=['POST'])
+@librarian_required
+def remove_book_from_user():
+    user_id,book_id = request.user_id.data,request.book_id.data
+    print(db.session.query(Borrow).filter(Borrow.c.book_id == book_id and Borrow.c.user_id == user_id).delete())
+    # db.commit()
+    return redirect(url_for("see_specific_section",id = user_id))
