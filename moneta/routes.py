@@ -382,20 +382,28 @@ def edit_specific_author(id):
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
 
 # Route to delete specific user.
-# @app.route("/librarian/user/delete/<id>")
-# @librarian_required
-# def delete_specific_user(id):    
-#     obj = User.query.filter(User.id == id).scalar()
-#     if not obj:
-#         return render_template('librarian_specific/non_existant.html')
-#     db.session.delete(obj)
-#     db.session.commit()
-#     return redirect(url_for('see_users'))
+@app.route("/librarian/user/delete/<id>")
+@librarian_required
+def delete_specific_user(id):   
+     
+    obj = User.query.filter(User.id == id).scalar()
+    if not obj:
+        return render_template('librarian_specific/non_existant.html')
+    
+    db.session.query(Borrow).filter(Borrow.user_id == id).delete()
+    db.session.query(Return).filter(Return.user_id == id).delete()
+    db.session.query(Comment).filter(Comment.user_id == id).delete()
+    db.session.query(Rating).filter(Rating.user_id == id).delete()
+
+    db.session.delete(obj)
+    db.session.commit()
+    return redirect(url_for('see_users'))
 
 # Route to delete specific book.
 @app.route("/librarian/book/delete/<id>")
 @librarian_required
 def delete_specific_book(id):  
+    
     obj = Book.query.filter(Book.id == id).scalar()
     if not obj:
         return render_template('librarian_specific/non_existant.html')
@@ -410,22 +418,45 @@ def delete_specific_book(id):
     db.session.commit()  
     return redirect(url_for('see_books'))
 
-# @app.route("/librarian/section/delete/<id>")
-# @librarian_required
-# def delete_specific_section(id): 
-#     obj = Section.query.filter(Section.id == id).scalar()
-#     if not obj:
-#         return render_template('librarian_specific/non_existant.html')
-#     db.session.delete(obj)
-#     db.session.commit()   
-#     return redirect(url_for('see_sections'))
+@app.route("/librarian/section/delete/<id>")
+@librarian_required
+def delete_specific_section(id): 
+    
+    obj = Section.query.filter(Section.id == id).scalar()
+    if not obj:
+        return render_template('librarian_specific/non_existant.html')
+    
+    db.session.query(category).filter(category.c.section_id == id).delete()
 
-# @app.route("/librarian/author/delete/<id>")
-# @librarian_required
-# def delete_specific_author(id):   
-#     obj = Author.query.filter(Author.id == id).scalar()
-#     if not obj:
-#         return render_template('librarian_specific/non_existant.html')
-#     db.session.delete(obj)
-#     db.session.commit() 
-#     return redirect(url_for('see_authors'))
+    db.session.delete(obj)
+    db.session.commit()   
+    return redirect(url_for('see_sections'))
+
+@app.route("/librarian/author/delete/<id>")
+@librarian_required
+def delete_specific_author(id):
+    
+    obj = Author.query.filter(Author.id == id).scalar()
+    if not obj:
+        return render_template('librarian_specific/non_existant.html')
+    
+    db.session.query(written).filter(written.c.author_id == id).delete()
+
+    db.session.delete(obj)
+    db.session.commit() 
+    return redirect(url_for('see_authors'))
+
+@app.route("/librarian/confirm/<message><id>")
+@librarian_required
+def confirm_action(message,id):
+    print(id)
+    action = {"message":message}
+    if "User" in message:
+        action["route"] = url_for('see_users')
+    elif "Author" in message:
+        action["route"] = url_for('see_authors')
+    elif "Book" in message:
+        action["route"] = url_for('see_books')
+    else:
+        action["route"] = url_for('see_sections')
+    return render_template("librarian_specific/confirm.html",action=action)

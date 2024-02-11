@@ -1,0 +1,8 @@
+{% extends "librarian_specific/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center mx-auto">
+        <h4>{{ action.message }}</h4>
+        <a href="{{action.route}}" class="btn btn-danger">Proceed</a>   
+    </div>
+{% endblock %}

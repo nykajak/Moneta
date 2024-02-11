@@ -7,7 +7,7 @@
                 <h5>{{ section.name }}</h5>
                 <p>{{ section.description }}</p>
                 <a class="btn btn-primary" href="{{url_for('edit_specific_section',id=section.id)}}">Edit</a>
-                <button class="btn btn-danger">Delete</button>
+                <a class="btn btn-danger" href="{{url_for('delete_specific_section',id=section.id)}}">Delete</a>
             </div>
         </div>    
         <br>

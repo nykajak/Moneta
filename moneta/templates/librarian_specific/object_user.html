@@ -5,7 +5,7 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <h5>{{ user.username }}</h5>
-                <button class="btn btn-danger">Delete</button>
+                <a class="btn btn-danger" href="{{url_for('delete_specific_user',id=user.id)}}">Delete</a>
             </div>
         </div>    
         <br>
