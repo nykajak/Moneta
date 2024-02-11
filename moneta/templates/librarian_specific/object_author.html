@@ -9,7 +9,7 @@
                 <h5>{{ author.name }}</h5>
                 <p>{{ author.bio }}</p>
                 <a class="btn btn-primary" href="{{url_for('edit_specific_author',id=author.id)}}">Edit</a>
-                <a class="btn btn-danger" href="{{url_for('delete_specific_author',id=author.id)}}">Delete</a>
+                <a class="btn btn-danger" onclick="return confirm('Confirm Deletion?')" href="{{url_for('delete_specific_author',id=author.id)}}">Delete</a>
             </div>
         </div>    
         <br>
