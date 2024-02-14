@@ -49,9 +49,7 @@
                         <tr>
                             <td><h5><a href="{{url_for('see_specific_book',id = book.id)}}">{{book.name}}</h5></a></td>
                             <td>
-                                <div>
-                                    <input type="submit" class="btn btn-default" value="x" form="request_form" onclick = "populate_form(this)" data-section = "{{section.id}}" data-book = "{{book.id}}">
-                                </div>
+                                <input type="submit" class="btn btn-default" value="x" form="request_form" onclick = "populate_form(this)" data-section = "{{section.id}}" data-book = "{{book.id}}">
                             </td>
                         </tr>
                     {% endfor %}
