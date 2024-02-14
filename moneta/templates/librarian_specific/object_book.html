@@ -1,6 +1,59 @@
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
+    <script>
+        let author_validated = false;
+        let genre_validated = false;
+        
+        function populate_genre_form(obj){
+            let i = confirm("Remove relation?")
+
+            if (i){
+                let section_id = obj.getAttribute("data-section");
+                let book_id = obj.getAttribute("data-book");
+                document.querySelector("#section_request_form #section_id").value = section_id;
+                document.querySelector("#section_request_form #book_id").value = book_id;
+                genre_validated = true;
+            }
+            else{
+                genre_validated = false;
+            }
+        }
+
+        function validate_genre_form(){
+            return genre_validated;
+        }
+
+        function populate_author_form(obj){
+            let i = confirm("Remove relation?")
+
+            if (i){
+                let author_id = obj.getAttribute("data-author");
+                let book_id = obj.getAttribute("data-book");
+                document.querySelector("#author_request_form #author_id").value = author_id;
+                document.querySelector("#author_request_form #book_id").value = book_id;
+                author_validated = true;
+            }
+            else{
+                author_validated = false;
+            }
+        }
+
+        function validate_author_form(){
+            return author_validated;
+        }
+    </script>
+
+    <form action="{{url_for('remove_book_from_section')}}" method="POST" id="section_request_form" onsubmit="return validate_genre_form()" hidden>
+        <input type="number" name="section_id" id="section_id">
+        <input type="number" name="book_id" id="book_id">
+    </form>
+
+    <form action="{{url_for('remove_book_from_author')}}" method="POST" id="author_request_form" onsubmit="return validate_author_form()" hidden>
+        <input type="number" name="author_id" id="author_id">
+        <input type="number" name="book_id" id="book_id">
+    </form>
+
     <div class="container text-center mx-auto border border-dark p-1">
         <div class="row text-center mx-auto">
             <div class="col">
@@ -13,17 +66,31 @@
         <br>
         <div class="row text-center mx-auto">
             <div class="col">
-                <h4>Authors: <button class="btn btn-default">+</button></h4>
-                {% for author in book.authors %}
-                    <h5><a href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a><button class="btn btn-default">x</button></h5>
-                {% endfor %}
+                <table class="mx-auto">
+                    <legend><h4>Authors: <button class="btn btn-default">+</button></h4></legend>
+                    {% for author in book.authors %}
+                        <tr>
+                            <td><h5><a href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a></h5></td>
+                            <td>
+                                <input type="submit" class="btn btn-default" value="x" form="author_request_form" onclick = "populate_author_form(this)" data-author = "{{author.id}}" data-book = "{{book.id}}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
 
             <div class="col">
-                <h4>Genres: <button class="btn btn-default">+</button></h4>
-                {% for section in book.sections %}
-                    <h5><a href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a><button class="btn btn-default">x</button></h5>
-                {% endfor %}
+                <table class="mx-auto">
+                    <legend><h4>Genres: <button class="btn btn-default">+</button></h4></legend>
+                    {% for section in book.sections %}
+                        <tr>
+                            <td><h5><a href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a></h5></td>
+                            <td>
+                                <input type="submit" class="btn btn-default" value="x" form="section_request_form" onclick = "populate_genre_form(this)" data-section = "{{section.id}}" data-book = "{{book.id}}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
 

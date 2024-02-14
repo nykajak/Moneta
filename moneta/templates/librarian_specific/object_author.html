@@ -2,18 +2,32 @@
 
 {% block main_body %}
     <script>
+        let validated = false;
+
         function populate_form(obj){
-            let author_id = obj.getAttribute("data-author");
-            let book_id = obj.getAttribute("data-book");
-            document.getElementById("author_id").value = author_id;
-            document.getElementById("book_id").value = book_id;
-            return true;
+            let i = confirm("Remove relation?")
+
+            if (i){
+                let author_id = obj.getAttribute("data-author");
+                let book_id = obj.getAttribute("data-book");
+                document.getElementById("author_id").value = author_id;
+                document.getElementById("book_id").value = book_id;
+                validated = true;
+            }
+            else{
+                validated = false;
+            }
+        }
+
+        function validate_form(){
+            return validated;
         }
     </script>
 
-    <form action="{{url_for('remove_book_from_author')}}" method="POST" id="request_form" hidden>
+    <form action="{{url_for('remove_book_from_author')}}" method="POST" id="request_form" onsubmit="return validate_form()" hidden>
         <input type="number" name="author_id" id="author_id">
         <input type="number" name="book_id" id="book_id">
+        <input type="number" name="origin" id="origin" value="1">
     </form>
 
     <div class="container text-center mx-auto border border-dark p-1">
