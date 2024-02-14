@@ -1,6 +1,20 @@
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
+    <script>
+        function populate_form(obj){
+            let author_id = obj.getAttribute("data-author");
+            let book_id = obj.getAttribute("data-book");
+            document.getElementById("author_id").value = author_id;
+            document.getElementById("book_id").value = book_id;
+            return true;
+        }
+    </script>
+
+    <form action="{{url_for('remove_book_from_author')}}" method="POST" id="request_form" hidden>
+        <input type="number" name="author_id" id="author_id">
+        <input type="number" name="book_id" id="book_id">
+    </form>
 
     <div class="container text-center mx-auto border border-dark p-1">
 
@@ -22,12 +36,9 @@
                         <tr>
                             <td><h5><a href="{{url_for('see_specific_book',id = book.id)}}">{{book.name}}</h5></a></td>
                             <td>
-                                <form action="{{url_for('remove_book_from_author')}}" method="POST">
-                                    <input type="number" name="author_id" value="{{author.id}}" hidden>
-                                    <input type="number" name="book_id" value="{{book.id}}" hidden>
-                                    <input type="submit" class="btn btn-default" value="x">
-                                    <!-- <a class="btn btn-default" href="">x</a> -->
-                                </form>
+                                <div>
+                                    <input type="submit" class="btn btn-default" value="x" form="request_form" onclick = "populate_form(this)" data-author = "{{author.id}}" data-book = "{{book.id}}">
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
