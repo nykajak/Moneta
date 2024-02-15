@@ -22,6 +22,20 @@
         function validate_form(){
             return validated;
         }
+
+        function show_add(){
+            let element = document.getElementById("add_book");
+            let curr = element.style.display;
+
+            if (curr == "none"){
+                element.style.display = "block";
+                document.getElementById("button_add").innerText = "-"
+            }
+            else{
+                element.style.display = "none";
+                document.getElementById("button_add").innerText = "+"
+            }
+        }
     </script>
 
     <form action="{{url_for('remove_book_from_section')}}" method="POST" id="request_form" onsubmit="return validate_form()" hidden>
@@ -42,9 +56,16 @@
         <br>
         <div class="row text-center mx-auto">
             <div class="col">
+                <div id="add_book" style="display: none;">
+                    <form action="">
+                        <input type="text">
+                        <input type="submit" class="btn btn-primary" value="Add Book">
+                    </form>
+                </div>
 
                 <table class="mx-auto">
-                    <legend><h4>Books: <button class="btn btn-default">+</button></h4></legend>
+                    <legend><h4>Books: <button id="button_add" class="btn btn-default" onclick="show_add()">+</button></h4></legend>
+
                     {% for book in section.books %}
                         <tr>
                             <td><h5><a href="{{url_for('see_specific_book',id = book.id)}}">{{book.name}}</h5></a></td>
