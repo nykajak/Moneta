@@ -249,11 +249,30 @@ def _return():
     if not Return.query.filter(Return.book_id == record.book_id).filter(Return.user_id == record.user_id).scalar():
         return_obj = Return(book_id = record.book_id, user_id = record.user_id, b_date = record.b_date)
         db.session.add(return_obj)
-        
+
     query.delete()
     db.session.commit()
 
     return redirect(url_for("shelf"))
+
+#Route to rate a particular book
+@app.route("/rate",methods = ["POST"])
+@normal_user_required
+def rate():
+    book_id = request.form.get("book_id")
+    score = request.form.get("score")
+    user_id = current_user.id
+
+    record = Rating.query.filter(Rating.book_id == book_id).filter(Rating.user_id == user_id).scalar()
+    if record:
+        record.score = score
+
+    else:
+        db.session.add(Rating(book_id = book_id, user_id = user_id, score = score))
+        
+    db.session.commit()
+
+    return redirect(url_for("selected_book",id=book_id))
     
 # Route to see a particular author's details.
 @app.route("/author/<id>")
