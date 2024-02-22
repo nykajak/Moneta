@@ -1,7 +1,32 @@
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
+    <script>
+        function toggle_reveal(){
+            obj = document.getElementById("add_more");
+            if (obj.style.display == "none"){
+                obj.style.display = "block";
+            }
+            else{
+                obj.style.display = "none";
+            }
+        }
+    </script>
+
     <div class="container text-center mx-auto">
+        <div class="row mx-auto" style="display:none" id="add_more">
+            <form action="{{url_for('add_item')}}" method="POST">
+                <input type="text" name="user_input">
+                <input type="text" name="kind" value = "author" hidden>
+                <input type="submit" class="btn btn-primary" value="Add">
+            </form>
+        </div>
+
+        <div class="row mx-auto border border-dark p-1" style="width:75%">
+            <div class="col text-center">
+                <h5><button onclick="toggle_reveal()">+ Add Author</button></h5>
+            </div>
+        </div>
         {% for author in authors %}
             <div class="row mx-auto border border-dark p-1" style="width:75%">
                 <div class="col text-center">

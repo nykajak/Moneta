@@ -594,3 +594,32 @@ def add_section_to_book():
             print("Duplicate")
 
         return redirect(url_for('see_specific_section',id=section_id))
+
+@app.route("/librarian/item/add",methods=['POST'])
+@librarian_required
+def add_item():
+    kind = request.form.get("kind")
+    data = request.form.get("user_input")
+
+    if kind == "author":
+        cls = Author
+    elif kind == "book":
+        cls = Book
+    elif kind == "section":
+        cls = Section
+
+    obj = cls(name=data)
+
+    try:
+        db.session.add(obj)
+        db.session.commit()
+
+    except Exception as e:
+        return "Invalid Operation"
+    
+    if kind == "author":
+        return redirect(url_for('see_authors'))
+    elif kind == "book":
+        return redirect(url_for('see_books'))
+    else:
+        return redirect(url_for('see_sections'))
