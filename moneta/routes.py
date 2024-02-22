@@ -220,6 +220,40 @@ def read():
         return "Unauthorised access."
 
     return render_template("user_specific/read.html")
+
+#Route to borrow a particular book
+@app.route("/borrow",methods = ["POST"])
+@normal_user_required
+def borrow():
+    book_id = request.form.get("book_id")
+    user_id = current_user.id
+
+    if len(current_user.borrowed) >= 5:
+        return "Too many books"
+
+    b = Borrow(book_id = book_id, user_id = user_id)
+    db.session.add(b)
+    db.session.commit()
+    return redirect(url_for("shelf"))
+
+#Route to return a particular book
+@app.route("/return",methods = ["POST"])
+@normal_user_required
+def _return():
+    book_id = request.form.get("book_id")
+    user_id = current_user.id
+
+    query = Borrow.query.filter(Borrow.book_id == book_id).filter(Borrow.user_id == user_id)
+    record = query.scalar()
+    
+    if not Return.query.filter(Return.book_id == record.book_id).filter(Return.user_id == record.user_id).scalar():
+        return_obj = Return(book_id = record.book_id, user_id = record.user_id, b_date = record.b_date)
+        db.session.add(return_obj)
+        
+    query.delete()
+    db.session.commit()
+
+    return redirect(url_for("shelf"))
     
 # Route to see a particular author's details.
 @app.route("/author/<id>")

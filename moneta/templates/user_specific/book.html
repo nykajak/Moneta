@@ -19,9 +19,15 @@
                             <input type="submit" class="btn btn-primary" value="Read">
                         </form>
                         
-                        <button class="btn btn-primary">Return</button>
+                        <form action="{{url_for('_return')}}" method="POST">
+                            <input type="text" value="{{book.id}}" name="book_id" hidden>
+                            <input type="submit" class="btn btn-primary" value="Return">
+                        </form>
                     {% else %}
-                        <button class="btn btn-primary">Borrow</button>
+                    <form action="{{url_for('borrow')}}" method="POST">
+                        <input type="text" value="{{book.id}}" name="book_id" hidden>
+                        <input type="submit" class="btn btn-primary" value="Borrow">
+                    </form>
                     {% endif %}
                     
                 </div>
