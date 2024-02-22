@@ -95,8 +95,9 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <div id="add_author" style="display: none;">
-                    <form action="">
-                        <input type="text">
+                    <form action="{{url_for('add_author_to_book')}}" method="POST">
+                        <input type="text" name="author_name">
+                        <input type="text" name="book_id" value="{{book.id}}" hidden>
                         <input type="submit" class="btn btn-primary" value="Add Author">
                     </form>
                 </div>
@@ -116,8 +117,9 @@
 
             <div class="col">
                 <div id="add_section" style="display: none;">
-                    <form action="">
-                        <input type="text">
+                    <form action="{{url_for('add_section_to_book')}}" method="POST">
+                        <input type="text" name="section_name">
+                        <input type="text" name="book_id" value="{{book.id}}" hidden>
                         <input type="submit" class="btn btn-primary" value="Add Section">
                     </form>
                 </div>

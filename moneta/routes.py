@@ -4,6 +4,7 @@ from moneta.forms import *
 from moneta.models import *
 from flask_login import login_user,logout_user,current_user
 from functools import wraps
+from sqlalchemy import insert
 
 ## Utility functions!
 
@@ -498,3 +499,98 @@ def remove_book_from_user():
         return redirect(url_for("see_specific_user",id = user_id))
     else:
         return redirect(url_for("see_specific_book",id = book_id))
+
+@app.route("/librarian/author/edit",methods=['POST'])
+@librarian_required
+def add_author_to_book():
+    if "author_name" in request.form.keys():
+        author_name = request.form.get("author_name")
+        book_id = request.form.get("book_id")
+
+        author = Author.query.filter(Author.name == author_name).scalar()
+        if not author:
+            return render_template('librarian_specific/non_existant.html')
+        
+        present = db.session.query(written).filter(written.c.book_id == book_id).filter(written.c.author_id == author.id).scalar()
+        if not present:
+            stmt =(
+                insert(written).
+                values(book_id=book_id,author_id=author.id)
+            )
+
+            db.session.execute(stmt)
+            db.session.commit()
+        else:
+            print("Duplicate")
+        
+        return redirect(url_for('see_specific_book',id=book_id))
+    
+    else:
+        author_id = request.form.get("author_id")
+        book_name = request.form.get("book_name")
+        
+        book = Book.query.filter(Book.name == book_name).scalar()
+        if not book:
+            return render_template('librarian_specific/non_existant.html')
+        
+        present = db.session.query(written).filter(written.c.book_id == book.id).filter(written.c.author_id == author_id).scalar()
+        if not present:
+            stmt =(
+                insert(written).
+                values(book_id=book.id,author_id=author_id)
+            )
+
+            db.session.execute(stmt)
+            db.session.commit()
+        else:
+            print("Duplicate")
+
+        return redirect(url_for('see_specific_author',id=author_id))
+
+
+@app.route("/librarian/section/edit",methods=['POST'])
+@librarian_required
+def add_section_to_book():
+    if "section_name" in request.form.keys():
+        section_name = request.form.get("section_name")
+        book_id = request.form.get("book_id")
+
+        section = Section.query.filter(Section.name == section_name).scalar()
+        if not section:
+            return render_template('librarian_specific/non_existant.html')
+        
+        present = db.session.query(category).filter(category.c.book_id == book_id).filter(category.c.section_id == section.id).scalar()
+        if not present:
+            stmt =(
+                insert(category).
+                values(book_id=book_id,section_id=section.id)
+            )
+
+            db.session.execute(stmt)
+            db.session.commit()
+        else:
+            print("Duplicate")
+
+        return redirect(url_for('see_specific_book',id=book_id))
+    
+    else:
+        section_id = request.form.get("section_id")
+        book_name = request.form.get("book_name")
+
+        book = Book.query.filter(Book.name == book_name).scalar()
+        if not book:
+            return render_template('librarian_specific/non_existant.html')
+        
+        present = db.session.query(category).filter(category.c.book_id == book.id).filter(category.c.section_id == section_id).scalar()
+        if not present:
+            stmt =(
+                insert(category).
+                values(book_id=book.id,section_id=section_id)
+            )
+
+            db.session.execute(stmt)
+            db.session.commit()
+        else:
+            print("Duplicate")
+
+        return redirect(url_for('see_specific_section',id=section_id))

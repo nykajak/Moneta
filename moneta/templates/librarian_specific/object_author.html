@@ -58,8 +58,9 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <div id="add_book" style="display: none;">
-                    <form action="">
-                        <input type="text">
+                    <form action="{{url_for('add_author_to_book')}}" method="POST">
+                        <input type="text" name="book_name">
+                        <input type="text" name="author_id" value="{{author.id}}" hidden>
                         <input type="submit" class="btn btn-primary" value="Add Book">
                     </form>
                 </div>
