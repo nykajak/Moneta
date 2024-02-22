@@ -269,7 +269,21 @@ def rate():
 
     else:
         db.session.add(Rating(book_id = book_id, user_id = user_id, score = score))
-        
+
+    db.session.commit()
+
+    return redirect(url_for("selected_book",id=book_id))
+
+#Route to comment on a particular book
+@app.route("/comment",methods = ["POST"])
+@normal_user_required
+def comment():
+    book_id = request.form.get("book_id")
+    content = request.form.get("content")
+    user_id = current_user.id
+
+    obj = Comment(book_id = book_id, user_id = user_id, content = content)
+    db.session.add(obj)
     db.session.commit()
 
     return redirect(url_for("selected_book",id=book_id))

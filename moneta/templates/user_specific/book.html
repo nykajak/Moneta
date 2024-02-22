@@ -41,7 +41,7 @@
                     {% if your_score %}
                         <h4> Your Rating: {{ your_score }} </h4>
                     {% endif %}
-                    
+
                     <h5>Rate this book:</h5>
                     <form action="{{url_for('rate')}}" method="POST">
                         <input type="text" name="book_id" value="{{book.id}}" hidden>
@@ -75,9 +75,10 @@
         </div>
 
         <div>
-            <form action="">
+            <form action="{{url_for('comment')}}" method="POST">
                 <legend>Add a comment</legend>
-                <textarea name="" id="" cols="30" rows="5"></textarea>
+                <textarea name="content" id="" cols="30" rows="5"></textarea>
+                <input type="number" name="book_id" value="{{book.id}}" hidden>
                 <br>
                 <br>
                 <input type="submit" class="btn btn-primary" value="Comment">
