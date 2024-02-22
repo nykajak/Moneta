@@ -195,15 +195,30 @@ def selected_book(id):
     if (sum_score != 0):
         avg_score = sum_score / len(all_ratings)
 
+    owned = 0
+    for b in current_user.borrowed:
+        if b.book.name == curr_book.name:
+            owned = 1
+
     return render_template('user_specific/book.html',book=curr_book,
-                            avg_score = avg_score, your_score = your_score,
+                            avg_score = f"{avg_score:.1f}", your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
-                            all_sections = all_sections)
+                            all_sections = all_sections, owned = owned)
 
 # Stub route to read a particular book.
-@app.route("/read/<id>")
+@app.route("/read",methods = ["POST"])
 @normal_user_required
-def read(id):
+def read():
+    book_id = request.form.get("book_id")
+    owned = 0
+    for b in current_user.borrowed:
+        if b.book.id == int(book_id):
+            owned = 1
+            break
+
+    if not owned:
+        return "Unauthorised access."
+
     return render_template("user_specific/read.html")
     
 # Route to see a particular author's details.

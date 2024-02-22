@@ -1,32 +1,54 @@
 {% extends "base_templates/dashboard.html" %}
 
 {% block main_body %}
-    <div class="container">
-        <div class="row">
+    <div class="container text-center mx-auto border border-dark p-1">
+        <div class="row text-center mx-auto">
             <div class="col">
-                <img src="{{ url_for('static',filename='assets/default_book.png') }}" alt="">
                 <h4> {{ book.name }} </h4>
-                <h4>No of ratings: {{ num_scores }}</h4>
-                {% if avg_score %}
-                    <h4> Average Rating: {{ avg_score }} </h4>
-                {% endif %}
-                {% if your_score %}
-                    <h4> Your Rating: {{ your_score }} </h4>
-                {% endif %}
-            </div>
 
-            <div class="col">
                 {% if book.description %}
                     <p> {{ book.description }} </p> 
                 {% else %}
                     <p> No description provided! </p>
                 {% endif %}
+                
+                <div>
+                    {% if owned %}
+                        <form action="{{url_for('read')}}" method="POST">
+                            <input type="text" value="{{book.id}}" name="book_id" hidden>
+                            <input type="submit" class="btn btn-primary" value="Read">
+                        </form>
+                        
+                        <button class="btn btn-primary">Return</button>
+                    {% else %}
+                        <button class="btn btn-primary">Borrow</button>
+                    {% endif %}
+                    
+                </div>
+                <br>
 
+                <div>
+                    <h4>No of ratings: {{ num_scores }}</h4>
+                    {% if avg_score %}
+                        <h4> Average Rating: {{ avg_score }} </h4>
+                    {% endif %}
+                    {% if your_score %}
+                        <h4> Your Rating: {{ your_score }} </h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class="col">
+                <h4>Sections: </h4>
                 {% for section in all_sections %}
                     <a href="{{ url_for('selected_genre',name=section.name) }}">{{ section.name }} </a>
                     <br>
                 {% endfor %}
+            </div>
 
+            <div class = "col">
                 <div>
                     <h4>Authors: </h4>
                     {% for author in all_authors %}
@@ -37,16 +59,29 @@
             </div>
         </div>
 
-        <div class = "row">
-            <div class = "col">
-                <!-- options for reading and purchase go here with ratings -->
-            </div>
+        <div>
+            <form action="">
+                <legend>Add a comment</legend>
+                <textarea name="" id="" cols="30" rows="5"></textarea>
+                <br>
+                <br>
+                <input type="submit" class="btn btn-primary" value="Comment">
+            </form>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <!-- reviews/comments go here -->
+        {% if book.comments %}
+            <div class="row">
+                <div class="col"> 
+                    <h3>All Comments</h3>
+                    {% for comment in book.comments %}
+                        <div>
+                            <h4><a href="">{{comment.user.username}}</a></h4>
+                            <p>{{comment.content}}</p>
+                        </div>
+                    {% endfor %}
+                    
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
