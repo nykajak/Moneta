@@ -1,6 +1,9 @@
+# Imports
 from moneta.database import db 
 from datetime import date
 from flask_login import UserMixin
+
+# Leftovers from previous attempts
 # from flask_security import UserMixin,RoleMixin
 # from flask_security.models import fsqla_v3 as fsqla
 
@@ -17,6 +20,10 @@ category = db.Table('category',
 )
 
 class User(db.Model,UserMixin):
+    """
+        Representative class for a user. Has a boolean denoting whether user is a librarian
+        or not.
+    """
     __tablename__ = "user"
 
     # Fields
@@ -26,6 +33,8 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(60),nullable=False,unique=True)
     doj = db.Column(db.DateTime, nullable=False, default = date.today())
     is_librarian = db.Column(db.Integer,nullable = False, default = 0)
+
+    # Remnants of a previous system.
     # is_active = db.Column(db.Boolean(),nullable=False,default=1)
     # is_authenticated = db.Column(db.Boolean(),nullable=False)
     # is_anonymous = db.Column(db.Boolean(),nullable=False,default=0)
@@ -42,10 +51,14 @@ class User(db.Model,UserMixin):
     def __repr__(self):
         return f"User({self.username},{self.email})"
     
+    # Remnants of a previous system.
     # def get_id(self):
     #     return str(self.id)
 
 class Book(db.Model):
+    """
+        Representative class for a book.
+    """
     __tablename__ = "book"
 
     # Fields
@@ -67,6 +80,9 @@ class Book(db.Model):
         return self.name < other.name
     
 class Author(db.Model):
+    """
+        Representative class for an author.
+    """
     __tablename__ = 'author'
 
     #Fields
@@ -81,6 +97,9 @@ class Author(db.Model):
         return f'Author({self.name})'
 
 class Section(db.Model):
+    """
+        Representative class for an author.
+    """
     __tablename__ = "section"
 
     # Fields
@@ -97,6 +116,9 @@ class Section(db.Model):
     
 
 class Comment(db.Model):
+    """
+        Representative class for a comment.
+    """
     __tablename__ = "comment"
 
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"),primary_key=True)
@@ -107,6 +129,9 @@ class Comment(db.Model):
         return f"Comment({self.user_id},{self.book_id})"
     
 class Rating(db.Model):
+    """
+        Representative class for some rating associated with the book.
+    """
     __tablename__ = "rating"
 
     book_id = db.Column(db.Integer,db.ForeignKey("book.id"),primary_key=True)
@@ -117,6 +142,9 @@ class Rating(db.Model):
         return f"Rating({self.user_id},{self.book_id})"
 
 class Borrow(db.Model):
+    """
+        Representative class for the borrow relation between a book and a user.
+    """
     __tablename__ = "borrow"
 
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
@@ -129,6 +157,9 @@ class Borrow(db.Model):
         return f"Borrow({self.user_id},{self.book_id},{self.b_date})"
     
 class Return(db.Model):
+    """
+        Representative class for the returned relation between a book and a user.
+    """
     __tablename__ = "return"
 
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)

@@ -1,3 +1,4 @@
+# Imports
 from flask import request,render_template,flash,redirect,url_for
 from moneta import app,db,bcrypt,login_manager
 from moneta.forms import *
@@ -419,6 +420,7 @@ def delete_specific_book(id):
     db.session.commit()  
     return redirect(url_for('see_books'))
 
+# Route to delete specific section.
 @app.route("/librarian/section/delete/<id>")
 @librarian_required
 def delete_specific_section(id): 
@@ -433,6 +435,7 @@ def delete_specific_section(id):
     db.session.commit()   
     return redirect(url_for('see_sections'))
 
+# Route to delete specific author.
 @app.route("/librarian/author/delete/<id>")
 @librarian_required
 def delete_specific_author(id):
@@ -447,21 +450,7 @@ def delete_specific_author(id):
     db.session.commit() 
     return redirect(url_for('see_authors'))
 
-@app.route("/librarian/confirm/<message><id>")
-@librarian_required
-def confirm_action(message,id):
-    print(id)
-    action = {"message":message}
-    if "User" in message:
-        action["route"] = url_for('see_users')
-    elif "Author" in message:
-        action["route"] = url_for('see_authors')
-    elif "Book" in message:
-        action["route"] = url_for('see_books')
-    else:
-        action["route"] = url_for('see_sections')
-    return render_template("librarian_specific/confirm.html",action=action)
-
+# Route to remove author from a book.
 @app.route("/librarian/author/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_author():
@@ -474,6 +463,7 @@ def remove_book_from_author():
     else:
         return redirect(url_for("see_specific_book",id = book_id))
 
+# Route to remove section from a book.
 @app.route("/librarian/section/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_section():
@@ -487,6 +477,7 @@ def remove_book_from_section():
     else:
         return redirect(url_for("see_specific_book",id = book_id))
 
+# Route to remove a book from a user.
 @app.route("/librarian/user/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_user():
@@ -500,9 +491,10 @@ def remove_book_from_user():
     else:
         return redirect(url_for("see_specific_book",id = book_id))
 
-@app.route("/librarian/author/edit",methods=['POST'])
+# Route to add an author to a book.
+@app.route("/librarian/author/include",methods=['POST'])
 @librarian_required
-def add_author_to_book():
+def add_author_to_book():    
     if "author_name" in request.form.keys():
         author_name = request.form.get("author_name")
         book_id = request.form.get("book_id")
@@ -547,8 +539,8 @@ def add_author_to_book():
 
         return redirect(url_for('see_specific_author',id=author_id))
 
-
-@app.route("/librarian/section/edit",methods=['POST'])
+# Route to add a section to a book.
+@app.route("/librarian/section/include",methods=['POST'])
 @librarian_required
 def add_section_to_book():
     if "section_name" in request.form.keys():
@@ -595,6 +587,7 @@ def add_section_to_book():
 
         return redirect(url_for('see_specific_section',id=section_id))
 
+# Route to add some item - be it author, class or book with default values except for names.
 @app.route("/librarian/item/add",methods=['POST'])
 @librarian_required
 def add_item():
