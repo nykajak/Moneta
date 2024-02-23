@@ -169,7 +169,7 @@ def trending():
     all_books = Book.query.all()
     new_books = all_books[-5::]
     
-    top_books = []
+    rated_books = []
     for book in all_books:
         avg_score = 0
         for rating in book.ratings:
@@ -179,29 +179,11 @@ def trending():
             avg_score = avg_score / len(book.ratings)
             avg_score = round(avg_score,1)
 
-        if len(top_books) < 5:
-            top_books.append((avg_score,book))
-            top_books.sort()
-        
-        else:
-            stop = -1
-            for i in range(5):
-                if top_books[i][0] > avg_score:
-                    stop = i
-                    break
-            else:
-                stop = 5
+        rated_books.append((avg_score,book))
 
-            if not stop:
-                if stop != 5:
-                    top_books.insert(stop,(avg_score,book))
-                else:
-                    top_books.append((avg_score,book))
+    rated_books.sort(reverse=True)
 
-                top_books.pop(0)
-            
-
-    return render_template('user_specific/trending.html', new_books = new_books,top_books = reversed(top_books))
+    return render_template('user_specific/trending.html', new_books = new_books,top_books = rated_books[:5:])
 
 # Route to see a particular book.
 @app.route("/book/<id>")
@@ -228,6 +210,7 @@ def selected_book(id):
 
     if (sum_score != 0):
         avg_score = sum_score / len(all_ratings)
+        avg_score = round(avg_score,1)
 
     owned = 0
     for b in current_user.borrowed:
@@ -235,7 +218,7 @@ def selected_book(id):
             owned = 1
 
     return render_template('user_specific/book.html',book=curr_book,
-                            avg_score = f"{avg_score:.1f}", your_score = your_score,
+                            avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
                             all_sections = all_sections, owned = owned)
 
