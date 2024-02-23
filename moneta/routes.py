@@ -285,7 +285,7 @@ def comment():
     highest_id = db.session.query(func.max(Comment.id)).scalar()
     if not highest_id:
         highest_id = 1
-        
+
     obj = Comment(id = highest_id + 1, book_id = book_id, user_id = user_id, content = content)
     db.session.add(obj)
     db.session.commit()
@@ -576,6 +576,17 @@ def remove_book_from_user():
         return redirect(url_for("see_specific_user",id = user_id))
     else:
         return redirect(url_for("see_specific_book",id = book_id))
+    
+# Route to remove a book from a user.
+@app.route("/librarian/comment/remove/book/<id>")
+@librarian_required
+def remove_comment_from_book(id):
+    comment = Comment.query.filter(Comment.id == id)
+    id_redirect = comment.scalar().book_id
+    comment.delete()
+    db.session.commit()
+
+    return redirect(url_for("see_specific_book",id=id_redirect))
 
 # Route to add an author to a book.
 @app.route("/librarian/author/include",methods=['POST'])

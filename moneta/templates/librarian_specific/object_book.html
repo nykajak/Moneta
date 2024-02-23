@@ -143,7 +143,11 @@
                 <h4>Comments: </h4>
                 {% for comment in book.comments %}
                     <div>
-                        <h5><a href="{{url_for('see_specific_user',id = comment.user.id)}}">{{comment.user.username}}</a><button class="btn btn-default">x</button></h5>
+                        <a href="{{url_for('see_specific_user',id = comment.user.id)}}"><h4></h4> {{comment.user.username}}</a>
+                        <a class="btn btn-default" href="{{url_for('remove_comment_from_book',id=comment.id)}}" onclick="return confirm('Remove comment?')">x</a>
+                    </div>
+
+                    <div>
                         <h5>{{comment.content}}</h5>
                     </div>
                     
