@@ -163,11 +163,45 @@ def selected_genre(name):
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
 
 # Route to see user shelf containing all borrowed books.
-@app.route("/shelf")
+@app.route("/trending")
 @normal_user_required
-def shelf():
-    books = [borrow_obj.book for borrow_obj in current_user.borrowed]
-    return render_template('user_specific/shelf.html',books=books)
+def trending():
+    all_books = Book.query.all()
+    new_books = all_books[-5::]
+    
+    top_books = []
+    for book in all_books:
+        avg_score = 0
+        for rating in book.ratings:
+            avg_score += rating.score
+
+        if (len(book.ratings)):
+            avg_score = avg_score / len(book.ratings)
+            avg_score = round(avg_score,1)
+
+        if len(top_books) < 5:
+            top_books.append((avg_score,book))
+            top_books.sort()
+        
+        else:
+            stop = -1
+            for i in range(5):
+                if top_books[i][0] > avg_score:
+                    stop = i
+                    break
+            else:
+                stop = 5
+
+            if not stop:
+                if stop != 5:
+                    top_books.insert(stop,(avg_score,book))
+                else:
+                    top_books.append((avg_score,book))
+
+                top_books.pop(0)
+            
+
+    return render_template('user_specific/trending.html', new_books = new_books,top_books = reversed(top_books))
 
 # Route to see a particular book.
 @app.route("/book/<id>")

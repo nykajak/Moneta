@@ -2,6 +2,29 @@
 
 {% block main_body %}
     <div class="container text-center">
+        <div>
+            <h4>Borrowed Books</h4>
+            {% for b in current_user.borrowed %}
+                    <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                        <br>
+                        <h5><a href="{{ url_for('selected_book',id = b.book.id) }}">{{ b.book.name }}</a></h5>
+                    </div>
+            {% endfor %}
+        </div>
+
+        <br>
+
+        <div>
+            <h4>Returned Books</h4>
+            {% for r in current_user.returned %}
+                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                    <br>
+                    <h5><a href="{{ url_for('selected_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
+                </div>
+            {% endfor %}
+        </div>
+
+        <br>
         <a class="btn btn-info" href="{{url_for('logout')}}">Logout</a>
     </div>
 {% endblock %}

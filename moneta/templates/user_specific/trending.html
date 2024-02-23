@@ -1,0 +1,23 @@
+{% extends "base_templates/dashboard.html" %}
+
+{% block main_body %}
+    <div class="container text-center">
+        <h4>New additions!</h4>
+        {% for book in new_books %}
+        <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+            <br>
+            <h5><a href="{{ url_for('selected_book',id = book.id) }}">{{book.name}}</a></h5>
+        </div>
+        {% endfor %}
+
+        <br>
+        
+        <h4>Top rated!</h4>
+        {% for rating,book in top_books %}
+        <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+            <br>
+            <h5><a href="{{ url_for('selected_book',id = book.id) }}">{{book.name}}</a>: {{rating}}</h5>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
