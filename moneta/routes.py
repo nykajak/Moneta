@@ -268,7 +268,7 @@ def borrow():
     b = Borrow(book_id = book_id, user_id = user_id)
     db.session.add(b)
     db.session.commit()
-    return redirect(url_for("shelf"))
+    return redirect(url_for("home"))
 
 #Route to return a particular book
 @app.route("/return",methods = ["POST"])
@@ -287,7 +287,7 @@ def _return():
     query.delete()
     db.session.commit()
 
-    return redirect(url_for("shelf"))
+    return redirect(url_for("home"))
 
 #Route to rate a particular book
 @app.route("/rate",methods = ["POST"])
