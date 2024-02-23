@@ -5,7 +5,7 @@ from moneta.forms import *
 from moneta.models import *
 from flask_login import login_user,logout_user,current_user
 from functools import wraps
-from sqlalchemy import insert
+from sqlalchemy import insert,func
 
 ## Utility functions!
 
@@ -282,7 +282,11 @@ def comment():
     content = request.form.get("content")
     user_id = current_user.id
 
-    obj = Comment(book_id = book_id, user_id = user_id, content = content)
+    highest_id = db.session.query(func.max(Comment.id)).scalar()
+    if not highest_id:
+        highest_id = 1
+        
+    obj = Comment(id = highest_id + 1, book_id = book_id, user_id = user_id, content = content)
     db.session.add(obj)
     db.session.commit()
 

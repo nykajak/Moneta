@@ -124,6 +124,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"),primary_key=True)
     book_id = db.Column(db.Integer,db.ForeignKey("book.id"),primary_key=True)
     content = db.Column(db.Text,nullable=False)
+    id = db.Column(db.Integer,primary_key = True)
 
     def __repr__(self):
         return f"Comment({self.user_id},{self.book_id})"
