@@ -291,6 +291,21 @@ def comment():
     db.session.commit()
 
     return redirect(url_for("selected_book",id=book_id))
+
+# Route to remove a book from a user.
+@app.route("/comment/remove/book/<id>")
+@normal_user_required
+def remove_own_comment(id):
+    comment = Comment.query.filter(Comment.id == id)
+    obj = comment.scalar()
+    redirect_id = obj.book_id
+    if obj.user_id == current_user.id:
+        comment.delete()
+        db.session.commit()
+
+        return redirect(url_for("selected_book",id = redirect_id))
+    
+    return "Invalid permission!"
     
 # Route to see a particular author's details.
 @app.route("/author/<id>")

@@ -92,6 +92,9 @@
                     {% for comment in book.comments %}
                         <div>
                             <h4><a href="">{{comment.user.username}}</a></h4>
+                            {% if comment.user.id == current_user.id %}
+                                <a href="{{url_for('remove_own_comment',id=comment.id)}}" onclick="return confirm('Delete comment?')">Delete</a>
+                            {% endif %}
                             <p>{{comment.content}}</p>
                         </div>
                     {% endfor %}
