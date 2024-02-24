@@ -212,20 +212,25 @@ def selected_book(id):
         avg_score = sum_score / len(all_ratings)
         avg_score = round(avg_score,1)
 
-    owned = 0
+    state = 3
+
+    if len(current_user.borrowed) + len(current_user.requested) >= 5:
+        state = 2
+
     for b in current_user.borrowed:
         if b.book.name == curr_book.name:
-            owned = 1
+            state = 0
+            break
 
-    if not owned:
-        for r in current_user.requested:
-            if r.book.name == curr_book.name:
-                owned = 2
+    for b in current_user.requested:
+        if b.book.name == curr_book.name:
+            state = 1
+            break
 
     return render_template('user_specific/book.html',book=curr_book,
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
-                            all_sections = all_sections, owned = owned)
+                            all_sections = all_sections, state = state)
 
 # Stub route to read a particular book.
 @app.route("/read",methods = ["POST"])
@@ -243,18 +248,29 @@ def read():
 
     return render_template("user_specific/read.html")
 
-#Route to borrow a particular book
-@app.route("/borrow",methods = ["POST"])
+#Route to request a particular book
+@app.route("/request",methods = ["POST"])
 @normal_user_required
-def borrow():
+def request_book():
     book_id = request.form.get("book_id")
     user_id = current_user.id
 
-    if len(current_user.borrowed) >= 5:
+    if len(current_user.requested) + len(current_user.borrowed) >= 5:
         return "Too many books"
 
-    b = Borrow(book_id = book_id, user_id = user_id)
+    b = Requested(book_id = book_id, user_id = user_id)
     db.session.add(b)
+    db.session.commit()
+    return redirect(url_for("home"))
+
+#Route to cancel request of a particular book
+@app.route("/request/cancel",methods = ["POST"])
+@normal_user_required
+def cancel_request_book():
+    book_id = request.form.get("book_id")
+    user_id = current_user.id
+
+    Requested.query.filter(Requested.book_id == book_id).filter(Requested.user_id == user_id).delete()
     db.session.commit()
     return redirect(url_for("home"))
 
@@ -757,3 +773,29 @@ def add_item():
         return redirect(url_for('see_books'))
     else:
         return redirect(url_for('see_sections'))
+    
+#Route to grant a particular request
+@app.route("/librarian/grant/<id>")
+@librarian_required
+def grant(id):
+    query = Requested.query.filter(Requested.id == id)
+    obj = query.scalar()
+
+    book_id = obj.book_id
+    user_id = obj.user_id
+
+    b = Borrow(book_id = book_id, user_id = user_id)
+    db.session.add(b)
+
+    query.delete()
+    db.session.commit()
+    return redirect(url_for("see_requests"))
+
+#Route to reject a particular request
+@app.route("/librarian/reject/<id>")
+@librarian_required
+def reject(id):
+    query = Requested.query.filter(Requested.id == id)
+    query.delete()
+    db.session.commit()
+    return redirect(url_for("see_requests"))

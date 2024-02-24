@@ -13,7 +13,8 @@
                 {% endif %}
                 
                 <div>
-                    {% if owned == 1 %}
+                    {% if state == 0 %}
+                        <!-- Borrowed -->
                         <form action="{{url_for('read')}}" method="POST">
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
                             <input type="submit" class="btn btn-primary" value="Read">
@@ -21,17 +22,25 @@
                         
                         <form action="{{url_for('_return')}}" method="POST">
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
-                            <input type="submit" class="btn btn-primary" value="Return">
+                            <input type="submit" class="btn btn-danger" value="Return">
                         </form>
-                    {% elif owned == 0 %}
-                        <form action="{{url_for('borrow')}}" method="POST">
+                    {% elif state == 1 %}
+                        <!-- Requested -->
+                        <form action="{{url_for('cancel_request_book')}}" method="POST">
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
-                            <input type="submit" class="btn btn-primary" value="Request">
+                            <input type="submit" class="btn btn-danger" value="Cancel Request">
+                        </form>
+                    {% elif state == 2 %}
+                        <!-- No free space -->
+                        <form action="">
+                            <input type="text" value="{{book.id}}" name="book_id" hidden>
+                            <input type="submit" class="btn btn-primary" value="Request" disabled>
                         </form>
                     {% else %}
+                        <!-- Not requested and space present -->
                         <form action="{{url_for('request_book')}}" method="POST">
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
-                            <input type="submit" class="btn btn-primary" value="Borrow">
+                            <input type="submit" class="btn btn-primary" value="Request">
                         </form>
                     {% endif %}
                     

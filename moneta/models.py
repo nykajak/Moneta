@@ -49,7 +49,7 @@ class User(db.Model,UserMixin):
     comments = db.relationship('Comment',backref = 'user', lazy=True)
 
     # Reference to all the request made by user
-    requests = db.relationship('Requested',backref = 'user', lazy=True)
+    requested = db.relationship('Requested',backref = 'user', lazy=True)
 
     def __repr__(self):
         return f"User({self.username},{self.email})"
@@ -182,8 +182,9 @@ class Requested(db.Model):
     """
     __tablename__ = "requested"
 
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     r_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
     book = db.relationship('Book',lazy= True)
