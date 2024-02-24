@@ -94,7 +94,7 @@ def login():
 
             for r in current_user.requested:
                 if (datetime.now() - r.r_date).days > 7:
-                    Requested.query.filter(Requested.user_id == obj.user_id).filter(Requested.book_id == obj.book_id).delete()
+                    Requested.query.filter(Requested.user_id == r.user_id).filter(Requested.book_id == r.book_id).delete()
                     db.session.commit()
 
             next = request.args.get('next')
