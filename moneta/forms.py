@@ -46,8 +46,7 @@ class EditBookForm(FlaskForm):
     """
     name = StringField('Book Name',validators=[DataRequired()])
     description = StringField('Description',validators=[DataRequired()])
-    # To be added eventually.
-    # file_name = FileField('Content') 
+    file_path = StringField('Content Address',validators=[DataRequired()]) 
     submit = SubmitField('Edit')
     
 class EditAuthorForm(FlaskForm):

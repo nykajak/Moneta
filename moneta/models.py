@@ -19,10 +19,14 @@ category = db.Table('category',
     db.Column('section_id', db.Integer, db.ForeignKey('section.id'), primary_key=True)
 )
 
-content = db.Table('content',
-    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
-    db.Column('filename', db.Text, nullable=False)
-)
+class Content(db.Model):
+    """
+        Class that maps books to filenames.
+    """
+    __tablename__ = "content"
+
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
+    filename = db.Column(db.Text, nullable=False)
 
 class User(db.Model,UserMixin):
     """

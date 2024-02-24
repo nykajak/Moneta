@@ -245,8 +245,14 @@ def read():
 
     if not owned:
         return "Unauthorised access."
+    
+    src = Content.query.filter(Content.book_id == book_id).scalar()
+    if not src:
+        src = url_for('static',filename='assets/default.pdf')
+    else:
+        src = src.filename
 
-    return render_template("user_specific/read.html")
+    return render_template("user_specific/read.html",src = src)
 
 #Route to request a particular book
 @app.route("/request",methods = ["POST"])
@@ -486,16 +492,29 @@ def edit_specific_book(id):
     book = Book.query.filter(Book.id == id).scalar()
     if not book:
         return render_template('librarian_specific/non_existant.html')
+
     form = EditBookForm()
+    default_path = url_for('static',filename='assets/default.pdf')
+    obj = Content.query.filter(Content.book_id == id).scalar()
+    if obj:
+        default_path = obj.filename
 
     if form.validate_on_submit():
         book.name = form.name.data
         book.description = form.description.data
+        new_path = form.file_path.data
+
+        query = Content.query.filter(Content.book_id == id)
+        if query.scalar():
+            query.delete()
+            db.session.commit()
+
+        db.session.add(Content(book_id = book.id, filename=new_path))
         db.session.commit()
 
         return redirect(url_for('see_specific_book',id=id))
 
-    return render_template("librarian_specific/edit_book.html",form = form, default = book)
+    return render_template("librarian_specific/edit_book.html",form = form, default = book, default_path = default_path)
 
 # Stub route to edit the details of some section.
 @app.route("/librarian/section/edit/<id>",methods = ['GET','POST'])
