@@ -155,5 +155,26 @@
             </div>
         </div>
         
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h4>Users who borrowed: </h4>
+                {% for b in book.borrowed %}
+                    <div>
+                        <a href="{{url_for('see_specific_user',id = b.user.id)}}"><h4></h4> {{b.user.username}}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row text-center mx-auto">
+            <div class="col">
+                <h4>Users who requested: </h4>
+                {% for b in book.borrowed %}
+                    <div>
+                        <a href="{{url_for('see_specific_user',id = b.user.id)}}"><h4></h4> {{b.user.username}}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}

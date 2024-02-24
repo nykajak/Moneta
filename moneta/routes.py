@@ -462,6 +462,10 @@ def see_specific_section(id):
 @librarian_required
 def see_specific_user(id):
     user = User.query.filter(User.id == id).scalar()
+
+    if user.is_librarian:
+        return "Not authorised!"
+
     if not user:
         return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_user.html",user = user)

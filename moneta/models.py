@@ -75,6 +75,12 @@ class Book(db.Model):
     # Reference to all comments associated with the book
     comments = db.relationship('Comment',backref = 'book', lazy=True)
 
+    #Reference to all borrow objects
+    borrowed = db.relationship('Borrow',backref = 'book',lazy=True)
+
+    #Reference to all request objects
+    requested = db.relationship('Requested',backref = 'book',lazy=True)
+
     def __repr__(self):
         return f'Book({self.name})'
     
@@ -155,7 +161,7 @@ class Borrow(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     b_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
-    book = db.relationship('Book',lazy= True)
+    # book = db.relationship('Book',lazy= True)
 
     def __repr__(self):
         return f"Borrow({self.user_id},{self.book_id},{self.b_date})"
@@ -187,7 +193,7 @@ class Requested(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     r_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
-    book = db.relationship('Book',lazy= True)
+    # book = db.relationship('Book',lazy= True)
 
     def __repr__(self):
         return f"Requested({self.user_id},{self.book_id},{self.r_date})"
