@@ -6,6 +6,7 @@ from moneta.models import *
 from flask_login import login_user,logout_user,current_user
 from functools import wraps
 from sqlalchemy import insert,func
+from datetime import timedelta,datetime
 
 ## Utility functions!
 
@@ -77,6 +78,24 @@ def login():
                 app.logger.info("Successful login!")
             else:
                 app.logger.critical("Login failed.")
+
+            # House keeping
+            for b in current_user.borrowed:
+                if (datetime.now() - b.b_date).days > 7:
+                    obj = b
+                    try:
+                        db.session.add(Return(user_id = obj.user_id, book_id = obj.book_id, b_date = obj.b_date, r_date = obj.b_date +timedelta(days=7)))
+                        db.session.commit()
+                    except Exception as e:
+                        db.session.rollback()
+
+                    Borrow.query.filter(Borrow.user_id == obj.user_id).filter(Borrow.book_id == obj.book_id).delete()
+                    db.session.commit()
+
+            for r in current_user.requested:
+                if (datetime.now() - r.r_date).days > 7:
+                    Requested.query.filter(Requested.user_id == obj.user_id).filter(Requested.book_id == obj.book_id).delete()
+                    db.session.commit()
 
             next = request.args.get('next')
             return redirect(next or url_for('home'))
@@ -773,7 +792,7 @@ def add_section_to_book():
 def add_item():
     kind = request.form.get("kind")
     data = request.form.get("user_input")
-    
+
     if kind == "author":
         cls = Author
     elif kind == "book":
