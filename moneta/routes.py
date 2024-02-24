@@ -773,7 +773,7 @@ def add_section_to_book():
 def add_item():
     kind = request.form.get("kind")
     data = request.form.get("user_input")
-
+    
     if kind == "author":
         cls = Author
     elif kind == "book":
