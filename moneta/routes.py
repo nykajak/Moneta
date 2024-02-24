@@ -157,7 +157,7 @@ def genre():
 @app.route("/sections/<name>")
 @normal_user_required
 def selected_genre(name):
-    section = Section.query.filter(Section.name == name.title()).scalar()
+    section = Section.query.filter(func.lower(Section.name) == name.lower()).scalar()
     if not section:
         return render_template('user_specific/non_existant.html')
     return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)

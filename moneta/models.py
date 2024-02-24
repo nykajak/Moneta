@@ -19,6 +19,11 @@ category = db.Table('category',
     db.Column('section_id', db.Integer, db.ForeignKey('section.id'), primary_key=True)
 )
 
+content = db.Table('content',
+    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
+    db.Column('filename', db.Text, nullable=False)
+)
+
 class User(db.Model,UserMixin):
     """
         Representative class for a user. Has a boolean denoting whether user is a librarian
