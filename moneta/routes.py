@@ -265,13 +265,18 @@ def read():
     if not owned:
         return "Unauthorised access."
     
+    book = Book.query.filter(Book.id == book_id).scalar()
+
+    if not book:
+        return "Invalid resource"
+    
     src = Content.query.filter(Content.book_id == book_id).scalar()
     if not src:
-        src = url_for('static',filename='assets/default.pdf')
+        src = "https://drive.google.com/file/d/1a7k6giBy_fBfbH2GwxytDLjnLcVfN5GF/view?usp=sharing"
     else:
         src = src.filename
 
-    return render_template("user_specific/read.html",src = src)
+    return redirect(src)
 
 #Route to request a particular book
 @app.route("/request",methods = ["POST"])
