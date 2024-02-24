@@ -48,6 +48,9 @@ class User(db.Model,UserMixin):
     # Reference to all the comments made by user
     comments = db.relationship('Comment',backref = 'user', lazy=True)
 
+    # Reference to all the request made by user
+    requests = db.relationship('Requested',backref = 'user', lazy=True)
+
     def __repr__(self):
         return f"User({self.username},{self.email})"
     
@@ -172,3 +175,18 @@ class Return(db.Model):
 
     def __repr__(self):
         return f"Return({self.user_id},{self.book_id},{self.r_date})"
+    
+class Requested(db.Model):
+    """
+        Representative class for the requested relation between a book and a user.
+    """
+    __tablename__ = "requested"
+
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    r_date = db.Column(db.DateTime, nullable = False, default = date.today())
+
+    book = db.relationship('Book',lazy= True)
+
+    def __repr__(self):
+        return f"Requested({self.user_id},{self.book_id},{self.r_date})"

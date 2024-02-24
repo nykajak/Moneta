@@ -217,6 +217,11 @@ def selected_book(id):
         if b.book.name == curr_book.name:
             owned = 1
 
+    if not owned:
+        for r in current_user.requested:
+            if r.book.name == curr_book.name:
+                owned = 2
+
     return render_template('user_specific/book.html',book=curr_book,
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
@@ -374,6 +379,13 @@ def see_sections():
 def see_books():
     books = Book.query.all()
     return render_template("librarian_specific/all_books.html",books = books)
+
+# Route to see all requests.
+@app.route("/librarian/requests")
+@librarian_required
+def see_requests():
+    requests = Requested.query.all()
+    return render_template("librarian_specific/all_requests.html",requests = requests)
 
 # Route to see all authors.
 @app.route("/librarian/authors")

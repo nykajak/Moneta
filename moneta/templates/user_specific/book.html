@@ -13,7 +13,7 @@
                 {% endif %}
                 
                 <div>
-                    {% if owned %}
+                    {% if owned == 1 %}
                         <form action="{{url_for('read')}}" method="POST">
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
                             <input type="submit" class="btn btn-primary" value="Read">
@@ -23,11 +23,16 @@
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
                             <input type="submit" class="btn btn-primary" value="Return">
                         </form>
+                    {% elif owned == 0 %}
+                        <form action="{{url_for('borrow')}}" method="POST">
+                            <input type="text" value="{{book.id}}" name="book_id" hidden>
+                            <input type="submit" class="btn btn-primary" value="Request">
+                        </form>
                     {% else %}
-                    <form action="{{url_for('borrow')}}" method="POST">
-                        <input type="text" value="{{book.id}}" name="book_id" hidden>
-                        <input type="submit" class="btn btn-primary" value="Borrow">
-                    </form>
+                        <form action="{{url_for('request_book')}}" method="POST">
+                            <input type="text" value="{{book.id}}" name="book_id" hidden>
+                            <input type="submit" class="btn btn-primary" value="Borrow">
+                        </form>
                     {% endif %}
                     
                 </div>
