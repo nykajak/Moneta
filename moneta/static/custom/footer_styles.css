@@ -1,0 +1,17 @@
+#footer-container{
+    padding: 5px;
+    background-color: var(--custom_accent_dark);
+    margin-top: auto;
+}
+
+#footer-content{
+    padding: 5px;
+}
+
+.footer-section{
+    margin: 5px;
+}
+
+.footer-text{
+    color: var(--custom_tertiary);
+}

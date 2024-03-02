@@ -7,5 +7,9 @@
 }
 
 body{ 
+    background-color: var(--custom_accent_light);
     overflow-x: hidden; /* To prevent horizontal scroller from appearing*/
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }

@@ -8,19 +8,23 @@
 
         <link href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static',filename='custom/global_styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='custom/header_styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='custom/footer_styles.css') }}">
     </head>
 
     <body>
         {% block header_element %}
-            <div class="container-flexible">
-                <div class="row text-center">
-                    <div class="col"><h1>Moneta: Remembering Words</h1></div>
+            <div class="container-flexible" id="header-container">
+                <div class="row text-center header-container-element" id="header-container-info">
+                    <div class="col" id="header-container-info-content">
+                        <h1 class="header-info-content-text">Moneta: Remembering Words</h1>
+                    </div>
                 </div>
                 <hr>
-                <div class="row text-center">
-                    <div class="col"><a href="{{ url_for('register') }}">Register</a></div>
-                    <div class="col"><a href="{{ url_for('login') }}">Login</a></div>
-                    <div class="col"><a href="{{ url_for('home') }}">About</a></div>
+                <div class="row text-center header-container-element" id="header-container-links">
+                    <div class="col header-link-div"><a class="header-link" href="{{ url_for('register') }}">Register</a></div>
+                    <div class="col header-link-div"><a class="header-link" href="{{ url_for('login') }}">Login</a></div>
+                    <div class="col header-link-div"><a class="header-link" href="{{ url_for('home') }}">About</a></div>
                 </div>
             </div>
             <hr>
@@ -31,18 +35,19 @@
         {% endblock %}
 
         {% block footer_element %}
-        <div class="text-center mx-auto" style="position: absolute; bottom: 10px; width: 100%;">
-            <hr>
-            <section>
-                <p>Welcome! Hope you enjoy!<br>Built with Flask</p> 
-            </section>
-
-            <section>
-                <address>
-                    Made by: <strong>Nykaj A K</strong><br>
-                    Contact: 22f3003212@ds.study.iitm.ac.in 
-                </address>
-            </section>
+        <div class="text-center" id="footer-container">
+            <div id="footer-content">
+                <section class="footer-section">
+                    <p class="footer-text">Welcome! Hope you enjoy!<br>Built with Flask</p> 
+                </section>
+        
+                <section class="footer-section">
+                    <address class="footer-text">
+                        Made by: <strong>Nykaj A K</strong><br>
+                        Contact: 22f3003212@ds.study.iitm.ac.in 
+                    </address>
+                </section>
+            </div>
         </div>
         {% endblock %}
     </body>

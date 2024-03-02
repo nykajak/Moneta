@@ -1,35 +1,19 @@
 {% extends "base_templates/base.html" %}
 {% block header_element %}
-    <div class="container-flexible">
-        <div class="row text-center">
-            <div class="col">
-                <h2>Moneta: Remembering Words</h2>
-                <h4>Logged in as: {{ current_user.username }} </h4>
+    <div class="container-flexible" id="header-container">
+        <div class="row text-center header-container-element" id="header-container-info">
+            <div class="col" id="header-container-info-content">
+                <h2 class="header-info-content-text">Moneta: Remembering Words</h2>
+                <h4 class="header-info-content-text">Logged in as: {{ current_user.username }} </h4>
             </div>
         </div>
-        <hr>
-        <div class="row text-center">
-            <div class="col"><a href="{{ url_for('search') }}">Explore</a></div>
-            <div class="col"><a href="{{ url_for('genre') }}">Genres</a></div>
-            <div class="col"><a href="{{ url_for('trending') }}">Trending</a></div>
-            <div class="col"><a href="{{ url_for('home') }}">Profile</a></div>
+        
+        <div class="row text-center header-container-element" id="header-container-links">
+            <div class="col header-link-div"><a class="header-link" href="{{ url_for('search') }}">Explore</a></div>
+            <div class="col header-link-div"><a class="header-link" href="{{ url_for('genre') }}">Genres</a></div>
+            <div class="col header-link-div"><a class="header-link" href="{{ url_for('trending') }}">Trending</a></div>
+            <div class="col header-link-div"><a class="header-link" href="{{ url_for('home') }}">Profile</a></div>
         </div>
     </div>
     <hr>
-{% endblock %}
-
-{% block footer_element %}
-    <div class="text-center mx-auto">
-        <hr>
-        <section>
-            <p>Welcome! Hope you enjoy!<br>Built with Flask</p> 
-        </section>
-
-        <section>
-            <address>
-                Made by: <strong>Nykaj A K</strong><br>
-                Contact: 22f3003212@ds.study.iitm.ac.in 
-            </address>
-        </section>
-    </div>
 {% endblock %}

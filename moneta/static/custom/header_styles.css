@@ -1,0 +1,32 @@
+#header-container{
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: var(--custom_accent_dark);
+}
+
+.header-container-element{
+    padding: 5px;
+    margin: 5px;
+    margin-top: 15px;
+    
+}
+
+.header-link-div{
+    margin: 2px;
+}
+
+.header-link{
+    color: var(--custom_tertiary);
+}
+
+.header-link:hover{
+    color: var(--custom_secondary);
+}
+
+.header-info-content-text{
+    color: var(--custom_tertiary);
+}
+
+#header-container-links{
+    border: 2px solid var(--custom_tertiary);
+}
