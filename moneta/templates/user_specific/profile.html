@@ -3,37 +3,49 @@
 {% block main_body %}
     <div class="container text-center">
         <div>
-            <h4>Borrowed Books</h4>
-            {% for b in current_user.borrowed %}
+            <h4 class="help-text">Borrowed Books</h4>
+            {% if current_user.borrowed %}
+                {% for b in current_user.borrowed %}
+                        <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                            <br>
+                            <h5><a class="btn link-text" href="{{ url_for('selected_book',id = b.book.id) }}">{{ b.book.name }}</a></h5>
+                        </div>
+                {% endfor %}
+            {% else %}
+                <p class="help-text">No books borrowed yet!</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <div>
+            <h4 class="help-text">Returned Books</h4>
+            {% if current_user.returned %}
+                {% for r in current_user.returned %}
                     <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                         <br>
-                        <h5><a href="{{ url_for('selected_book',id = b.book.id) }}">{{ b.book.name }}</a></h5>
+                        <h5><a class="btn link-text" href="{{ url_for('selected_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
                     </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p class="help-text">No books returned yet!</p>
+            {% endif %}
         </div>
 
         <br>
 
         <div>
-            <h4>Returned Books</h4>
-            {% for r in current_user.returned %}
-                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                    <br>
-                    <h5><a href="{{ url_for('selected_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
-                </div>
-            {% endfor %}
-        </div>
-
-        <br>
-
-        <div>
-            <h4>Requested Books</h4>
-            {% for r in current_user.requested %}
-                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                    <br>
-                    <h5><a href="{{ url_for('selected_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
-                </div>
-            {% endfor %}
+            <h4 class="help-text">Requested Books</h4>
+            {% if current_user.requested %}
+                {% for r in current_user.requested %}
+                    <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                        <br>
+                        <h5><a class="btn link-text" href="{{ url_for('selected_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="help-text">No books requested yet!</p>
+            {% endif %}
         </div>
 
         <br>
