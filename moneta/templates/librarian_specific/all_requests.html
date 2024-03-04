@@ -2,16 +2,20 @@
 
 {% block main_body %}
     <div class="container text-center mx-auto">
-        {% for r in requests %}
-            <div class="row mx-auto border border-dark p-1" style="width:75%">
-                <div class="col text-center">
-                    <a href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
-                    :
-                    <a href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
-                    <a href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
-                    <a href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
+        {% if requests %}
+            {% for r in requests %}
+                <div class="row mx-auto border border-dark p-1" style="width:75%">
+                    <div class="col text-center">
+                        <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
+                        :
+                        <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                        <a class="link-text btn" href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
+                        <a class="link-text btn" href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}      
+            {% endfor %}
+        {% else %}
+                <h4>No pending requests!</h4>
+        {% endif %} 
     </div>
 {% endblock %}

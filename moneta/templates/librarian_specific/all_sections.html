@@ -31,7 +31,7 @@
         {% for section in sections %}
             <div class="row mx-auto border border-dark p-1" style="width:75%">
                 <div class="col text-center">
-                    <h5><a href="{{url_for('see_specific_section',id=section.id)}}">{{ section.name }}</a></h5>
+                    <h5><a class="btn link-text" href="{{url_for('see_specific_section',id=section.id)}}">{{ section.name }}</a></h5>
                 </div>
                 
             </div>

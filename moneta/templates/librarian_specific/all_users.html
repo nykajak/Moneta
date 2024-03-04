@@ -6,7 +6,7 @@
             {% if not user.is_librarian %}
                 <div class="row mx-auto border border-dark p-1" style="width:75%">
                     <div class="col text-center">
-                        <h5 class=""><a href="{{url_for('see_specific_user',id=user.id)}}">{{ user.username }}</a></h5>
+                        <h5><a class="btn link-text" href="{{url_for('see_specific_user',id=user.id)}}">{{ user.username }}</a></h5>
                     </div>
                     
                 </div>
