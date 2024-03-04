@@ -4,12 +4,12 @@
     <div class="container text-center mx-auto border border-dark p-1">
         <div class="row text-center mx-auto">
             <div class="col">
-                <h4> {{ book.name }} </h4>
+                <h4 class="help-text"> {{ book.name }} </h4>
 
                 {% if book.description %}
-                    <p> {{ book.description }} </p> 
+                    <p class="help-text"> {{ book.description }} </p> 
                 {% else %}
-                    <p> No description provided! </p>
+                    <p class="help-text"> No description provided! </p>
                 {% endif %}
                 
                 <div>
@@ -48,15 +48,15 @@
                 <br>
 
                 <div>
-                    <h4>No of ratings: {{ num_scores }}</h4>
+                    <h4 class="help-text">No of ratings: {{ num_scores }}</h4>
                     {% if avg_score %}
-                        <h4> Average Rating: {{ avg_score }} </h4>
+                        <h4 class="help-text"> Average Rating: {{ avg_score }} </h4>
                     {% endif %}
                     {% if your_score %}
-                        <h4> Your Rating: {{ your_score }} </h4>
+                        <h4 class="help-text"> Your Rating: {{ your_score }} </h4>
                     {% endif %}
 
-                    <h5>Rate this book:</h5>
+                    <h5 class="help-text">Rate this book:</h5>
                     <form action="{{url_for('rate')}}" method="POST">
                         <input type="text" name="book_id" value="{{book.id}}" hidden>
                         <input type="number" min="1" max="5" name="score" value="3">
@@ -70,18 +70,18 @@
 
         <div class = "row">
             <div class="col">
-                <h4>Sections: </h4>
+                <h4 class="help-text">Sections: </h4>
                 {% for section in all_sections %}
-                    <a href="{{ url_for('selected_genre',name=section.name) }}">{{ section.name }} </a>
+                    <a class="link-text" href="{{ url_for('selected_genre',name=section.name) }}">{{ section.name }} </a>
                     <br>
                 {% endfor %}
             </div>
 
             <div class = "col">
                 <div>
-                    <h4>Authors: </h4>
+                    <h4 class="help-text">Authors: </h4>
                     {% for author in all_authors %}
-                        <a href="{{ url_for('selected_author',id = author.id) }}">{{ author.name }}</a>
+                        <a class="link-text" href="{{ url_for('selected_author',id = author.id) }}">{{ author.name }}</a>
                         <br>
                     {% endfor %}
                 </div>
@@ -102,14 +102,14 @@
         {% if book.comments %}
             <div class="row">
                 <div class="col"> 
-                    <h3>All Comments</h3>
+                    <h3 class="help-text">All Comments</h3>
                     {% for comment in book.comments %}
                         <div>
-                            <h4><a href="">{{comment.user.username}}</a></h4>
+                            <h4><a href="" class="link-text">{{comment.user.username}}</a></h4>
                             {% if comment.user.id == current_user.id %}
-                                <a href="{{url_for('remove_own_comment',id=comment.id)}}" onclick="return confirm('Delete comment?')">Delete</a>
+                                <a class="btn link-text" href="{{url_for('remove_own_comment',id=comment.id)}}" onclick="return confirm('Delete comment?')">Delete</a>
                             {% endif %}
-                            <p>{{comment.content}}</p>
+                            <p class="help-text">{{comment.content}}</p>
                         </div>
                     {% endfor %}
                     
