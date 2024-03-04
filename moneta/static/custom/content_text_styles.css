@@ -1,0 +1,11 @@
+.link-text{
+    color: var(--custom_primary);
+}
+
+.link-text:hover{
+    color: var(--custom_secondary);
+}
+
+.help-text{
+    color: var(--custom_accent_dark);
+}

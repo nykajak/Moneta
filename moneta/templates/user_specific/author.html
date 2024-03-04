@@ -3,19 +3,23 @@
 {% block main_body %}
     <div class="container">
         <div class="row">
-            <div class="col">{{ author.name }}</div>
-            {% if author.description %}
-                <div class="col">{{ author.description }}</div> 
-            {% else %}
-                <div class="col">No description yet!</div> 
-            {% endif %}
+            <div class="col text-center">
+                <h3 class="help-text">{{ author.name }}</h3>
+
+                {% if author.description %}
+                    <p class="help-text">{{ author.description }}</p>
+                {% else %}
+                    <p class="help-text">No description yet!</p>
+                {% endif %}
+            </div>
         </div>
 
         <div class="row">
-            <div class="col">
+            <div class="col text-center">
                 {% for book in books %}
-                        <a href="{{ url_for('selected_book',id = book.id) }}">{{ book.name }}</a>
-                        <br>
+                        <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                            <h5><a href="{{ url_for('selected_book',id = book.id) }}" class="btn link-text">{{ book.name }}</a></h5>
+                        </div>
                 {% endfor %}
             </div>
         </div>
