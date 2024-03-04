@@ -13,3 +13,8 @@ body{
     display: flex;
     flex-direction: column;
 }
+
+#content-container{
+    margin: 5px;
+    padding: 10px;
+}
