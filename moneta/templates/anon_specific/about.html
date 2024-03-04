@@ -4,23 +4,23 @@
     <div class="container-flexible">
         <div class="row m-2">
             <div class="col text-center">
-                <h3>What is Moneta?</h3>
-                <p>
+                <h3 class="help-text">What is Moneta?</h3>
+                <p class="help-text">
                     It is an example project build to showcase proficiency with Flask, 
                     several other associated modules/libraries as well as web
                     development essentials like html and css. The name was inspired by mythology, 
                     and comes from the Roman goddess of memory.
                 </p>
 
-                <p>
+                <p class="help-text">
                     I have no aspirations to turn this into a full-size client-facing application
                     as of now but I may always change my mind later. It has been very rewarding
                     and enjoyable working on this and I mean to improve upon this in the future.
                 </p>
             </div>
             <div class="col text-center">
-                <h3>What does Moneta offer?</h3>
-                <p>
+                <h3 class="help-text">What does Moneta offer?</h3>
+                <p class="help-text">
                     Moneta enables users to read borrowed e-books online free of cost. We aim to
                     have a wide selection of books, genres and authors so as to provide a little
                     something to everyone. Carefully curated by the volunteer librarians; magic,
@@ -28,7 +28,7 @@
                 </p>
 
                 <p>
-                    Users are limited to 10 borrowed books with one time renewal option. A paid tier 
+                    Users are limited to 5 borrowed books at the moment. A paid tier 
                     which removes the above restriction as well as allows download of books in pdf 
                     format is also in the works.
                 </p>
@@ -37,15 +37,15 @@
 
         <div class="row m-2">
             <div class="col text-center">
-                <h3>Start!</h3>
-                <p>
+                <h3 class="help-text">Start!</h3>
+                <p class="help-text">
                     So you have decided to become part of the Moneta community! Great!
                     Here's what you do now.
                 </p>
-                <p>
-                    New user? <a href="{{ url_for('register') }}">Register</a>
+                <p class="help-text">
+                    New user? <a class="link-text" href="{{ url_for('register') }}">Register</a>
                     <br>
-                    Already have an account? <a href="{{ url_for('login') }}">Log In</a>
+                    Already have an account? <a class="link-text" href="{{ url_for('login') }}">Log In</a>
                 </p>
             </div>
         </div>
