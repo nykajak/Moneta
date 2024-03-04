@@ -6,7 +6,7 @@
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <div class="form-group">
-                {{ form.name.label(class='form-control-label') }}
+                {{ form.name.label(class='form-control-label help-text') }}
                 {% if form.name.errors %}
                     {{ form.name(class='form-control form-control-md is-invalid',value = default.name) }}
                     <div class="invalid-feedback">
@@ -20,7 +20,7 @@
             </div>
 
             <div class="form-group">
-                {{ form.description.label(class='form-control-label') }}
+                {{ form.description.label(class='form-control-label help-text') }}
                 {% if form.description.errors %}
                     {{ form.description(class='form-control form-control-md is-invalid',value = default.description) }}
                     <div class="invalid-feedback">
