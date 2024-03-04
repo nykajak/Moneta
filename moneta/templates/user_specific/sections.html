@@ -5,7 +5,7 @@
         {% for section in sections %}
             <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                 <br>
-                <h5><a href="{{ url_for('selected_genre',name=section.name) }}">{{section.name}}</a></h5>
+                <h5><a class="link-text btn" href="{{ url_for('selected_genre',name=section.name) }}">{{section.name}}</a></h5>
                 <p>{{section.description}}</p>
             </div>
         {% endfor %}

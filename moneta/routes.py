@@ -399,7 +399,10 @@ def search():
 
         result = list(result)
         result.sort()
-        return render_template("user_specific/results.html",results = result)
+        if result:
+            return render_template("user_specific/results.html",results = result)
+        else:
+            return render_template("user_specific/non_existant.html")
 
     return render_template("user_specific/explore.html",form = form)
 

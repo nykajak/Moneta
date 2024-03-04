@@ -2,15 +2,13 @@
 
 {% block main_body %}
     <div class="container mx-auto">
-        {% if not results %}
-            <h2>No results found!</h2>
-        {% else %}
-            {% for result in results %}
-                <div class="mx-auto text-center border border-dark p-1" style="width:75%">
-                    <br>
-                    <h5><a href="{{ url_for('selected_book',id = result.id) }}">{{ result.name }}</a></h5>
-                </div>
-            {% endfor %}
-        {% endif %}
+        
+        {% for result in results %}
+            <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                <br>
+                <h5><a class="link-text btn" href="{{ url_for('selected_book',id = result.id) }}">{{ result.name }}</a></h5>
+            </div>
+        {% endfor %}
+    
     </div>
 {% endblock %}
