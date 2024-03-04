@@ -7,7 +7,7 @@
         <fieldset class="form-group">
 
             <div class="form-group">
-                {{ form.book_name.label(class='form-control-label') }}
+                {{ form.book_name.label(class='form-control-label help-text') }}
                 {% if form.book_name.errors %}
                     {{ form.book_name(class='form-control form-control-md is-invalid') }}
                     <div class="invalid-feedback">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-                {{ form.author_name.label(class='form-control-label') }}
+                {{ form.author_name.label(class='form-control-label help-text') }}
                 {% if form.author_name.errors %}
                     {{ form.author_name(class='form-control form-control-md is-invalid') }}
                     <div class="invalid-feedback">
@@ -35,7 +35,7 @@
             </div>
 
             <div class="form-group">
-                {{ form.section_name.label(class='form-control-label') }}
+                {{ form.section_name.label(class='form-control-label help-text') }}
                 {% if form.section_name.errors %}
                     {{ form.section_name(class='form-control form-control-md is-invalid') }}
                     <div class="invalid-feedback">
