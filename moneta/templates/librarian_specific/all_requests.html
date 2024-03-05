@@ -9,8 +9,8 @@
                         <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
                         :
                         <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
-                        <a class="link-text btn" href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
-                        <a class="link-text btn" href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
+                        <a class="btn btn-success" href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
+                        <a class="btn btn-danger" href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
                     </div>
                 </div>
             {% endfor %}
