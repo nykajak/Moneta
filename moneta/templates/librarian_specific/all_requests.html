@@ -1,7 +1,9 @@
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
+
     <div class="container text-center mx-auto">
+        <h3 class="helper-text">Pending Requests</h3>
         {% if requests %}
             {% for r in requests %}
                 <div class="row mx-auto border border-dark p-1" style="width:75%">
@@ -15,7 +17,27 @@
                 </div>
             {% endfor %}
         {% else %}
-                <h4>No pending requests!</h4>
+                <h4 class="helper-text">No pending requests!</h4>
+        {% endif %} 
+
+        <br>
+        <br>
+        
+        <h3 class="helper-text">Pending Returns</h3>
+        {% if returned %}
+            {% for r in returned %}
+                <div class="row mx-auto border border-dark p-1" style="width:75%">
+                    <div class="col text-center">
+                        <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
+                        :
+                        <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                        <a class="link-text" href="{{r.book.content[0].filename}}" target="_blank">Source File</a>
+                        <a class="btn btn-danger" href="{{url_for('handled_return',id = r.id)}}" onclick="return confirm('Handled return?')" class="btn btn-danger">Done</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+                <h4 class="helper-text">No unhandled returns!</h4>
         {% endif %} 
     </div>
 {% endblock %}

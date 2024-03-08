@@ -28,6 +28,11 @@ class Content(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
     filename = db.Column(db.Text, nullable=False)
 
+    book = db.relationship('Book',backref='content',lazy=True)
+
+    def __repr__(self):
+        return f"Content({self.book.name},{self.filename})"
+
 class User(db.Model,UserMixin):
     """
         Representative class for a user. Has a boolean denoting whether user is a librarian
@@ -181,8 +186,9 @@ class Return(db.Model):
     """
     __tablename__ = "return"
 
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     b_date = db.Column(db.DateTime, nullable = False)
     r_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
@@ -206,3 +212,14 @@ class Requested(db.Model):
 
     def __repr__(self):
         return f"Requested({self.user_id},{self.book_id},{self.r_date})"
+
+class Read(db.Model):
+    """
+        Representative class for the read relation between a book and a user.
+    """
+    __tablename__ = "read"
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'),primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),primary_key=True)
+
+    user = db.relationship('User',backref = 'read',lazy=True)
+    book = db.relationship('Book',backref = 'read',lazy=True)

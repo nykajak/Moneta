@@ -92,11 +92,6 @@ def login():
                     Borrow.query.filter(Borrow.user_id == obj.user_id).filter(Borrow.book_id == obj.book_id).delete()
                     db.session.commit()
 
-            for r in current_user.requested:
-                if (datetime.now() - r.r_date).days > 7:
-                    Requested.query.filter(Requested.user_id == r.user_id).filter(Requested.book_id == r.book_id).delete()
-                    db.session.commit()
-
             next = request.args.get('next')
             return redirect(next or url_for('home'))
 
@@ -233,7 +228,7 @@ def selected_book(id):
 
     state = 3
 
-    if len(current_user.borrowed) + len(current_user.requested) >= 5:
+    if len(current_user.borrowed) + len(current_user.requested) + len(current_user.returned) >= 5:
         state = 2
 
     for b in current_user.borrowed:
@@ -434,7 +429,29 @@ def see_books():
 @librarian_required
 def see_requests():
     requests = Requested.query.all()
-    return render_template("librarian_specific/all_requests.html",requests = requests)
+    returned = Return.query.all()
+    return render_template("librarian_specific/all_requests.html",requests = requests, returned = returned)
+
+@app.route("/librarian/return/handle/<id>")
+@librarian_required
+def handled_return(id):
+    res = Return.query.filter(Return.id == id)
+    obj = res.scalar()
+    if obj:
+        
+        try:
+            db.session.add(Read(user_id=obj.user_id,book_id=obj.book_id))
+            db.session.commit()
+
+        except Exception as E:
+            db.session.rollback()
+        
+        res.delete()
+        db.session.commit()
+    else:
+        return render_template('librarian_specific/non_existant.html')
+
+    return redirect(url_for('see_requests'))
 
 # Route to see all authors.
 @app.route("/librarian/authors")
@@ -589,7 +606,6 @@ def delete_specific_user(id):
         return render_template('librarian_specific/non_existant.html')
     
     db.session.query(Borrow).filter(Borrow.user_id == id).delete()
-    db.session.query(Return).filter(Return.user_id == id).delete()
     db.session.query(Comment).filter(Comment.user_id == id).delete()
     db.session.query(Rating).filter(Rating.user_id == id).delete()
 

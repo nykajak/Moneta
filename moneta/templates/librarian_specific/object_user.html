@@ -49,7 +49,7 @@
                     </div>
                 {% endfor %}  
             {% else %}
-                <p class="help-text">No requests yet!</p>
+                <p class="help-text">No borrows yet!</p>
             {% endif %}
         </div>
         <br>
@@ -69,6 +69,34 @@
                 {% endfor %}  
             {% else %}
                 <p class="help-text">No requests yet!</p>
+            {% endif %}
+        </div>
+        <br>
+        <div>
+            <h4 class="help-text">Read Books</h4>
+            {% if user.read %}
+                {% for r in user.read %}
+                    <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                        <br>
+                        <h5><a class="btn link-text" href="{{ url_for('see_specific_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
+                    </div>
+                {% endfor %}  
+            {% else %}
+                <p class="help-text">No books read yet!</p>
+            {% endif %}
+        </div>
+        <br>
+        <div>
+            <h4 class="help-text">Returned Books</h4>
+            {% if user.returned %}
+                {% for r in user.returned %}
+                    <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                        <br>
+                        <h5><a class="btn link-text" href="{{ url_for('see_specific_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
+                    </div>
+                {% endfor %}  
+            {% else %}
+                <p class="help-text">No books read yet!</p>
             {% endif %}
         </div>
         <br>
