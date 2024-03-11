@@ -34,6 +34,7 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <h5 class="help-text">{{ user.username }}</h5>
+                <h5 class="help-text">{{ user.email }}</h5>
                 <a class="btn btn-danger" onclick="return confirm('Confirm Deletion?')" href="{{url_for('delete_specific_user',id=user.id)}}">Delete</a>
             </div>
         </div>    
