@@ -266,12 +266,9 @@ def read():
         return "Invalid resource"
     
     src = Content.query.filter(Content.book_id == book_id).scalar()
-    if not src:
-        src = url_for('static',filename = 'assets/default.pdf')
-    else:
-        src = src.filename
+    src=src.filename
 
-    return render_template("user_specific/read.html",book = book, src = src)
+    return redirect(src)
 
 #Route to request a particular book
 @app.route("/request",methods = ["POST"])
