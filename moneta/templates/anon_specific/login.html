@@ -1,9 +1,11 @@
+<!-- Functional version: 11/03/2024 -->
 {% extends "base_templates/base.html" %}
 
 {% block main_body %}
     <div class="container">
         <form action="" method="POST">
             {{ login_user_form.hidden_tag() }}
+            <legend class="text-center help-text">Login</legend>
             <fieldset class="form-group">
 
                 <div class="form-group">
