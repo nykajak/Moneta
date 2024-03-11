@@ -403,6 +403,10 @@ def search():
     return render_template("user_specific/explore.html",form = form)
 
 ## Librarian routes
+@app.route("/librarian/browse")
+@librarian_required
+def browse():
+    return render_template("librarian_specific/browse.html")
 
 # Stub route to see all users and their statuses.
 @app.route("/librarian/users")
