@@ -1,8 +1,11 @@
+<!-- Alpha version: 11/03/2024 -->
+<!-- Page provides display of all sections to librarian -->
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
     <script>
         function toggle_reveal(){
+            // Function to toggle the display of add section form.
             obj = document.getElementById("add_more");
             if (obj.style.display == "none"){
                 obj.style.display = "block";
