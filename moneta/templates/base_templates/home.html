@@ -5,5 +5,5 @@
 {% elif not current_user.is_librarian %}
     {% extends "user_specific/profile.html" %}
 {% else %}
-    {% extends "librarian_specific/profile.html" %}
+    {% extends "librarian_specific/browse.html" %}
 {% endif %}
