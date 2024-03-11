@@ -51,11 +51,11 @@
 
             if (curr == "none"){
                 element.style.display = "block";
-                document.getElementById("button_add_author").innerText = "-"
+                document.getElementById("button_add_author").innerText = "Cancel?"
             }
             else{
                 element.style.display = "none";
-                document.getElementById("button_add_author").innerText = "+"
+                document.getElementById("button_add_author").innerText = "Add Author"
             }
         }
 
@@ -65,11 +65,11 @@
 
             if (curr == "none"){
                 element.style.display = "block";
-                document.getElementById("button_add_section").innerText = "-"
+                document.getElementById("button_add_section").innerText = "Cancel?"
             }
             else{
                 element.style.display = "none";
-                document.getElementById("button_add_section").innerText = "+"
+                document.getElementById("button_add_section").innerText = "Add Section"
             }
         }
     </script>
@@ -88,7 +88,11 @@
         <div class="row text-center mx-auto">
             <div class="col">
                 <h5 class="help-text">{{ book.name }}</h5>
-                <p class="help-text">{{ book.description }}</p>
+                {% if book.description %}
+                    <p class="help-text">{{ book.description }}</p>
+                {% else %}
+                    <p class="help-text">No description!</p>
+                {% endif %}
                 <a class="btn btn-primary" href="{{url_for('edit_specific_book',id=book.id)}}">Edit</a>
                 <a class="btn btn-danger" onclick="return confirm('Confirm Deletion?')" href="{{url_for('delete_specific_book',id=book.id)}}">Delete</a>
             </div>
@@ -105,12 +109,15 @@
                 </div>
 
                 <table class="mx-auto">
-                    <legend><h4 class="help-text">Authors: <button id="button_add_author" onclick="show_add_author()">+</button></h4></legend>
+                    <legend><h4 class="help-text">Authors</h4></legend>
+                    <button class="btn btn-info" id="button_add_author" onclick="show_add_author()">Add Author</button>
+                    <br><br>
+    
                     {% for author in book.authors %}
                         <tr>
                             <td><h5><a class="link-text btn" href="{{url_for('see_specific_author',id = author.id)}}">{{author.name}}</a></h5></td>
                             <td>
-                                <input type="submit" value="x" form="author_request_form" onclick = "populate_author_form(this)" data-author = "{{author.id}}" data-book = "{{book.id}}">
+                                <input class="btn btn-info" type="submit" value="Remove Author" form="author_request_form" onclick = "populate_author_form(this)" data-author = "{{author.id}}" data-book = "{{book.id}}">
                             </td>
                         </tr>
                     {% endfor %}
@@ -127,12 +134,14 @@
                 </div>
 
                 <table class="mx-auto">
-                    <legend><h4 class="help-text">Genres: <button id="button_add_section" onclick="show_add_section()">+</button></h4></legend>
+                    <legend><h4 class="help-text">Genres</h4></legend>
+                    <button id="button_add_section" class="btn btn-info" onclick="show_add_section()">Add Section</button>
+                    <br> <br>
                     {% for section in book.sections %}
                         <tr>
                             <td><h5><a class="link-text btn" href="{{url_for('see_specific_section',id = section.id)}}">{{section.name}}</a></h5></td>
                             <td>
-                                <input type="submit" value="x" form="section_request_form" onclick = "populate_genre_form(this)" data-section = "{{section.id}}" data-book = "{{book.id}}">
+                                <input type="submit" class="btn btn-info" value="Remove Section" form="section_request_form" onclick = "populate_genre_form(this)" data-section = "{{section.id}}" data-book = "{{book.id}}">
                             </td>
                         </tr>
                     {% endfor %}
@@ -145,15 +154,15 @@
                 <h4 class="help-text">Comments: </h4>
                 {% if book.comments %}
                     {% for comment in book.comments %}
-                        <div>
-                            <a class="link-text btn" href="{{url_for('see_specific_user',id = comment.user.id)}}"><h4></h4> {{comment.user.username}}</a>
-                            <a class="link-text btn" href="{{url_for('remove_comment_from_book',id=comment.id)}}" onclick="return confirm('Remove comment?')">x</a>
+                        <div style="border: 1px solid black; margin:5px; padding:10px">
+                            <div>
+                                <a class="btn btn-info" href="{{url_for('remove_comment_from_book',id=comment.id)}}" onclick="return confirm('Remove comment?')">Delete Comment</a>
+                                <h5>User :<a class="link-text btn" href="{{url_for('see_specific_user',id = comment.user.id)}}">{{comment.user.username}}</a></h5>
+                            </div>
+                            <div>
+                                <p class="help-text">{{comment.content}}</p>
+                            </div>
                         </div>
-
-                        <div>
-                            <h5 class="help-text">{{comment.content}}</h5>
-                        </div>
-                        
                     {% endfor %}
                 {% else %}
                         <p class="help-text">No comments yet!</p>
@@ -167,7 +176,7 @@
                 {% if book.borrowed %}
                     {% for b in book.borrowed %}
                         <div>
-                            <a class="link-text btn" href="{{url_for('see_specific_user',id = b.user.id)}}"><h4></h4> {{b.user.username}}</a>
+                            <a class="link-text btn" href="{{url_for('see_specific_user',id = b.user.id)}}">{{b.user.username}}</a>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -182,7 +191,7 @@
                 {% if book.borrowed %}
                     {% for b in book.requested %}
                         <div>
-                            <a class="link-text btn" href="{{url_for('see_specific_user',id = b.user.id)}}"><h4></h4> {{b.user.username}}</a>
+                            <a class="link-text btn" href="{{url_for('see_specific_user',id = b.user.id)}}">{{b.user.username}}</a>
                         </div>
                     {% endfor %}
                 {% else %}
