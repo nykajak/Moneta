@@ -174,7 +174,7 @@ def selected_genre(name):
     section = Section.query.filter(func.lower(Section.name) == name.lower()).scalar()
     if not section:
         return render_template('user_specific/non_existant.html')
-    return render_template('user_specific/genre_list.html',genre = name.title(), books=section.books)
+    return render_template('user_specific/specific_section.html',genre = section, books=section.books)
 
 # Route to see user shelf containing all borrowed books.
 @app.route("/trending")

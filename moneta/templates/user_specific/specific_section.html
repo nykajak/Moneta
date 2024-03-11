@@ -1,8 +1,11 @@
+<!-- Alpha version: 11/03/2024 -->
+<!-- Page provides template for books from specific section for users -->
 {% extends "user_specific/dashboard.html" %}
 
 {% block main_body %}
     <div class="container text-center">
-        <h3 class="help-text">Genre: {{ genre }}</h3>
+        <h3 class="help-text">Genre: {{ genre.name.title() }}</h3>
+        <p class="help-text">{{genre.description}}</p>
         {% for book in books %}
             <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                 <br>
