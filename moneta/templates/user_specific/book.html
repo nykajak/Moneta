@@ -26,6 +26,8 @@
                             <input type="text" value="{{book.id}}" name="book_id" hidden>
                             <input type="submit" class="btn btn-danger" value="Return">
                         </form>
+
+                        <h6 class="help-text">To be returned on or before: {{return_date}}</h6>
                     {% elif state == 1 %}
                         <!-- Requested -->
                         <form action="{{url_for('cancel_request_book')}}" method="POST">

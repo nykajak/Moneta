@@ -84,7 +84,7 @@ def login():
                 if (datetime.now() - b.b_date).days > 7:
                     obj = b
                     try:
-                        db.session.add(Return(user_id = obj.user_id, book_id = obj.book_id, b_date = obj.b_date, r_date = obj.b_date +timedelta(days=7)))
+                        db.session.add(Read(user_id = obj.user_id, book_id = obj.book_id))
                         db.session.commit()
                     except Exception as e:
                         db.session.rollback()
@@ -231,9 +231,13 @@ def selected_book(id):
     if len(current_user.borrowed) + len(current_user.requested) + len(current_user.returned) >= 5:
         state = 2
 
+    return_date = None
     for b in current_user.borrowed:
         if b.book.name == curr_book.name:
             state = 0
+            return_date = b.b_date + timedelta(days=7)
+            return_date = return_date.__str__()
+            return_date = return_date[:10:]
             break
 
     for b in current_user.requested:
@@ -244,7 +248,7 @@ def selected_book(id):
     return render_template('user_specific/book.html',book=curr_book,
                             avg_score = avg_score, your_score = your_score,
                             num_scores = len(all_ratings), all_authors = all_authors,
-                            all_sections = all_sections, state = state)
+                            all_sections = all_sections, state = state,return_date=return_date)
 
 # Stub route to read a particular book.
 @app.route("/read",methods = ["POST"])
