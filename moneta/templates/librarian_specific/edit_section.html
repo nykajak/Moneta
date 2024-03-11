@@ -1,9 +1,12 @@
+<!-- Alpha version: 11/03/2024 -->
+<!-- Page allows edition of section specific details -->
 {% extends "librarian_specific/dashboard.html" %}
 
 {% block main_body %}
 <div class="container">
     <form action="" method="POST">
         {{ form.hidden_tag() }}
+        <legend class="help-text text-center">Editing Section...</legend>
         <fieldset class="form-group">
             <div class="form-group">
                 {{ form.name.label(class='form-control-label help-text') }}
