@@ -93,6 +93,19 @@ class Book(db.Model):
     def __repr__(self):
         return f'Book({self.name})'
     
+    def get_rating(self):
+        """Return average rating associated with the book."""
+        avg_score = 0
+        all_ratings = self.ratings
+        for rating in all_ratings:
+            avg_score += rating.score
+    
+        if (len(all_ratings)):
+            avg_score = avg_score / len(all_ratings)
+            avg_score = round(avg_score,1)
+
+        return avg_score
+
     #Unused?
     def __lt__(self,other):
         return self.name < other.name
