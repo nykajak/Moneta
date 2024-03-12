@@ -263,10 +263,13 @@ def selected_book(id):
                             state = state, return_date=return_date, num_ratings = num_ratings)
 
 # Stub route to read a particular book.
+# Tested OK
 @app.route("/read",methods = ["POST"])
 @normal_user_required
 def read():
     book_id = request.form.get("book_id")
+    
+    # Sanity check for book being actually borrowed.
     owned = 0
     for b in current_user.borrowed:
         if b.book.id == int(book_id):
@@ -274,45 +277,57 @@ def read():
             break
 
     if not owned:
-        return "Unauthorised access."
+        return app.login_manager.unauthorized()
     
     book = Book.query.filter(Book.id == book_id).scalar()
-
     if not book:
-        return "Invalid resource"
+        return render_template('user_specific/non_existant.html')
     
     src = Content.query.filter(Content.book_id == book_id).scalar()
-    src=src.filename
+    if src:
+        src = src.filename
+    else:
+        return render_template('user_specific/non_existant.html')
 
     return redirect(src)
 
 #Route to request a particular book
+# Tested OK
 @app.route("/request",methods = ["POST"])
 @normal_user_required
 def request_book():
     book_id = request.form.get("book_id")
     user_id = current_user.id
 
-    if len(current_user.requested) + len(current_user.borrowed) >= 5:
-        return "Too many books"
+    # Sanity check in case of POST request being sent
+    if len(current_user.requested) + len(current_user.borrowed) + len(current_user.returned) >= 5:
+        return app.login_manager.unauthorized()
 
-    b = Requested(book_id = book_id, user_id = user_id)
-    db.session.add(b)
-    db.session.commit()
+    # Adding the request object. Checking for duplicates just in case.
+    try:
+        b = Requested(book_id = book_id, user_id = user_id)
+        db.session.add(b)
+        db.session.commit()
+    except:
+        db.session.rollback()
+
     return redirect(url_for("home"))
 
 #Route to cancel request of a particular book
+# Tested OK
 @app.route("/request/cancel",methods = ["POST"])
 @normal_user_required
 def cancel_request_book():
     book_id = request.form.get("book_id")
     user_id = current_user.id
 
+    # Deleting request object. No try catch here.
     Requested.query.filter(Requested.book_id == book_id).filter(Requested.user_id == user_id).delete()
     db.session.commit()
     return redirect(url_for("home"))
 
 #Route to return a particular book
+# Tested OK
 @app.route("/return",methods = ["POST"])
 @normal_user_required
 def _return():
@@ -323,15 +338,22 @@ def _return():
     record = query.scalar()
     
     if not Return.query.filter(Return.book_id == record.book_id).filter(Return.user_id == record.user_id).scalar():
-        return_obj = Return(book_id = record.book_id, user_id = record.user_id, b_date = record.b_date)
-        db.session.add(return_obj)
+        try:
+            # Adding Return object.
+            return_obj = Return(book_id = record.book_id, user_id = record.user_id, b_date = record.b_date)
+            db.session.add(return_obj)
+            db.session.commit()
+        except:
+            db.session.rollback()
 
+    # Removing Borrow object.
     query.delete()
     db.session.commit()
 
     return redirect(url_for("home"))
 
 #Route to rate a particular book
+# Tested OK
 @app.route("/rate",methods = ["POST"])
 @normal_user_required
 def rate():
@@ -339,18 +361,18 @@ def rate():
     score = request.form.get("score")
     user_id = current_user.id
 
+    # Checking if record exists and overwriting as necessary.
     record = Rating.query.filter(Rating.book_id == book_id).filter(Rating.user_id == user_id).scalar()
     if record:
         record.score = score
-
     else:
         db.session.add(Rating(book_id = book_id, user_id = user_id, score = score))
-
-    db.session.commit()
+        db.session.commit()
 
     return redirect(url_for("selected_book",id=book_id))
 
 #Route to comment on a particular book
+# Tested OK
 @app.route("/comment",methods = ["POST"])
 @normal_user_required
 def comment():
@@ -358,10 +380,12 @@ def comment():
     content = request.form.get("content")
     user_id = current_user.id
 
+    # Computing id of new comment.
     highest_id = db.session.query(func.max(Comment.id)).scalar()
     if not highest_id:
         highest_id = 1
 
+    # Adding Comment object.
     obj = Comment(id = highest_id + 1, book_id = book_id, user_id = user_id, content = content)
     db.session.add(obj)
     db.session.commit()
@@ -369,29 +393,32 @@ def comment():
     return redirect(url_for("selected_book",id=book_id))
 
 # Route to remove a book from a user.
+# Tested OK
 @app.route("/comment/remove/book/<id>")
 @normal_user_required
 def remove_own_comment(id):
     comment = Comment.query.filter(Comment.id == id)
     obj = comment.scalar()
     redirect_id = obj.book_id
+
+    # Sanity check: Is it own comment?
     if obj.user_id == current_user.id:
         comment.delete()
         db.session.commit()
 
         return redirect(url_for("selected_book",id = redirect_id))
     
-    return "Invalid permission!"
+    return app.login_manager.unauthorized()
     
 # Route to see a particular author's details.
+# Tested OK
 @app.route("/author/<id>")
 @normal_user_required
 def selected_author(id):
     author = Author.query.filter(id == Author.id).scalar()
     if not author:
         return render_template('user_specific/non_existant.html')
-    books = author.books
-    return render_template('user_specific/author.html',author=author,books=books)
+    return render_template('user_specific/author.html',author=author)
 
 # Route to search for some book.
 @app.route("/explore", methods=['GET','POST'])
