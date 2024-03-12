@@ -60,11 +60,27 @@
             <h4 class="help-text">Requested Books</h4>
             {% if user.requested %}
                 {% for r in user.requested %}
-                    <div class="row mx-auto border border-dark p-1" style="width:75%">
+                    <!-- <div class="row mx-auto border border-dark p-1" style="width:75%">
                         <div class="col text-center">
                             <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
                             :
                             <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                            <a class="btn btn-success" href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
+                            <a class="btn btn-danger" href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
+                        </div>
+                    </div> -->
+                    <div class="row mx-auto border border-dark p-1" style="width:75%">
+                        <div class="col text-center">
+                            <span>
+                                <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{r.user.username}}</a>
+                                <span class="help-text">{{r.user.email}}</span>
+                            </span>
+                            <br>
+                            <span>
+                                <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                                <a class ="link-text btn" href="{{r.book.content.__str__().split(',')[1][:-2:]}}">Source File</a>
+                            </span>
+                            <br>
                             <a class="btn btn-success" href="{{url_for('grant',id=r.id)}}" onclick="return confirm('Accept request?')" class="btn btn-primary">Grant</a>
                             <a class="btn btn-danger" href="{{url_for('reject',id=r.id)}}" onclick="return confirm('Reject request?')" class="btn btn-danger">Reject</a>
                         </div>
@@ -93,9 +109,24 @@
             <h4 class="help-text">Returned Books</h4>
             {% if user.returned %}
                 {% for r in user.returned %}
-                    <div class="mx-auto text-center border border-dark p-1" style="width:75%">
+                    <!-- <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                         <br>
                         <h5><a class="btn link-text" href="{{ url_for('see_specific_book',id = r.book.id) }}">{{ r.book.name }}</a></h5>
+                    </div> -->
+                    <div class="row mx-auto border border-dark p-1" style="width:75%">
+                        <div class="col text-center">
+                            <span>
+                                <a class="link-text btn" href="{{url_for('see_specific_user',id=r.user.id)}}">{{ r.user.username }}</a>
+                                <span class="help-text">{{r.user.email}}</span>
+                            </span>
+                            <br>
+                            <span>
+                                <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                                <a class="link-text" href="{{r.book.content[0].filename}}" target="_blank">Source File</a>
+                            </span>
+                            <br>
+                            <a class="btn btn-danger" href="{{url_for('handled_return',id = r.id)}}" onclick="return confirm('Handled return?')" class="btn btn-danger">Done</a>
+                        </div>
                     </div>
                 {% endfor %}  
             {% else %}
