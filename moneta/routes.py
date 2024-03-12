@@ -11,6 +11,7 @@ from datetime import timedelta,datetime
 ## Utility functions!
 
 # Helper function called internally to login correct user.
+# Tested OK
 @login_manager.user_loader
 def load_user(user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -18,6 +19,7 @@ def load_user(user_id):
     return user
 
 # Helper function called internally to display content for pages that do not exist.
+# Tested OK
 @app.errorhandler(404)
 def page_not_found(e):
     if not current_user.is_anonymous:
@@ -27,6 +29,7 @@ def page_not_found(e):
     return "Page not found",404
 
 # Helper wrapper to ensure that only librarians can access certain pages.
+# Tested OK
 def librarian_required(fun):
     @wraps(fun)
     def inner(*args,**kwargs):
@@ -41,6 +44,7 @@ def librarian_required(fun):
     return inner
 
 # Helper wrapper to ensure that only normal users can access certain pages.
+# Tested OK
 def normal_user_required(fun):
     @wraps(fun)
     def inner(*args,**kwargs):
@@ -55,13 +59,14 @@ def normal_user_required(fun):
     return inner    
 
 # Route that reroutes user to their profile page if logged in, the about page if not.
+# Tested OK
 @app.route("/")
 def home():
     return render_template("base_templates/home.html")
 
 ## Anon user routes
 
-# Route that renders the common login form.
+# Route that renders the common login form
 @app.route("/login",methods=['GET','POST'])
 def login():
     form = MyLoginForm()
