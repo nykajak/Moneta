@@ -52,7 +52,7 @@
                 <br>
 
                 <div>
-                    <h4 class="help-text">No of ratings: {{ num_scores }}</h4>
+                    <h4 class="help-text">No of ratings: {{num_ratings}}</h4>
                     {% if avg_score %}
                         <h4 class="help-text"> Average Rating: {{ avg_score }} </h4>
                     {% endif %}
@@ -75,7 +75,7 @@
         <div class = "row">
             <div class="col">
                 <h4 class="help-text">Sections: </h4>
-                {% for section in all_sections %}
+                {% for section in book.sections %}
                     <a class="link-text" href="{{ url_for('selected_genre',name=section.name) }}">{{ section.name }} </a>
                     <br>
                 {% endfor %}
@@ -84,7 +84,7 @@
             <div class = "col">
                 <div>
                     <h4 class="help-text">Authors: </h4>
-                    {% for author in all_authors %}
+                    {% for author in book.authors %}
                         <a class="link-text" href="{{ url_for('selected_author',id = author.id) }}">{{ author.name }}</a>
                         <br>
                     {% endfor %}

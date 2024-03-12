@@ -210,6 +210,7 @@ def trending():
     return render_template('user_specific/trending.html', new_books = new_books,top_books = top_books)
 
 # Route to see a particular book.
+# Tested OK
 @app.route("/book/<id>")
 @normal_user_required
 def selected_book(id):
@@ -218,29 +219,24 @@ def selected_book(id):
     if not curr_book:
         return render_template('user_specific/non_existant.html')
     
-    your_score = None
-    avg_score = None
-    sum_score = 0
+    # Info related to rating and number of ratings
+    num_ratings = len(list(curr_book.ratings))
+    avg_score = curr_book.get_rating()
+    your_score = Rating.query.filter(Rating.book_id == curr_book.id).filter(Rating.user_id == current_user.id).scalar()
+    if your_score:
+        your_score = your_score.score
 
-    all_ratings = curr_book.ratings
-    all_authors = curr_book.authors
-    all_sections = curr_book.sections
-
-    for user_rating in all_ratings:
-        if user_rating.user_id == current_user.id:
-            your_score = user_rating.score
-
-        sum_score += user_rating.score
-
-    if (sum_score != 0):
-        avg_score = sum_score / len(all_ratings)
-        avg_score = round(avg_score,1)
-
+    # State value and what it means:
+    # 3: Can be requested
+    # 2: Insufficient space / Awaiting return
+    # 1: Already requested
+    # 0: Already borrowed
     state = 3
 
     if len(current_user.borrowed) + len(current_user.requested) + len(current_user.returned) >= 5:
         state = 2
 
+    # Check if currently borrowed.
     return_date = None
     for b in current_user.borrowed:
         if b.book.name == curr_book.name:
@@ -249,16 +245,22 @@ def selected_book(id):
             return_date = return_date.__str__()
             return_date = return_date[:10:]
             break
-
+    
+    # Check if currently requested.
     for b in current_user.requested:
         if b.book.name == curr_book.name:
             state = 1
             break
 
+    # Check if currently returned and awaiting processing.
+    for b in current_user.returned:
+        if b.book.name == curr_book.name:
+            state = 2
+            break
+
     return render_template('user_specific/book.html',book=curr_book,
                             avg_score = avg_score, your_score = your_score,
-                            num_scores = len(all_ratings), all_authors = all_authors,
-                            all_sections = all_sections, state = state,return_date=return_date)
+                            state = state, return_date=return_date, num_ratings = num_ratings)
 
 # Stub route to read a particular book.
 @app.route("/read",methods = ["POST"])
