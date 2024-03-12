@@ -392,7 +392,7 @@ def comment():
 
     return redirect(url_for("selected_book",id=book_id))
 
-# Route to remove a book from a user.
+# Route to remove a comment on book for user.
 # Tested OK
 @app.route("/comment/remove/book/<id>")
 @normal_user_required
@@ -421,6 +421,7 @@ def selected_author(id):
     return render_template('user_specific/author.html',author=author)
 
 # Route to search for some book.
+# Tested OK
 @app.route("/explore", methods=['GET','POST'])
 @normal_user_required
 def search():
@@ -428,6 +429,8 @@ def search():
 
     if form.validate_on_submit():
         book_name,author_name,section_name = form.book_name.data,form.author_name.data,form.section_name.data
+        
+        # Applying Criteria
         result = Book.query.filter(Book.name.ilike(f"%{book_name}%"))
         result = result.filter(Book.authors.any(Author.name.ilike(f"%{author_name}%")))
         result = result.filter(Book.sections.any(Section.name.ilike(f"%{section_name}%")))
@@ -441,19 +444,25 @@ def search():
     return render_template("user_specific/explore.html",form = form)
 
 ## Librarian routes
+
+# Main navigation page for librarians to view all objects.
+# Tested OK
 @app.route("/librarian/browse")
 @librarian_required
 def browse():
     return render_template("librarian_specific/browse.html")
 
-# Stub route to see all users and their statuses.
+# Route to see all users.
+# Tested OK
 @app.route("/librarian/users")
 @librarian_required
 def see_users():
     users = User.query.order_by(User.username).all()
+    # Jinja2 handles not displaying librarian users.
     return render_template("librarian_specific/all_users.html",users = users)
 
 # Route to see all sections.
+# Tested OK
 @app.route("/librarian/sections")
 @librarian_required
 def see_sections():
@@ -461,13 +470,23 @@ def see_sections():
     return render_template("librarian_specific/all_sections.html",sections = sections)
 
 # Route to see all books.
+# Tested OK
 @app.route("/librarian/books")
 @librarian_required
 def see_books():
     books = Book.query.order_by(Book.name).all()
     return render_template("librarian_specific/all_books.html",books = books)
 
+# Route to see all authors.
+# Tested OK
+@app.route("/librarian/authors")
+@librarian_required
+def see_authors():
+    authors = Author.query.all()
+    return render_template("librarian_specific/all_authors.html",authors = authors)
+
 # Route to see all requests.
+# Tested OK
 @app.route("/librarian/requests")
 @librarian_required
 def see_requests():
@@ -475,35 +494,32 @@ def see_requests():
     returned = Return.query.all()
     return render_template("librarian_specific/all_requests.html",requests = requests, returned = returned)
 
+# Route to handle a return requests.
+# Tested OK
 @app.route("/librarian/return/handle/<id>")
 @librarian_required
 def handled_return(id):
     res = Return.query.filter(Return.id == id)
     obj = res.scalar()
-    if obj:
-        
-        try:
-            db.session.add(Read(user_id=obj.user_id,book_id=obj.book_id))
-            db.session.commit()
-
-        except Exception as E:
-            db.session.rollback()
-        
-        res.delete()
-        db.session.commit()
-    else:
+    if not obj:
         return render_template('librarian_specific/non_existant.html')
+    
+    try:
+        # Adding the Read object
+        db.session.add(Read(user_id=obj.user_id,book_id=obj.book_id))
+        db.session.commit()
+
+    except Exception as E:
+        db.session.rollback()
+
+    # Deleting the Return object
+    res.delete()
+    db.session.commit()
 
     return redirect(url_for('see_requests'))
 
-# Route to see all authors.
-@app.route("/librarian/authors")
-@librarian_required
-def see_authors():
-    authors = Author.query.all()
-    return render_template("librarian_specific/all_authors.html",authors = authors)
-
 # Route to search for some object.
+# Tested OK
 @app.route("/find",methods=['GET','POST'])
 @librarian_required
 def find_something():
@@ -528,11 +544,12 @@ def find_something():
         else:
             results = None
 
-        return "Something went wrong",404
+        return render_template("librarian_specific/non_existant.html")
 
     return render_template("librarian_specific/search.html",form = form)
 
 # Route to view a particular book.
+# Tested OK
 @app.route("/librarian/book/<id>")
 @librarian_required
 def see_specific_book(id):
@@ -542,6 +559,7 @@ def see_specific_book(id):
     return render_template("librarian_specific/object_book.html",book = book)
 
 # Route to view a particular section.
+# Tested OK
 @app.route("/librarian/section/<id>")
 @librarian_required
 def see_specific_section(id):
@@ -551,19 +569,22 @@ def see_specific_section(id):
     return render_template("librarian_specific/object_section.html",section = section)
 
 # Route to view a particular user.
+# Tested OK
 @app.route("/librarian/user/<id>")
 @librarian_required
 def see_specific_user(id):
     user = User.query.filter(User.id == id).scalar()
 
+    # Librarians cannot interfere with each other.
     if user.is_librarian:
-        return "Not authorised!"
+        return app.login_manager.unauthorized()
 
     if not user:
         return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_user.html",user = user)
 
 # Route to view a particular author.
+# Tested OK
 @app.route("/librarian/author/<id>")
 @librarian_required
 def see_specific_author(id):
@@ -572,7 +593,8 @@ def see_specific_author(id):
         return render_template('librarian_specific/non_existant.html')
     return render_template("librarian_specific/object_author.html",author = author)
 
-# Stub route to edit the details of some book.
+# Route to edit the details of some book.
+# Tested OK
 @app.route("/librarian/book/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_book(id):
@@ -581,29 +603,27 @@ def edit_specific_book(id):
         return render_template('librarian_specific/non_existant.html')
 
     form = EditBookForm()
-    default_path = "https://drive.google.com/file/d/1a7k6giBy_fBfbH2GwxytDLjnLcVfN5GF/view?usp=sharingw"
+
     obj = Content.query.filter(Content.book_id == id).scalar()
-    if obj:
-        default_path = obj.filename
+    default_path = obj.filename
 
     if form.validate_on_submit():
+        # Update attrs.
         book.name = form.name.data
         book.description = form.description.data
         new_path = form.file_path.data
 
-        query = Content.query.filter(Content.book_id == id)
-        if query.scalar():
-            query.delete()
-            db.session.commit()
-
-        db.session.add(Content(book_id = book.id, filename=new_path))
+        # Update content.
+        content_obj = Content.query.filter(Content.book_id == id).scalar()
+        content_obj.filename = new_path
         db.session.commit()
 
         return redirect(url_for('see_specific_book',id=id))
 
     return render_template("librarian_specific/edit_book.html",form = form, default = book, default_path = default_path)
 
-# Stub route to edit the details of some section.
+# Route to edit the details of some section.
+# Tested OK
 @app.route("/librarian/section/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_section(id):
@@ -622,6 +642,7 @@ def edit_specific_section(id):
     return render_template("librarian_specific/edit_section.html",form = form, default = section)
 
 # Stub route to edit the details of some author.
+# Tested OK
 @app.route("/librarian/author/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_author(id):
@@ -640,6 +661,7 @@ def edit_specific_author(id):
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
 
 # Route to delete specific user.
+# Tested OK
 @app.route("/librarian/user/delete/<id>")
 @librarian_required
 def delete_specific_user(id):   
@@ -648,7 +670,11 @@ def delete_specific_user(id):
     if not obj:
         return render_template('librarian_specific/non_existant.html')
     
+    # Everything to be deleted
     db.session.query(Borrow).filter(Borrow.user_id == id).delete()
+    db.session.query(Read).filter(Read.user_id == id).delete()
+    db.session.query(Return).filter(Return.user_id == id).delete()
+    db.session.query(Requested).filter(Requested.user_id == id).delete()
     db.session.query(Comment).filter(Comment.user_id == id).delete()
     db.session.query(Rating).filter(Rating.user_id == id).delete()
 
@@ -657,6 +683,7 @@ def delete_specific_user(id):
     return redirect(url_for('see_users'))
 
 # Route to delete specific book.
+# Tested OK
 @app.route("/librarian/book/delete/<id>")
 @librarian_required
 def delete_specific_book(id):  
@@ -665,10 +692,15 @@ def delete_specific_book(id):
     if not obj:
         return render_template('librarian_specific/non_existant.html')
 
+    # Everything to be deleted
     db.session.query(written).filter(written.c.book_id == id).delete()
     db.session.query(category).filter(category.c.book_id == id).delete()
+    db.session.query(Requested).filter(Requested.book_id == id).delete()
+    db.session.query(Read).filter(Read.book_id == id).delete()
+    db.session.query(Return).filter(Return.book_id == id).delete()
     db.session.query(Borrow).filter(Borrow.book_id == id).delete()
     db.session.query(Comment).filter(Comment.book_id == id).delete()
+    db.session.query(Content).filter(Content.book_id == id).delete()
     db.session.query(Rating).filter(Rating.book_id == id).delete()
 
     db.session.delete(obj)
@@ -676,6 +708,7 @@ def delete_specific_book(id):
     return redirect(url_for('see_books'))
 
 # Route to delete specific section.
+# Tested OK
 @app.route("/librarian/section/delete/<id>")
 @librarian_required
 def delete_specific_section(id): 
@@ -691,6 +724,7 @@ def delete_specific_section(id):
     return redirect(url_for('see_sections'))
 
 # Route to delete specific author.
+# Tested OK
 @app.route("/librarian/author/delete/<id>")
 @librarian_required
 def delete_specific_author(id):
@@ -706,12 +740,15 @@ def delete_specific_author(id):
     return redirect(url_for('see_authors'))
 
 # Route to remove author from a book.
+# Tested OK
 @app.route("/librarian/author/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_author():
     author_id,book_id = request.form.get("author_id"),request.form.get("book_id")
     db.session.query(written).filter(written.c.book_id == book_id).filter(written.c.author_id == author_id).delete()
     db.session.commit()
+
+    # Rerouting
     origin = request.form.get("origin")
     if origin:
         return redirect(url_for("see_specific_author",id = author_id))
@@ -719,6 +756,7 @@ def remove_book_from_author():
         return redirect(url_for("see_specific_book",id = book_id))
 
 # Route to remove section from a book.
+# Tested OK
 @app.route("/librarian/section/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_section():
@@ -726,6 +764,7 @@ def remove_book_from_section():
     db.session.query(category).filter(category.c.book_id == book_id).filter(category.c.section_id == section_id).delete()
     db.session.commit()
 
+    # Rerouting
     origin = request.form.get("origin")
     if origin:
         return redirect(url_for("see_specific_section",id = section_id))
@@ -733,20 +772,32 @@ def remove_book_from_section():
         return redirect(url_for("see_specific_book",id = book_id))
 
 # Route to remove a book from a user.
+# Tested OK
 @app.route("/librarian/user/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_user():
     user_id,book_id = request.form.get("user_id"),request.form.get("book_id")
+
+    # Removing Borrow object
     db.session.query(Borrow).filter(Borrow.book_id == book_id).filter(Borrow.user_id == user_id).delete()
     db.session.commit()
 
+    # Adding Read object
+    try:
+        db.session.add(Read(user_id = user_id, book_id = book_id))
+        db.session.commit()
+    except:
+        db.session.rollback()
+
+    # Rerouting
     origin = request.form.get("origin")
     if origin:
         return redirect(url_for("see_specific_user",id = user_id))
     else:
         return redirect(url_for("see_specific_book",id = book_id))
     
-# Route to remove a book from a user.
+# Route to remove a comment on book from a user.
+# Tested OK
 @app.route("/librarian/comment/remove/book/<id>")
 @librarian_required
 def remove_comment_from_book(id):
@@ -758,6 +809,7 @@ def remove_comment_from_book(id):
     return redirect(url_for("see_specific_book",id=id_redirect))
 
 # Route to add an author to a book.
+# Tested OK
 @app.route("/librarian/author/include",methods=['POST'])
 @librarian_required
 def add_author_to_book():    
@@ -779,7 +831,7 @@ def add_author_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            print("Duplicate")
+            return app.login_manager.unauthorized()
         
         return redirect(url_for('see_specific_book',id=book_id))
     
@@ -801,11 +853,12 @@ def add_author_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            print("Duplicate")
+            return app.login_manager.unauthorized()
 
         return redirect(url_for('see_specific_author',id=author_id))
 
 # Route to add a section to a book.
+# Tested OK
 @app.route("/librarian/section/include",methods=['POST'])
 @librarian_required
 def add_section_to_book():
@@ -827,7 +880,7 @@ def add_section_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            print("Duplicate")
+            return app.login_manager.unauthorized()
 
         return redirect(url_for('see_specific_book',id=book_id))
     
@@ -849,11 +902,12 @@ def add_section_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            print("Duplicate")
+            return app.login_manager.unauthorized()
 
         return redirect(url_for('see_specific_section',id=section_id))
 
 # Route to add some item - be it author, class or book with default values except for names.
+# Tested OK
 @app.route("/librarian/item/add",methods=['POST'])
 @librarian_required
 def add_item():
@@ -873,8 +927,16 @@ def add_item():
         db.session.add(obj)
         db.session.commit()
 
-    except Exception as e:
-        return "Invalid Operation"
+    except:
+        db.session.rollback()
+        return app.login_manager.unauthorized()
+    
+    if kind == "book":
+        try:
+            db.session.add(Content(book_id = obj.id, filename = "https://drive.google.com/file/d/1a7k6giBy_fBfbH2GwxytDLjnLcVfN5GF/view?usp=sharing"))
+            db.session.commit()
+        except:
+            db.session.rollback()
     
     if kind == "author":
         return redirect(url_for('see_authors'))
@@ -884,6 +946,7 @@ def add_item():
         return redirect(url_for('see_sections'))
     
 #Route to grant a particular request
+# Tested OK
 @app.route("/librarian/grant/<id>")
 @librarian_required
 def grant(id):
@@ -901,6 +964,7 @@ def grant(id):
     return redirect(url_for("see_requests"))
 
 #Route to reject a particular request
+# Tested OK
 @app.route("/librarian/reject/<id>")
 @librarian_required
 def reject(id):

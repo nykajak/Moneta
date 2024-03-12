@@ -104,7 +104,7 @@ class Book(db.Model):
             avg_score = avg_score / len(all_ratings)
             avg_score = round(avg_score,1)
         else:
-            avg_score = None
+            avg_score = 0
 
         return avg_score
 

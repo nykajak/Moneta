@@ -48,6 +48,7 @@
                     <div class="row mx-auto border border-dark p-1" style="width:75%">
                         <div class="col text-center">
                             <a class="link-text btn" href="{{url_for('see_specific_book',id=r.book.id)}}">{{ r.book.name }}</a>
+                            <input type="submit" class="btn btn-info" value="Revoke" form="request_form" onclick = "populate_form(this)" data-user = "{{r.user.id}}" data-book = "{{r.book.id}}">
                         </div>
                     </div>
                 {% endfor %}  
