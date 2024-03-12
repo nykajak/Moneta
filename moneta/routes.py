@@ -393,8 +393,7 @@ def search():
         result = result.filter(Book.authors.any(Author.name.ilike(f"%{author_name}%")))
         result = result.filter(Book.sections.any(Section.name.ilike(f"%{section_name}%")))
 
-        result = list(result)
-        result.sort()
+        result = result.order_by(Book.name).all()
         if result:
             return render_template("user_specific/results.html",results = result)
         else:
@@ -412,21 +411,21 @@ def browse():
 @app.route("/librarian/users")
 @librarian_required
 def see_users():
-    users = User.query.all()
+    users = User.query.order_by(User.username).all()
     return render_template("librarian_specific/all_users.html",users = users)
 
 # Route to see all sections.
 @app.route("/librarian/sections")
 @librarian_required
 def see_sections():
-    sections = Section.query.all()
+    sections = Section.query.order_by(Section.name).all()
     return render_template("librarian_specific/all_sections.html",sections = sections)
 
 # Route to see all books.
 @app.route("/librarian/books")
 @librarian_required
 def see_books():
-    books = Book.query.all()
+    books = Book.query.order_by(Book.name).all()
     return render_template("librarian_specific/all_books.html",books = books)
 
 # Route to see all requests.
@@ -473,19 +472,19 @@ def find_something():
 
     if form.validate_on_submit():
         if form.obj_type.data == "Book":
-            results = Book.query.filter(Book.name.ilike(f"%{form.obj_name.data}%"))
+            results = Book.query.filter(Book.name.ilike(f"%{form.obj_name.data}%")).order_by(Book.name).all()
             return render_template("librarian_specific/all_books.html",books = results)
 
         elif form.obj_type.data == "User":
-            results = User.query.filter(User.username.ilike(f"%{form.obj_name.data}%"))
+            results = User.query.filter(User.username.ilike(f"%{form.obj_name.data}%")).order_by(User.username).all()
             return render_template("librarian_specific/all_users.html", users = results)
         
         elif form.obj_type.data == "Section":
-            results = Section.query.filter(Section.name.ilike(f"%{form.obj_name.data}%"))
+            results = Section.query.filter(Section.name.ilike(f"%{form.obj_name.data}%")).order_by(Section.name).all()
             return render_template("librarian_specific/all_sections.html", sections = results)
         
         elif form.obj_type.data == "Author":
-            results = Author.query.filter(Author.name.ilike(f"%{form.obj_name.data}%"))
+            results = Author.query.filter(Author.name.ilike(f"%{form.obj_name.data}%")).order_by(Author.name).all()
             return render_template("librarian_specific/all_authors.html",authors = results)
         else:
             results = None
