@@ -610,7 +610,8 @@ def edit_specific_book(id):
     if form.validate_on_submit():
         # Update attrs.
         book.name = form.name.data
-        book.description = form.description.data
+        if form.description.data != "None":
+            book.description = form.description.data
         new_path = form.file_path.data
 
         # Update content.
@@ -634,7 +635,8 @@ def edit_specific_section(id):
 
     if form.validate_on_submit():
         section.name = form.name.data
-        section.description = form.description.data
+        if form.description.data != "None":
+            section.description = form.description.data
         db.session.commit()
 
         return redirect(url_for('see_specific_section',id=id))
@@ -653,7 +655,8 @@ def edit_specific_author(id):
 
     if form.validate_on_submit():
         author.name = form.name.data
-        author.bio = form.description.data
+        if form.description.data != "None":
+            author.bio = form.description.data
         db.session.commit()
 
         return redirect(url_for('see_specific_author',id=id))
@@ -683,7 +686,6 @@ def delete_specific_user(id):
     return redirect(url_for('see_users'))
 
 # Route to delete specific book.
-# Tested OK
 @app.route("/librarian/book/delete/<id>")
 @librarian_required
 def delete_specific_book(id):  
