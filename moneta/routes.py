@@ -446,14 +446,14 @@ def search():
 ## Librarian routes
 
 # Main navigation page for librarians to view all objects.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/browse")
 @librarian_required
 def browse():
     return render_template("librarian_specific/browse.html")
 
 # Route to see all users.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/users")
 @librarian_required
 def see_users():
@@ -462,7 +462,7 @@ def see_users():
     return render_template("librarian_specific/all_users.html",users = users)
 
 # Route to see all sections.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/sections")
 @librarian_required
 def see_sections():
@@ -470,7 +470,7 @@ def see_sections():
     return render_template("librarian_specific/all_sections.html",sections = sections)
 
 # Route to see all books.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/books")
 @librarian_required
 def see_books():
@@ -478,7 +478,7 @@ def see_books():
     return render_template("librarian_specific/all_books.html",books = books)
 
 # Route to see all authors.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/authors")
 @librarian_required
 def see_authors():
@@ -486,7 +486,7 @@ def see_authors():
     return render_template("librarian_specific/all_authors.html",authors = authors)
 
 # Route to see all requests.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/requests")
 @librarian_required
 def see_requests():
@@ -495,7 +495,7 @@ def see_requests():
     return render_template("librarian_specific/all_requests.html",requests = requests, returned = returned)
 
 # Route to handle a return requests.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/return/handle/<id>")
 @librarian_required
 def handled_return(id):
@@ -519,7 +519,7 @@ def handled_return(id):
     return redirect(url_for('see_requests'))
 
 # Route to search for some object.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/find",methods=['GET','POST'])
 @librarian_required
 def find_something():
@@ -549,7 +549,7 @@ def find_something():
     return render_template("librarian_specific/search.html",form = form)
 
 # Route to view a particular book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/book/<id>")
 @librarian_required
 def see_specific_book(id):
@@ -559,7 +559,7 @@ def see_specific_book(id):
     return render_template("librarian_specific/object_book.html",book = book)
 
 # Route to view a particular section.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/section/<id>")
 @librarian_required
 def see_specific_section(id):
@@ -569,7 +569,7 @@ def see_specific_section(id):
     return render_template("librarian_specific/object_section.html",section = section)
 
 # Route to view a particular user.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/user/<id>")
 @librarian_required
 def see_specific_user(id):
@@ -584,7 +584,7 @@ def see_specific_user(id):
     return render_template("librarian_specific/object_user.html",user = user)
 
 # Route to view a particular author.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/author/<id>")
 @librarian_required
 def see_specific_author(id):
@@ -594,7 +594,7 @@ def see_specific_author(id):
     return render_template("librarian_specific/object_author.html",author = author)
 
 # Route to edit the details of some book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/book/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_book(id):
@@ -626,7 +626,7 @@ def edit_specific_book(id):
     return render_template("librarian_specific/edit_book.html",form = form, default = book, default_path = default_path)
 
 # Route to edit the details of some section.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/section/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_section(id):
@@ -648,7 +648,7 @@ def edit_specific_section(id):
     return render_template("librarian_specific/edit_section.html",form = form, default = section)
 
 # Stub route to edit the details of some author.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/author/edit/<id>",methods = ['GET','POST'])
 @librarian_required
 def edit_specific_author(id):
@@ -670,7 +670,7 @@ def edit_specific_author(id):
     return render_template("librarian_specific/edit_author.html",form = form, default = author)
 
 # Route to delete specific user.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/user/delete/<id>")
 @librarian_required
 def delete_specific_user(id):   
@@ -692,6 +692,7 @@ def delete_specific_user(id):
     return redirect(url_for('see_users'))
 
 # Route to delete specific book.
+# Tested OK - Gamma
 @app.route("/librarian/book/delete/<id>")
 @librarian_required
 def delete_specific_book(id):  
@@ -716,7 +717,7 @@ def delete_specific_book(id):
     return redirect(url_for('see_books'))
 
 # Route to delete specific section.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/section/delete/<id>")
 @librarian_required
 def delete_specific_section(id): 
@@ -732,7 +733,7 @@ def delete_specific_section(id):
     return redirect(url_for('see_sections'))
 
 # Route to delete specific author.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/author/delete/<id>")
 @librarian_required
 def delete_specific_author(id):
@@ -748,7 +749,7 @@ def delete_specific_author(id):
     return redirect(url_for('see_authors'))
 
 # Route to remove author from a book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/author/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_author():
@@ -764,7 +765,7 @@ def remove_book_from_author():
         return redirect(url_for("see_specific_book",id = book_id))
 
 # Route to remove section from a book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/section/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_section():
@@ -780,7 +781,7 @@ def remove_book_from_section():
         return redirect(url_for("see_specific_book",id = book_id))
 
 # Route to remove a book from a user.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/user/remove/book",methods=['POST'])
 @librarian_required
 def remove_book_from_user():
