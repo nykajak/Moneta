@@ -806,7 +806,7 @@ def remove_book_from_user():
         return redirect(url_for("see_specific_book",id = book_id))
     
 # Route to remove a comment on book from a user.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/comment/remove/book/<id>")
 @librarian_required
 def remove_comment_from_book(id):
@@ -818,7 +818,7 @@ def remove_comment_from_book(id):
     return redirect(url_for("see_specific_book",id=id_redirect))
 
 # Route to add an author to a book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/author/include",methods=['POST'])
 @librarian_required
 def add_author_to_book():    
@@ -840,7 +840,7 @@ def add_author_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            return app.login_manager.unauthorized()
+            return "Duplicates not allowed"
         
         return redirect(url_for('see_specific_book',id=book_id))
     
@@ -862,12 +862,12 @@ def add_author_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            return app.login_manager.unauthorized()
+            return "Duplicates not allowed"
 
         return redirect(url_for('see_specific_author',id=author_id))
 
 # Route to add a section to a book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/section/include",methods=['POST'])
 @librarian_required
 def add_section_to_book():
@@ -889,7 +889,7 @@ def add_section_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            return app.login_manager.unauthorized()
+            return "Duplicates not allowed"
 
         return redirect(url_for('see_specific_book',id=book_id))
     
@@ -911,12 +911,12 @@ def add_section_to_book():
             db.session.execute(stmt)
             db.session.commit()
         else:
-            return app.login_manager.unauthorized()
+            return "Duplicates not allowed"
 
         return redirect(url_for('see_specific_section',id=section_id))
 
 # Route to add some item - be it author, class or book with default values except for names.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/item/add",methods=['POST'])
 @librarian_required
 def add_item():
@@ -938,7 +938,7 @@ def add_item():
 
     except:
         db.session.rollback()
-        return app.login_manager.unauthorized()
+        return "Duplicates not allowed!"
     
     if kind == "book":
         try:
@@ -955,7 +955,7 @@ def add_item():
         return redirect(url_for('see_sections'))
     
 #Route to grant a particular request
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/grant/<id>")
 @librarian_required
 def grant(id):
@@ -973,7 +973,7 @@ def grant(id):
     return redirect(url_for("see_requests"))
 
 #Route to reject a particular request
-# Tested OK
+# Tested OK - Gamma
 @app.route("/librarian/reject/<id>")
 @librarian_required
 def reject(id):
