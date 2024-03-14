@@ -612,6 +612,8 @@ def edit_specific_book(id):
         book.name = form.name.data
         if form.description.data != "None":
             book.description = form.description.data
+        else:
+            book.description = None
         new_path = form.file_path.data
 
         # Update content.
@@ -637,6 +639,8 @@ def edit_specific_section(id):
         section.name = form.name.data
         if form.description.data != "None":
             section.description = form.description.data
+        else:
+            section.description = None
         db.session.commit()
 
         return redirect(url_for('see_specific_section',id=id))
@@ -657,6 +661,8 @@ def edit_specific_author(id):
         author.name = form.name.data
         if form.description.data != "None":
             author.bio = form.description.data
+        else:
+            author.bio = None
         db.session.commit()
 
         return redirect(url_for('see_specific_author',id=id))
