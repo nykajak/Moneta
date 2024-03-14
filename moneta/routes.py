@@ -11,7 +11,7 @@ from datetime import timedelta,datetime
 ## Utility functions!
 
 # Helper function called internally to login correct user.
-# Tested OK
+# Tested OK - Gamma
 @login_manager.user_loader
 def load_user(user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -19,7 +19,7 @@ def load_user(user_id):
     return user
 
 # Helper function called internally to display content for pages that do not exist.
-# Tested OK
+# Tested OK - Gamma
 @app.errorhandler(404)
 def page_not_found(e):
     if not current_user.is_anonymous:
@@ -29,7 +29,7 @@ def page_not_found(e):
     return "Page not found",404
 
 # Helper wrapper to ensure that only librarians can access certain pages.
-# Tested OK
+# Tested OK - Gamma
 def librarian_required(fun):
     @wraps(fun)
     def inner(*args,**kwargs):
@@ -44,7 +44,7 @@ def librarian_required(fun):
     return inner
 
 # Helper wrapper to ensure that only normal users can access certain pages.
-# Tested OK
+# Tested OK - Gamma
 def normal_user_required(fun):
     @wraps(fun)
     def inner(*args,**kwargs):
@@ -59,7 +59,7 @@ def normal_user_required(fun):
     return inner    
 
 # Route that reroutes user to their profile page if logged in, the about page if not.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/")
 def home():
     return render_template("base_templates/home.html")
@@ -67,7 +67,7 @@ def home():
 ## Global user routes
 
 # Route that renders the common login form
-# Tested OK
+# Tested OK - Gamma
 @app.route("/login",methods=['GET','POST'])
 def login():
     form = MyLoginForm()
@@ -113,7 +113,7 @@ def login():
     return render_template("anon_specific/login.html",login_user_form = form)
 
 # Route that renders the registration form.
-# Tested OK
+# Tested OK- Gamma
 @app.route("/register",methods=['GET','POST'])
 def register():
     form = MyRegistrationForm()
@@ -156,7 +156,7 @@ def register():
     return render_template("anon_specific/register.html",register_user_form = form)
 
 # Logout route.
-# Tested OK
+# Tested OK- Gamma
 @app.route("/logout")
 def logout():
     curr_name = current_user.username
@@ -170,7 +170,7 @@ def logout():
 ## Normal user routes.
 
 # Route to browse through all available sections.
-# Tested OK
+# Tested OK- Gamma
 @app.route("/sections")
 @normal_user_required
 def genre():
@@ -178,7 +178,7 @@ def genre():
     return render_template('user_specific/sections.html',sections=sections)
 
 # Route to see a specific section by name.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/sections/<name>")
 @normal_user_required
 def selected_genre(name):
@@ -188,7 +188,7 @@ def selected_genre(name):
     return render_template('user_specific/specific_section.html',genre = section)
 
 # Route to see recently added and highly rated books.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/trending")
 @normal_user_required
 def trending():
@@ -210,7 +210,7 @@ def trending():
     return render_template('user_specific/trending.html', new_books = new_books,top_books = top_books)
 
 # Route to see a particular book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/book/<id>")
 @normal_user_required
 def selected_book(id):
@@ -262,8 +262,8 @@ def selected_book(id):
                             avg_score = avg_score, your_score = your_score,
                             state = state, return_date=return_date, num_ratings = num_ratings)
 
-# Stub route to read a particular book.
-# Tested OK
+# Route to read a particular book.
+# Tested OK - Gamma
 @app.route("/read",methods = ["POST"])
 @normal_user_required
 def read():
@@ -292,7 +292,7 @@ def read():
     return redirect(src)
 
 #Route to request a particular book
-# Tested OK
+# Tested OK - Gamma
 @app.route("/request",methods = ["POST"])
 @normal_user_required
 def request_book():
@@ -314,7 +314,7 @@ def request_book():
     return redirect(url_for("home"))
 
 #Route to cancel request of a particular book
-# Tested OK
+# Tested OK - Gamma
 @app.route("/request/cancel",methods = ["POST"])
 @normal_user_required
 def cancel_request_book():
@@ -327,7 +327,7 @@ def cancel_request_book():
     return redirect(url_for("home"))
 
 #Route to return a particular book
-# Tested OK
+# Tested OK - Gamma
 @app.route("/return",methods = ["POST"])
 @normal_user_required
 def _return():
@@ -353,7 +353,7 @@ def _return():
     return redirect(url_for("home"))
 
 #Route to rate a particular book
-# Tested OK
+# Tested OK - Gamma
 @app.route("/rate",methods = ["POST"])
 @normal_user_required
 def rate():
@@ -372,7 +372,7 @@ def rate():
     return redirect(url_for("selected_book",id=book_id))
 
 #Route to comment on a particular book
-# Tested OK
+# Tested OK - Gamma
 @app.route("/comment",methods = ["POST"])
 @normal_user_required
 def comment():
@@ -393,7 +393,7 @@ def comment():
     return redirect(url_for("selected_book",id=book_id))
 
 # Route to remove a comment on book for user.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/comment/remove/book/<id>")
 @normal_user_required
 def remove_own_comment(id):
@@ -411,7 +411,7 @@ def remove_own_comment(id):
     return app.login_manager.unauthorized()
     
 # Route to see a particular author's details.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/author/<id>")
 @normal_user_required
 def selected_author(id):
@@ -421,7 +421,7 @@ def selected_author(id):
     return render_template('user_specific/author.html',author=author)
 
 # Route to search for some book.
-# Tested OK
+# Tested OK - Gamma
 @app.route("/explore", methods=['GET','POST'])
 @normal_user_required
 def search():
@@ -433,7 +433,7 @@ def search():
         # Applying Criteria
         result = Book.query.filter(Book.name.ilike(f"%{book_name}%"))
         result = result.filter(Book.authors.any(Author.name.ilike(f"%{author_name}%")))
-        result = result.filter(Book.sections.any(Section.name.ilike(f"%{section_name}%")))
+        result = result.filter(Book.sections.any(name=section_name))
 
         result = result.order_by(Book.name).all()
         if result:
