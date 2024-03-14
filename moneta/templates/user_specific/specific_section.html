@@ -5,7 +5,12 @@
 {% block main_body %}
     <div class="container text-center">
         <h3 class="help-text">Genre: {{ genre.name.title() }}</h3>
-        <p class="help-text">{{genre.description}}</p>
+        {% if genre.description %}
+            <p class="help-text">{{ genre.description }}</p>
+        {% else %}
+            <p class="help-text">No description!</p>
+        {% endif %}
+        <p class="help-text">Created: {{genre.doc.__str__()[:10:]}}</p>
         {% for book in genre.books %}
             <div class="mx-auto text-center border border-dark p-1" style="width:75%">
                 <br>

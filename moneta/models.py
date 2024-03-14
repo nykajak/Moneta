@@ -129,7 +129,7 @@ class Author(db.Model):
     def __repr__(self):
         return f'Author({self.name})'
 
-#Floating
+# Finalised
 class Section(db.Model):
     """
         Representative class for an author.
@@ -139,7 +139,7 @@ class Section(db.Model):
     # Fields
     id = db.Column(db.Integer,primary_key = True)
     name = db.Column(db.String(40), unique = True, nullable = False)
-    doc = db.Column(db.DateTime, default = date.today()) #Unused
+    doc = db.Column(db.DateTime, default = date.today())
     description = db.Column(db.String(256))
 
     # Reference to all books in given section.
@@ -148,7 +148,7 @@ class Section(db.Model):
     def __repr__(self):
         return f"Section({self.name}, {self.description})"
     
-#Floating
+# Finalised
 class Comment(db.Model):
     """
         Representative class for a comment about some book made by some user.
@@ -194,7 +194,7 @@ class Borrow(db.Model):
     def __repr__(self):
         return f"Borrow({self.user_id},{self.book_id},{self.b_date})"
 
-#Floating
+# Finalised
 class Return(db.Model):
     """
         Representative class for the returned books whose processing is not yet over.
@@ -206,15 +206,14 @@ class Return(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     b_date = db.Column(db.DateTime, nullable = False)
-    r_date = db.Column(db.DateTime, nullable = False, default = date.today()) #Unused
+    r_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
-    #No backref?
     book = db.relationship('Book',lazy= True)
 
     def __repr__(self):
         return f"Return({self.user_id},{self.book_id},{self.r_date})"
 
-#Floating
+# Finalised
 class Requested(db.Model):
     """
         Representative class for the requested relation between a book and a user.
@@ -225,14 +224,12 @@ class Requested(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    r_date = db.Column(db.DateTime, nullable = False, default = date.today()) #Unused
-
-    # book = db.relationship('Book',lazy= True)
+    r_date = db.Column(db.DateTime, nullable = False, default = date.today())
 
     def __repr__(self):
         return f"Requested({self.user_id},{self.book_id},{self.r_date})"
 
-#Finished
+# Finalised
 class Read(db.Model):
     """
         Representative class for the read relation between a book and a user.
