@@ -8,6 +8,7 @@
                 <h2 class="header-info-content-text">Moneta: Remembering Words</h2>
                 <h4 class="header-info-content-text">Librarian Powers active</h4>
                 <h4 class="header-info-content-text">Logged in as: {{ current_user.username }} </h4>
+                <p class="header-info-content-text">Joined: {{current_user.doj.__str__()[:10:]}}</p>
             </div>
         </div>
         

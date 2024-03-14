@@ -34,7 +34,7 @@ class Content(db.Model):
     def __repr__(self):
         return f"Content({self.book.name},{self.filename})"
 
-#Floating
+# Finalised
 class User(db.Model,UserMixin):
     """
         Representative class for a user. Has a boolean denoting whether user is a librarian
@@ -48,7 +48,7 @@ class User(db.Model,UserMixin):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(60),nullable=True)
     email = db.Column(db.String(60),nullable=False,unique=True)
-    doj = db.Column(db.DateTime, nullable=False, default = date.today()) #Unused
+    doj = db.Column(db.DateTime, nullable=False, default = date.today())
     is_librarian = db.Column(db.Integer,nullable = False, default = 0)
 
     # Reference to all the borrow objects corresponding to books currently borrowed
@@ -66,7 +66,7 @@ class User(db.Model,UserMixin):
     def __repr__(self):
         return f"User({self.username},{self.email})"
 
-#Floating
+# Finalised
 class Book(db.Model):
     """
         Representative class for a book.
@@ -108,9 +108,8 @@ class Book(db.Model):
 
         return avg_score
 
-    #Unused?
     def __lt__(self,other):
-        return self.name < other.name
+        return len(self.ratings) < len(other.ratings)
     
 #Finalised
 class Author(db.Model):

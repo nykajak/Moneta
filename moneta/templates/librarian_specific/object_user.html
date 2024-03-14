@@ -37,6 +37,7 @@
             <div class="col">
                 <h5 class="help-text">{{ user.username }}</h5>
                 <h5 class="help-text">{{ user.email }}</h5>
+                <p class="help-text">Joined: {{user.doj.__str__()[:10:]}}</p>
                 <a class="btn btn-danger" onclick="return confirm('Confirm Deletion?')" href="{{url_for('delete_specific_user',id=user.id)}}">Delete</a>
             </div>
         </div>    
