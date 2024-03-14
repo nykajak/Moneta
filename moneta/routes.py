@@ -367,7 +367,7 @@ def rate():
         record.score = score
     else:
         db.session.add(Rating(book_id = book_id, user_id = user_id, score = score))
-        db.session.commit()
+    db.session.commit()
 
     return redirect(url_for("selected_book",id=book_id))
 
