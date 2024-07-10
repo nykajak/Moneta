@@ -3,7 +3,7 @@
 2) Install requirements.txt
 3) Run local_setup.sh file
 4) Run local_run.sh file to launch server on local machine
-5) Run global_run.sh file to launch server on local machin
+5) Run global_run.sh file to launch server on local machine
 
 # Features
 Project overview report attached here: [Report](https://drive.google.com/file/d/1CEOZderNZRbDdwSe5OXWvE4eRhasUA-q/view?usp=sharing) <br>
