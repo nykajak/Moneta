@@ -1,8 +1,8 @@
 # Imports
 from flask import request,render_template,flash,redirect,url_for
-from moneta import app,db,bcrypt,login_manager
-from moneta.forms import *
-from moneta.models import *
+from api import app,db,bcrypt,login_manager
+from api.forms import *
+from api.models import *
 from flask_login import login_user,logout_user,current_user
 from functools import wraps
 from sqlalchemy import insert,func

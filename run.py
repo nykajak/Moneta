@@ -1,5 +1,5 @@
-from moneta import app,db
-import moneta.models 
+from api import app,db
+import api.models 
 
 
 with app.app_context():

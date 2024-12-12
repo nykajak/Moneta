@@ -1,8 +1,8 @@
 # Imports
 import os
 from flask import Flask
-from moneta.config import LocalConfig
-from moneta.database import db
+from api.config import LocalConfig
+from api.database import db
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import logging 
@@ -51,4 +51,4 @@ login_manager.init_app(app)
 app.logger.info("Login manager initialised!")
 
 #Importing all the routes
-from moneta import routes
+from api import routes

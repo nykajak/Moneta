@@ -1,5 +1,5 @@
 # Imports
-from moneta.database import db 
+from api.database import db 
 from datetime import date
 from flask_login import UserMixin
 
