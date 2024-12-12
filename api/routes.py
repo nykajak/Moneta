@@ -62,7 +62,8 @@ def normal_user_required(fun):
 # Tested OK - Gamma
 @app.route("/")
 def home():
-    return render_template("base_templates/home.html")
+    return "Hello There!"
+    # return render_template("base_templates/home.html")
 
 ## Global user routes
 
