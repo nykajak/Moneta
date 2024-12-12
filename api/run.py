@@ -1,5 +1,4 @@
-from api import app,db
-import api.models 
+from api import app
 
 
 # with app.app_context():
