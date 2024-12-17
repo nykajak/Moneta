@@ -1,16 +1,25 @@
-# Setup
-1) Clone or download repo.
-2) Install requirements.txt
-3) Run local_setup.sh file
-4) Run local_run.sh file to launch server on local machine
-5) Run global_run.sh file to launch server on local machine
+# Moneta
+A sample library management website for users to borrow and read books from a centralised library. Made as
+part of IITM BS Degree, Modern Application Development - 1 course project. 
+
+# Setup (for local running)
+- Clone or download repo.
+- Execute `pip install -r requirements.txt`
+- Define FLASK_SECRET_KEY environment variable
+- Execute `python moneta.py` to start the local server
 
 # Features
-Project overview report attached here: [Report](https://drive.google.com/file/d/1CEOZderNZRbDdwSe5OXWvE4eRhasUA-q/view?usp=sharing) <br>
-Project overview video attached here: [Video](https://drive.google.com/file/d/10t2mg37L8IXXpekZC9hj26EOBb171PMh/view?usp=sharing)
 
-Note : Report and overview video are for the current alpha version of Moneta. Further development possible in time.
+## For users
+- User can browse, search for and filter out the books they want.
+- User requests for a book and after librarian approval gains access to the same.
+- Users can rate and comment on books.
+- Filtering by genre, author and book name all supported.
 
-# Future Changes
+## For customers
+- Librarian has admin powers and manages users and books.
+- Able to ban users, manage inventory and moderate the platform.
+
+# Upcoming changes
 1) Improvements in UI.
 2) Better storage than Google Drive or use of Drive API to simplify matters.
