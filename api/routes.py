@@ -64,105 +64,10 @@ def normal_user_required(fun):
 def home():
     return render_template("base_templates/home.html")
 
-## Global user routes
-
-# Route that renders the common login form
-# Tested OK - Gamma
-@app.route("/login",methods=['GET','POST'])
+@app.route("/login")
 def login():
-    form = MyLoginForm()
+    return render_template("base_templates/home.html")
 
-    if form.validate_on_submit():
-        app.logger.info("Login form validated!")
-        
-        u = User.query.filter_by(email=form.email.data).first()
-        app.logger.debug("User query processed!")
-
-        if u and bcrypt.check_password_hash(u.password,form.password.data):
-            res = login_user(u)
-            if res:
-                app.logger.info("Successful login!")
-            else:
-                app.logger.critical("Login failed.")
-
-            # Remove expired books from user on login
-            for b in current_user.borrowed:
-                if (datetime.now() - b.b_date).days > 7:
-                    obj = b
-                    try:
-                        db.session.add(Read(user_id = obj.user_id, book_id = obj.book_id))
-                        db.session.commit()
-                        app.logger.info(f"Added read relation: {obj.book.name} for user: {current_user.username}!")
-                    except Exception:
-                        db.session.rollback()
-                    
-                    Borrow.query.filter(Borrow.user_id == obj.user_id).filter(Borrow.book_id == obj.book_id).delete()
-                    app.logger.info(f"Removed book: {obj.book.name} from user: {current_user.username}!")
-                    db.session.commit()
-
-            return redirect(url_for('home'))
-
-        else:
-            if not u:
-                app.logger.debug(f"No user with email: {form.email.data}!")
-                flash("No such user found!",category="danger")
-            else:
-                app.logger.debug("User provided incorrect password!")
-                flash("Incorrect password!",category="danger")
-
-    return render_template("anon_specific/login.html",login_user_form = form)
-
-# Route that renders the registration form.
-# Tested OK- Gamma
-@app.route("/register",methods=['GET','POST'])
+@app.route("/register")
 def register():
-    form = MyRegistrationForm()
-
-    if form.validate_on_submit():
-        app.logger.info("Register form validated!")
-
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        u = User(username=form.username.data,email=form.email.data,password=hashed_password)
-        app.logger.debug("User query processed!")
-
-        created = 0
-        try:
-            #Creating user.
-            db.session.add(u)
-            db.session.commit()
-            created = 1
-
-        except Exception as E:
-            #Detecting which field repeated via the error message.
-            failed = E.args[0][56:]
-            if failed == 'email':
-                app.logger.debug("User not created as email already exists!")
-                flash("Email already in use",category='danger')
-            elif failed == 'username':
-                app.logger.debug("User not created as username already exists!")
-                flash("Username already in use",category='danger')
-                
-
-        if created:
-            app.logger.debug(f"User created with username:{form.username.data}!")
-            res = login_user(u)
-            if res:
-                app.logger.info("User logged in!")
-            else:
-                app.logger.critical("Login failed.")
-
-            return redirect(url_for('home'))
-
-    return render_template("anon_specific/register.html",register_user_form = form)
-
-# Logout route.
-# Tested OK- Gamma
-@app.route("/logout")
-def logout():
-    curr_name = current_user.username
-    res = logout_user()
-    if res:
-        app.logger.debug(f"User {curr_name} logged out!")
-    else:
-        app.logger.critical("Logout failed.")
-    return redirect(url_for('home'))
+    return render_template("base_templates/home.html")
