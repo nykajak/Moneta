@@ -2,3 +2,4 @@
 test*
 *.log
 *__pycache__
+*routes2.py
