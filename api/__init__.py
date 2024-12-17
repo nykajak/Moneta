@@ -5,11 +5,6 @@ from api.config import LocalConfig
 from api.database import db
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-import logging 
-
-# Setting up logger
-logger_format = f"%(asctime)s \n %(filename)s %(funcName)s \n %(levelname)s - %(message)s \n"
-logging.basicConfig(filename='debug.log', level=logging.DEBUG, format = logger_format)
 
 app = None
 
@@ -46,9 +41,7 @@ def create_app():
 
 #Instantiating app and login manager
 app,bcrypt = create_app()
-app.logger.info("App and bcrypt created!")
 login_manager.init_app(app)
-app.logger.info("Login manager initialised!")
 
 #Importing all the routes
 from api import routes
