@@ -1,6 +1,8 @@
-# Moneta
+ Moneta
 A sample library management website for users to borrow and read books from a centralised library. Made as
 part of IITM BS Degree, Modern Application Development - 1 course project. 
+
+# [Live Link](https://nykaj.pythonanywhere.com/)
 
 # Setup (for local running)
 - Clone or download repo.
@@ -23,3 +25,4 @@ part of IITM BS Degree, Modern Application Development - 1 course project.
 # Upcoming changes
 1) Improvements in UI.
 2) Better storage than Google Drive or use of Drive API to simplify matters.
+
